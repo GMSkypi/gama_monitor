@@ -4,31 +4,33 @@
 
 #ifndef DATA_COLLECTOR_LINUXSOURCEPATHS_H
 #define DATA_COLLECTOR_LINUXSOURCEPATHS_H
+namespace linuxSourcePaths{
+    const string cqroupPath = "/sys/fs/cgroup/";
 
-static const string cqroupPath = "/sys/fs/cgroup/";
+    const string accCPUPath = "cpuacct/docker/";
+    const string cpuUsageFile = "cpuacct.stat";
+    const string cpuPath = "cpu/docker/";
+    const string cpuThrottleFile = "cpu.stat";
+    const string totalCPUUsagePath = "/proc/stat";
+    const string processTotalCPUFile = "cpuacct.usage";
 
-static const string accCPUPath = "cpuacct/docker/";
-static const string cpuUsageFile = "cpuacct.stat";
-static const string cpuPath = "cpu/docker/";
-static const string cpuThrottleFile = "cpu.stat";
-static const string totalCPUUsagePath = "/proc/stat";
-static const string processTotalCPUFile = "cpuacct.usage";
+    const string memPath = "memory/docker/";
+    const string memStatFile = "memory.stat";
+    const string totalMemFile = "memory.usage_in_bytes";
+    const string totalMemSwapFile = "memory.memsw.usage_in_bytes";
+    const string memoryLimitFile = "memory.limit_in_bytes";
+    const string memorySwapLimitFile = "hierarchical_memsw_limit";
+    const string memLimitHitFile = "memory.failcnt";
+    const string memSwLimitHitFile = "memory.memsw.failcnt";
 
-static const string memPath = "memory/docker/";
-static const string memStatFile = "memory.stat";
-static const string totalMemFile = "memory.usage_in_bytes";
-static const string totalMemSwapFile = "memory.memsw.usage_in_bytes";
-static const string memoryLimitFile = "memory.limit_in_bytes";
-static const string memorySwapLimitFile = "hierarchical_memsw_limit";
-static const string memLimitHitFile = "memory.failcnt";
-static const string memSwLimitHitFile = "memory.memsw.failcnt";
+    const string ioPath = "blkio/docker/";
+    const string ioFile = "blkio.throttle.io_service_bytes";
 
-static const string ioPath = "blkio/docker/";
-static const string ioFile = "blkio.throttle.io_service_bytes";
+    const string pidsPath = "pids/docker";
+    const string pidsFile = "task";
+    const string proc = "/proc/";
+    const string networkTrafficFile = "net/dev";
+}
 
-static const string pidsPath = "pids/docker";
-static const string pidsFile = "task";
-static const string proc = "/proc/";
-static const string networkTrafficFile = "net/dev"
 
 #endif //DATA_COLLECTOR_LINUXSOURCEPATHS_H

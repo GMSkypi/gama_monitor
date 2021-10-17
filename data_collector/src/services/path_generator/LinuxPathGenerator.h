@@ -8,6 +8,9 @@
 
 #include "PathGenerator.h"
 #include "string"
+#include "../../../constants/LinuxSourcePaths.h"
+
+using namespace linuxSourcePaths;
 
 class LinuxPathGenerator : public PathGenerator {
 public:
@@ -20,6 +23,8 @@ public:
     string getCPUProcTotalPath(string containerId) override;
 
     string getMemoryPath(string containerId) override;
+
+    ~LinuxPathGenerator();
 
     string getTotalMemPath(string containerId) override;
 

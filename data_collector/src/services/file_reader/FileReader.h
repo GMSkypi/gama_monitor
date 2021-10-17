@@ -6,10 +6,9 @@
 #define DATA_COLLECTOR_FILEREADER_H
 #include <iostream>
 
-using namespace std;
 class FileReader{
 public:
-    virtual stringstream readFile(string filePath) = 0 ;
+    virtual std::stringstream readFile(const std::string & filePath) = 0 ;
 private:
 };
 

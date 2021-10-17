@@ -5,16 +5,16 @@
 #include <fstream>
 #include "LinuxFReader.h"
 
-stringstream LinuxFReader::readFile(string filePath) {
-    ifstream file;
+std::stringstream LinuxFReader::readFile(const std::string & filePath) {
+    std::ifstream file;
     file.open (filePath);
     if(file){
-        stringstream buffer;
+        std::stringstream buffer;
         buffer << file.rdbuf();
         file.close();
         return buffer;
     }
     else{
-        throw invalid_argument("Invalid file name" + filePath);
+        throw std::invalid_argument("Invalid file name" + filePath);
     }
 }

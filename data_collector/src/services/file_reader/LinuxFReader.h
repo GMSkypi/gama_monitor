@@ -8,6 +8,6 @@
 
 class LinuxFReader: public FileReader{
 public:
-    stringstream readFile(string filePath) override;
+    std::stringstream readFile(const std::string & filePath) override;
 };
 #endif //DATA_COLLECTOR_LINUXFREADER_H

@@ -8,6 +8,7 @@
 using namespace std;
 
 class PathGenerator{
+public:
     virtual string getCPUUsagePath(string containerId) = 0;
     virtual string getCPUThrottlePath(string containerId) = 0;
     virtual string getCPUTotalPath() = 0;

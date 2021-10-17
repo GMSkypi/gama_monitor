@@ -10,12 +10,16 @@
 #include <stdexcept>
 #include <string>
 #include <array>
+#include "Executor.h"
 
 using namespace std;
-class ShellExec {
+class ShellExec : public Executor {
 public:
-    static string exec(const char* cmd);
+    string exec(const char* cmd) override ;
 
+    string getPid(const string & containerID) override;
+
+    string getContainers() override;
 };
 
 

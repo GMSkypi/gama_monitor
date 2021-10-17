@@ -60,3 +60,7 @@ string LinuxPathGenerator::getNetworkPath(unsigned int containerPid) {
 string LinuxPathGenerator::getPidPath(string containerId) {
     return cqroupPath + pidsPath + containerId + "/" + pidsFile;
 }
+
+LinuxPathGenerator::~LinuxPathGenerator() {
+
+}
