@@ -13,4 +13,5 @@ public:
     virtual string getPid(const string & containerID) = 0;
     virtual string getContainers() = 0;
 };
+
 #endif //DATA_COLLECTOR_EXECUTOR_H

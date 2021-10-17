@@ -9,12 +9,14 @@
 #include "../../obj/Container.h"
 #include "vector"
 #include "../exec/Executor.h"
+#include "../../parsers/DockerParser.h"
 
 class ContainerExplorer{
 private:
     std::shared_ptr<Executor> executor;
+    std::shared_ptr<parser::DockerParser> parser;
 public:
-    explicit ContainerExplorer(std::shared_ptr<Executor> executor);
+    explicit ContainerExplorer(std::shared_ptr<Executor> executor, std::shared_ptr<parser::DockerParser> parser);
     [[nodiscard]] vector<Container> explore() const;
     void exploreNew(vector<Container> & explored) const;
 };

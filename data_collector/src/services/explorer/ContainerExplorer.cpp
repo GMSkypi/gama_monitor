@@ -3,19 +3,20 @@
 //
 
 #include "ContainerExplorer.h"
-#include "../../parsers/Parser.h"
+#include "../../parsers/StringParser.h"
 #include <regex>
 
-ContainerExplorer::ContainerExplorer(std::shared_ptr<Executor> executor) {
+ContainerExplorer::ContainerExplorer(std::shared_ptr<Executor> executor,std::shared_ptr<parser::DockerParser> parser) {
     this->executor = executor;
+    this->parser = parser;
 }
 
 vector<Container> ContainerExplorer::explore() const {
     string data = executor->getContainers();
-    vector<Container> exploredContainers = parser::parseContainerData(data);
+    vector<Container> exploredContainers = parser->parseContainerData(data);
     std::for_each(exploredContainers.begin(), exploredContainers.end(),
                   [this](Container container){
-                      unsigned pid = stoul(executor->getPid(container.getId()), nullptr,0);
+                      unsigned pid = parser->parseContainerPid(executor->getPid(container.getId()));
                       container.setPid(pid);
                   });
     return exploredContainers;

@@ -2,8 +2,8 @@
 // Created by gama on 15.10.21.
 //
 
-#ifndef DATA_COLLECTOR_PARSER_H
-#define DATA_COLLECTOR_PARSER_H
+#ifndef DATA_COLLECTOR_STRINGPARSER_H
+#define DATA_COLLECTOR_STRINGPARSER_H
 #include <string>
 #include <regex>
 #include "../obj/Container.h"
@@ -15,9 +15,7 @@ namespace parser{
     vector<string> tokenize(
             const string & str,
             const regex& re);
-
-    vector<Container> parseContainerData(const string  & data);
 }
 
 
-#endif //DATA_COLLECTOR_PARSER_H
+#endif //DATA_COLLECTOR_STRINGPARSER_H
