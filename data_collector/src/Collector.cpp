@@ -14,6 +14,7 @@
 #include "../constants/LinuxBashCommands.h"
 #include "services/exec/CurlExec.h"
 #include "parsers/DockerAPIParser.h"
+#include "parsers/DockerBashParser.h"
 
 Collector::Collector() {
     oSystem = detectOS();
@@ -21,7 +22,7 @@ Collector::Collector() {
         case constants::LINUX:
             pathGenerator = shared_ptr<PathGenerator>(new LinuxPathGenerator());
             fileReader = shared_ptr<FileReader>(new LinuxFReader());
-            executor = shared_ptr<Executor>(new CurlExec());
+            executor = shared_ptr<Executor>(new ShellExec());
             break;
         default:
             throw runtime_error("Support for this system is not implemented yet");
@@ -30,12 +31,12 @@ Collector::Collector() {
 
 void Collector::startCapturing() {
     // TODO parser options
-    ContainerExplorer containerExplorer = ContainerExplorer(executor,shared_ptr<parser::DockerParser>(new parser::DockerAPIParser));
+    ContainerExplorer containerExplorer = ContainerExplorer(executor,shared_ptr<parser::DockerParser>(new parser::DockerBashParser));
     vector<Container> containers = containerExplorer.explore();
     MetricsParserFactory metricsFactory;
     vector<MetricsParserFactory::metricParserVP> unCapturedMetrics = metricsFactory.getMetricSources();
     // add timer
-
+/*
     while(true){
         // capture time
         //containerExplorer.exploreNew(containers);
@@ -45,6 +46,7 @@ void Collector::startCapturing() {
         cout << "capturing";
         break;
     }
+    */
 
 }
 

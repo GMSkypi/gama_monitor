@@ -15,7 +15,7 @@ vector<Container> ContainerExplorer::explore() const {
     string data = executor->getContainers();
     vector<Container> exploredContainers = parser->parseContainerData(data);
     std::for_each(exploredContainers.begin(), exploredContainers.end(),
-                  [this](Container container){
+                  [this](Container & container){
                       unsigned pid = parser->parseContainerPid(executor->getPid(container.getId()));
                       container.setPid(pid);
                   });

@@ -23,5 +23,16 @@ std::vector<Container> parser::DockerAPIParser::parseContainerData(const std::st
 }
 
 unsigned int parser::DockerAPIParser::parseContainerPid(const std::string &data) {
+    rapidjson::Document jsonDoc;
+    jsonDoc.Parse(data.c_str());
+    const rapidjson::Value& attribute = jsonDoc["Processes"];
+    const rapidjson::Value& titles = jsonDoc["Titles"];
+
+    for (rapidjson::SizeType i = 0; i < titles.Size() && i < attribute[0].Size(); i++){
+        if( strcmp(titles[i].GetString(),"PID") == 0){
+            return std::stoul(attribute[0][i].GetString(), nullptr,0);
+        }
+
+    }
     return 1;
 }
