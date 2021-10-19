@@ -6,41 +6,45 @@
 #define DATA_COLLECTOR_ENUMS_H
 
 namespace constants{
-    enum Metrics{
-        CPU_USER,
-        CPU_USER_ACUM,
-        CPU_KERNEL,
-        CPU_KERNEL_ACUM,
-        THROTTLE_TIME,
-        THROTTLE_COUNT,
+    namespace metrics{
+        enum Metrics{
+            CPU_USER,
+            CPU_USER_ACUM,
+            CPU_KERNEL,
+            CPU_KERNEL_ACUM,
+            THROTTLE_TIME,
+            THROTTLE_COUNT,
+            CPU_PROC_TOTAL,
 
-        MEM_USED,
-        MEM_USED_SWAP,
-        MEM_RSS,
-        MEM_CACHE,
-        MEM_SWAP,
-        MEM_FREE,
-        MEM_LIMIT,
-        MEM_SWAP_LIMIT,
-        MEM_SWAP_FREE,
-        MEM_HIT_COUNT,
-        MEM_SWAP_HIT_COUNT,
+            MEM_USED,
+            MEM_USED_SWAP,
+            MEM_RSS,
+            MEM_CACHE,
+            MEM_SWAP,
+            MEM_FREE,
+            MEM_LIMIT,
+            MEM_SWAP_LIMIT,
+            MEM_SWAP_FREE,
+            MEM_HIT_COUNT,
+            MEM_SWAP_HIT_COUNT,
 
-        IO_READ_ACC,
-        IO_READ,
-        IO_WRITE_ACC,
-        IO_WRITE,
+            IO_READ_ACC,
+            IO_READ,
+            IO_WRITE_ACC,
+            IO_WRITE,
 
-        NET_RECEIVE_ACC,
-        NET_RECEIVE,
-        NET_RECEIVE_ERROR_ACC,
-        NET_RECEIVE_ERROR,
+            NET_RECEIVE_ACC,
+            NET_RECEIVE,
+            NET_RECEIVE_ERROR_ACC,
+            NET_RECEIVE_ERROR,
 
-        NET_TRANSMIT_ACC,
-        NET_TRANSMIT,
-        NET_TRANSMIT_ERROR_ACC,
-        NET_TRANSMIT_ERROR,
-    };
+            NET_TRANSMIT_ACC,
+            NET_TRANSMIT,
+            NET_TRANSMIT_ERROR_ACC,
+            NET_TRANSMIT_ERROR,
+        };
+    }
+
 
     enum Paths{
         CPU_USAGE,

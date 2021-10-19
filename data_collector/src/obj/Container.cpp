@@ -32,11 +32,11 @@ std::string Container::getImage() const {
     return image;
 }
 
-std::map<constants::Metrics, unsigned> Container::getLastMetrics() const {
+std::map<constants::metrics::Metrics, unsigned> Container::getLastMetrics() const {
     return lastMetrics;
 }
 
-void Container::setLastMetrics(const std::map<constants::Metrics, unsigned int> &metrics) {
+void Container::setLastMetrics(const std::map<constants::metrics::Metrics, unsigned int> &metrics) {
     lastMetrics = metrics;
 }
 

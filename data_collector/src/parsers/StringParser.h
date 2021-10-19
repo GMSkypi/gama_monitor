@@ -15,6 +15,8 @@ namespace parser{
     vector<string> tokenize(
             const string & str,
             const regex& re);
+
+    unsigned getUnsignedFromString(const std::string & number);
 }
 
 

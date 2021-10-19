@@ -15,6 +15,7 @@
 #include "services/exec/CurlExec.h"
 #include "parsers/DockerAPIParser.h"
 #include "parsers/DockerBashParser.h"
+#include "Capture.h"
 
 Collector::Collector() {
     oSystem = detectOS();
@@ -31,43 +32,53 @@ Collector::Collector() {
 
 void Collector::startCapturing() {
     // TODO parser options
-    ContainerExplorer containerExplorer = ContainerExplorer(executor,shared_ptr<parser::DockerParser>(new parser::DockerBashParser));
+    ContainerExplorer containerExplorer = ContainerExplorer(executor,
+                                                            shared_ptr<parser::DockerParser>(new parser::DockerBashParser),
+                                                            pathGenerator);
     vector<Container> containers = containerExplorer.explore();
+    const map<constants::Paths,std::string> globalMetricsPaths = containerExplorer.globalPathInit();
     MetricsParserFactory metricsFactory;
-    vector<MetricsParserFactory::metricParserVP> unCapturedMetrics = metricsFactory.getMetricSources();
+    metricsFactory.addAllMetrics();
+    const vector<MetricsParserFactory::metricParserVP> unCapturedMetrics = metricsFactory.getMetricSources();
+    metricsFactory.addAllGlobalMetrics();
+    const vector<MetricsParserFactory::metricParserVP> globalUnCapturedMetrics = metricsFactory.getMetricSources();
+
+    auto captureService = shared_ptr<Capture>(new Capture(globalUnCapturedMetrics,
+                                                          globalMetricsPaths,
+                                                          fileReader));
     // add timer
-/*
+
     while(true){
+        captureService->initNewCapturing(); // global metric does not have generated path
         // capture time
         //containerExplorer.exploreNew(containers);
         for(Container container : containers)
-            Capture.newCapture(&container, unCapturedMetrics );
+            captureService->newCapture(container, unCapturedMetrics );
         //sleep until delay
         cout << "capturing";
         break;
-    }
-    */
+    };
 
 }
 
 constants::OS Collector::detectOS() {
     #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
         // Windows (32-bit and 64-bit)
-        return WINDOWS;
+        return constants::WINDOWS;
     #elif __APPLE__
         // apple
-        return APPLE;
+        return constants::APPLE;
     #elif __linux__
         // linux
         return constants::LINUX;
     #elif __unix__
         // Unix
-        return UNIX;
+        return constants::UNIX;
     #elif defined(_POSIX_VERSION)
         // POSIX
-        return POSIX
+        return constants::POSIX;
     #else
         // unknown
-        return UNKNOWN
+        return constants::UNKNOWN;
     #endif
 }

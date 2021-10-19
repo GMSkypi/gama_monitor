@@ -17,4 +17,7 @@ vector<string> parser::tokenize(const string & data,const regex& regex) {
 
     return tokenized;
 }
+unsigned parser::getUnsignedFromString(const std::string & number){
+    return std::stoul(number, nullptr,0);
+}
 

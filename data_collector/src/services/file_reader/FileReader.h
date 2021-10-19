@@ -8,7 +8,7 @@
 
 class FileReader{
 public:
-    virtual std::stringstream readFile(const std::string & filePath) = 0 ;
+    [[nodiscard]] virtual std::stringstream readFile(const std::string & filePath) const = 0 ;
 private:
 };
 

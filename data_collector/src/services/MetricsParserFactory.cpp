@@ -5,8 +5,10 @@
 #include "MetricsParserFactory.h"
 #include "../parsers/metric_parsers/MetricParsersImp.cpp"
 
-std::vector<MetricsParserFactory::metricParserVP> MetricsParserFactory::getMetricSources() const {
-    return metricSources;
+std::vector<MetricsParserFactory::metricParserVP> MetricsParserFactory::getMetricSources(){
+    std::vector<MetricsParserFactory::metricParserVP> metricSource = this->metricSources;
+    this->metricSources = std::vector<MetricsParserFactory::metricParserVP>();
+    return metricSource;
 }
 
 void MetricsParserFactory::addCPUUsage() {
@@ -80,6 +82,12 @@ void MetricsParserFactory::addIO() {
         std::shared_ptr<MetricParser>(new IOParser())});
 }
 
+void MetricsParserFactory::addCPUTotal() {
+    metricSources.push_back({
+        constants::CPU_TOTAL,
+        std::shared_ptr<MetricParser>(new CpuTotalParser())});
+}
+
 void MetricsParserFactory::addAllMetrics() {
     addCPUUsage();
     addCPUThrottle();
@@ -94,3 +102,8 @@ void MetricsParserFactory::addAllMetrics() {
     addNetwork();
     addIO();
 }
+
+void MetricsParserFactory::addAllGlobalMetrics() {
+    addCPUTotal();
+}
+

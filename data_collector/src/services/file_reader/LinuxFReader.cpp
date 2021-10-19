@@ -5,7 +5,7 @@
 #include <fstream>
 #include "LinuxFReader.h"
 
-std::stringstream LinuxFReader::readFile(const std::string & filePath) {
+std::stringstream LinuxFReader::readFile(const std::string & filePath) const{
     std::ifstream file;
     file.open (filePath);
     if(file){

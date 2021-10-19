@@ -35,8 +35,10 @@ public:
     void addLimitSwapHit();
     void addNetwork();
     void addIO();
+    void addCPUTotal();
     void addAllMetrics();
-    [[nodiscard]] std::vector<metricParserVP> getMetricSources() const;
+    void addAllGlobalMetrics();
+    std::vector<metricParserVP> getMetricSources();
 };
 
 

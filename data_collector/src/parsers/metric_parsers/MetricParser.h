@@ -14,7 +14,7 @@ namespace metricParser{
     class MetricParser{
     public:
         virtual void parse(const std::string & data,
-                           std::map<constants::Metrics,unsigned> & metrics) = 0;
+                           std::map<constants::metrics::Metrics,unsigned> & metrics) = 0;
     };
 
 }
