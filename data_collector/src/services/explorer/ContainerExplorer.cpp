@@ -13,7 +13,6 @@ ContainerExplorer::ContainerExplorer(std::shared_ptr<Executor> executor,
     this->parser = parser;
     this->pathGenerator = pathGenerator;
 }
-// TODO rename to explore and init
 vector<Container> ContainerExplorer::explore() const {
     string data = executor->getContainers();
     vector<Container> exploredContainers = parser->parseContainerData(data);
@@ -26,8 +25,33 @@ vector<Container> ContainerExplorer::explore() const {
     return exploredContainers;
 }
 
-void ContainerExplorer::exploreNew(vector<Container> &explored) const {
-    // TODO
+void ContainerExplorer::exploreNew(vector<Container> &existing) const {
+    string data = executor->getContainers();
+    vector<Container> exploredContainers = parser->parseContainerData(data);
+    for( Container & expContainer : exploredContainers) {
+        bool exist = std::find_if(existing.begin(),
+                                  existing.end(),
+                                  [this, &expContainer](const Container &exist) {
+                                      return expContainer.getId() == exist.getId();
+                                  }) != existing.end();
+        // Container is new
+        if (!exist) {
+            initContainer(expContainer);
+            existing.push_back(expContainer);
+        }
+    }
+    // Some container is not running
+    if (existing.size() > exploredContainers.size()) {
+        for (auto exCont = existing.begin(); exCont != existing.end(); ++exCont) {
+            if(std::find_if(exploredContainers.begin(),
+                                     exploredContainers.end(),
+                                     [this, &exCont](const Container &explored) {
+                                         return exCont->getId() == explored.getId();
+                                     }) == exploredContainers.end()){
+                existing.erase(exCont);
+            }
+        }
+    }
 }
 // TODO move to new class ?
 void ContainerExplorer::containerPathInit(Container &container) const {
@@ -52,4 +76,10 @@ std::map<constants::Paths,std::string> ContainerExplorer::globalPathInit() const
     std::map<constants::Paths,std::string> globalPaths;
     globalPaths[constants::Paths::CPU_TOTAL] = pathGenerator->getCPUTotalPath();
     return globalPaths;
+}
+
+void ContainerExplorer::initContainer(Container &container) const {
+    unsigned pid = parser->parseContainerPid(executor->getPid(container.getId()));
+    container.setPid(pid);
+    containerPathInit(container);
 }

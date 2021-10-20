@@ -22,9 +22,10 @@ public:
                                std::shared_ptr<parser::DockerParser> parser,
                                std::shared_ptr<PathGenerator> pathGenerator);
     [[nodiscard]] vector<Container> explore() const;
-    void exploreNew(vector<Container> & explored) const;
+    void exploreNew(vector<Container> & existing) const;
     std::map<constants::Paths,std::string> globalPathInit() const;
 private:
     void containerPathInit(Container & container) const;
+    void initContainer(Container & container) const;
 };
 #endif //DATA_COLLECTOR_CONTAINEREXPLORER_H

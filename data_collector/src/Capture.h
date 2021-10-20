@@ -16,7 +16,8 @@ class Capture {
 private:
     std::vector<MetricsParserFactory::metricParserVP> globalUnCapturedMetrics;
     std::map<constants::Paths,std::string> globalPaths;
-    std::map<constants::metrics::Metrics,unsigned> lastGlobalMetrics;
+    std::map<constants::metrics::Metrics,unsigned long> lastGlobalMetrics;
+    std::map<constants::metrics::Metrics,unsigned long> actualGlobalMetrics;
     std::shared_ptr<FileReader> fileReader;
 public:
     Capture(std::vector<MetricsParserFactory::metricParserVP> globalUnCapturedMetrics,
@@ -25,7 +26,8 @@ public:
     void newCapture(Container & container,std::vector<MetricsParserFactory::metricParserVP> unCapturedMetrics);
     void initNewCapturing();
 private:
-    void postProcessing(std::map<constants::metrics::Metrics,unsigned> metric);
+    void postProcessing( std::map<constants::metrics::Metrics,unsigned long> & old,
+                                std::map<constants::metrics::Metrics,unsigned long> & actual);
     unsigned calculateCPUinPer();
 
 };

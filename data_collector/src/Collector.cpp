@@ -16,6 +16,7 @@
 #include "parsers/DockerAPIParser.h"
 #include "parsers/DockerBashParser.h"
 #include "Capture.h"
+#include <thread>
 
 Collector::Collector() {
     oSystem = detectOS();
@@ -51,12 +52,12 @@ void Collector::startCapturing() {
     while(true){
         captureService->initNewCapturing(); // global metric does not have generated path
         // capture time
-        //containerExplorer.exploreNew(containers);
+        containerExplorer.exploreNew(containers);
+
         for(Container & container : containers)
             captureService->newCapture(container, unCapturedMetrics );
         //sleep until delay
-        cout << "capturing";
-        break;
+        std::this_thread::sleep_for(5000ms);
     };
 
 }

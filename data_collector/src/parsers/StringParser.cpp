@@ -18,7 +18,7 @@ vector<string> parser::tokenize(const string & data,const regex& regex) {
     return tokenized;
 }
 unsigned parser::getUnsignedFromString(const std::string & number){
-    if(number.length() >= 10){
+    if(number.length() >= 19){
         return 0;
     }
     return std::stoul(number, nullptr,0);
