@@ -45,6 +45,7 @@ void ContainerExplorer::containerPathInit(Container &container) const {
     metricsPaths[constants::Paths::MEM_SWAP_LIMHIT] = pathGenerator->getMemSwapHitCountPath(id);
     metricsPaths[constants::Paths::IO] = pathGenerator->getIOPath(id);
     metricsPaths[constants::Paths::NET] = pathGenerator->getNetworkPath(container.getPid());
+    container.setMetricsPath(metricsPaths);
 }
 
 std::map<constants::Paths,std::string> ContainerExplorer::globalPathInit() const {

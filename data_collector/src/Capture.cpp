@@ -5,14 +5,18 @@
 #include "Capture.h"
 
 #include <utility>
+#include <sstream>
 
 void Capture::newCapture(Container & container, std::vector<MetricsParserFactory::metricParserVP> unCapturedMetrics) {
+    std::map<constants::metrics::Metrics,unsigned> actualMetric;
     for(const auto& parser : unCapturedMetrics){
-        const auto & metricPaths = container.getMetricsPath();
+       auto metricPaths = container.getMetricsPath();
         if(metricPaths.contains(parser.path)){
-            //parser.parser->parse(fileReader->readFile(metricPaths.find(parser.path)),); // TODO;
+            parser.parser->parse(fileReader->readFile(metricPaths[parser.path]).str(),
+                                 actualMetric);
         }
     }
+    container.setLastMetrics(actualMetric);
 }
 
 Capture::Capture(std::vector<MetricsParserFactory::metricParserVP> globalUnCapturedMetrics,
@@ -26,7 +30,16 @@ Capture::Capture(std::vector<MetricsParserFactory::metricParserVP> globalUnCaptu
 void Capture::initNewCapturing() {
     for(const auto& parser : globalUnCapturedMetrics){
         if(globalPaths.contains(parser.path))
-            continue;
-            //parser.parser->parse(this->fileReader->readFile(globalPaths[parser.path]),lastGlobalMetrics);
+            parser.parser->parse(
+                    fileReader->readFile(globalPaths[parser.path]).str(),
+                    lastGlobalMetrics);
     }
+}
+
+void Capture::postProcessing(std::map<constants::metrics::Metrics,unsigned> metric) {
+
+}
+
+unsigned Capture::calculateCPUinPer() {
+    return 0;
 }

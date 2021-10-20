@@ -4,7 +4,7 @@
 
 #ifndef DATA_COLLECTOR_FILEREADER_H
 #define DATA_COLLECTOR_FILEREADER_H
-#include <iostream>
+#include <string>
 
 class FileReader{
 public:

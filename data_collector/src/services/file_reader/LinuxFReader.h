@@ -5,6 +5,7 @@
 #ifndef DATA_COLLECTOR_LINUXFREADER_H
 #define DATA_COLLECTOR_LINUXFREADER_H
 #include "FileReader.h"
+#include <string>
 
 class LinuxFReader: public FileReader{
 public:

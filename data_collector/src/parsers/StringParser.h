@@ -17,6 +17,7 @@ namespace parser{
             const regex& re);
 
     unsigned getUnsignedFromString(const std::string & number);
+    std::string firstMatchRegex(const std::string & data, const regex& regex);
 }
 
 

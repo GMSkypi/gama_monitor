@@ -19,7 +19,7 @@ namespace linuxSourcePaths{
     const string totalMemFile = "memory.usage_in_bytes";
     const string totalMemSwapFile = "memory.memsw.usage_in_bytes";
     const string memoryLimitFile = "memory.limit_in_bytes";
-    const string memorySwapLimitFile = "hierarchical_memsw_limit";
+    const string memorySwapLimitFile = "memory.memsw.limit_in_bytes";
     const string memLimitHitFile = "memory.failcnt";
     const string memSwLimitHitFile = "memory.memsw.failcnt";
 

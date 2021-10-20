@@ -52,7 +52,7 @@ void Collector::startCapturing() {
         captureService->initNewCapturing(); // global metric does not have generated path
         // capture time
         //containerExplorer.exploreNew(containers);
-        for(Container container : containers)
+        for(Container & container : containers)
             captureService->newCapture(container, unCapturedMetrics );
         //sleep until delay
         cout << "capturing";

@@ -25,6 +25,8 @@ public:
     void newCapture(Container & container,std::vector<MetricsParserFactory::metricParserVP> unCapturedMetrics);
     void initNewCapturing();
 private:
+    void postProcessing(std::map<constants::metrics::Metrics,unsigned> metric);
+    unsigned calculateCPUinPer();
 
 };
 // TODO accept paths

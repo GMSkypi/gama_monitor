@@ -28,7 +28,13 @@ namespace metricParser{
     public:
         void parse(const std::string &data,
                    std::map<constants::metrics::Metrics,unsigned>  & metrics ) override {
-            // TODO shell exec ... | file read ??
+            std::string firstLine = parser::tokenize(data, std::regex("\\n"))[0];
+            std::vector<std::string> result = parser::tokenize(firstLine, std::regex("\\D+"));
+            unsigned totalCpu = 0;
+            for(const auto & value : result){
+                totalCpu += parser::getUnsignedFromString(value);
+            }
+            metrics[CPU_TOTAL] = totalCpu;
         }
     };
     class CpuProcTotalParser : public MetricParser{
@@ -43,55 +49,78 @@ namespace metricParser{
         void parse(const std::string &data,
                    std::map<constants::metrics::Metrics,unsigned>  & metrics ) override {
             std::vector<std::string> result = parser::tokenize(data, std::regex("\\D+"));
-            metrics[Metrics::THROTTLE_COUNT] = parser::getUnsignedFromString(result[0]); // TODO
+            metrics[Metrics::MEM_CACHE] = parser::getUnsignedFromString(result[15]);
+            metrics[Metrics::MEM_RSS] = parser::getUnsignedFromString(result[16]);
+            metrics[Metrics::MEM_SWAP] = parser::getUnsignedFromString(result[20]);
         }
     };
     class MemTotalParser : public MetricParser{
     public:
         void parse(const std::string &data,
                    std::map<constants::metrics::Metrics,unsigned>  & metrics ) override {
+            metrics[Metrics::MEM_USED] = parser::getUnsignedFromString(data);
         }
     };
     class MemTotalSwapParser : public MetricParser{
     public:
         void parse(const std::string &data,
                    std::map<constants::metrics::Metrics,unsigned>  & metrics ) override {
+            metrics[Metrics::MEM_USED_SWAP] = parser::getUnsignedFromString(data);
         }
     };
     class MemLimitsParser : public MetricParser{
     public:
         void parse(const std::string &data,
                    std::map<constants::metrics::Metrics,unsigned>  & metrics ) override {
+            if(data.length() >= 17)
+                metrics[Metrics::MEM_LIMIT] = 0;
+            else
+                metrics[Metrics::MEM_LIMIT] = parser::getUnsignedFromString(data);
         }
     };
     class MemLimitsSwapParser : public MetricParser{
     public:
         void parse(const std::string &data,
                    std::map<constants::metrics::Metrics,unsigned>  & metrics ) override {
+            if(data.length() >= 17)
+                metrics[Metrics::MEM_SWAP_LIMIT] = 0;
+            else
+                metrics[Metrics::MEM_SWAP_LIMIT] = parser::getUnsignedFromString(data);
         }
     };
     class MemCountLimHitParser : public MetricParser{
     public:
         void parse(const std::string &data,
                    std::map<constants::metrics::Metrics,unsigned>  & metrics ) override {
+            metrics[Metrics::MEM_HIT_COUNT] = parser::getUnsignedFromString(data);
         }
     };
     class MemSwapLimitHitParser : public MetricParser{
     public:
         void parse(const std::string &data,
                    std::map<constants::metrics::Metrics,unsigned>  & metrics ) override {
+            metrics[Metrics::MEM_SWAP_HIT_COUNT] = parser::getUnsignedFromString(data);
         }
     };
     class IOParser : public MetricParser{
     public:
         void parse(const std::string &data,
                    std::map<constants::metrics::Metrics,unsigned>  & metrics ) override {
+            metrics[Metrics::IO_READ_ACC] = parser::getUnsignedFromString(
+                    parser::firstMatchRegex(
+                            parser::firstMatchRegex(data,regex("(Read )[0-9]*")),
+                            regex("[0-9]+")));
+            metrics[Metrics::IO_WRITE_ACC] = parser::getUnsignedFromString(
+                    parser::firstMatchRegex(
+                            parser::firstMatchRegex(data,regex("(Write )[0-9]*")),
+                            regex("[0-9]+")));
         }
     };
     class NetParser : public MetricParser{
     public:
         void parse(const std::string &data,
                    std::map<constants::metrics::Metrics,unsigned>  & metrics ) override {
+            // TODO more then one interface
         }
     };
 }

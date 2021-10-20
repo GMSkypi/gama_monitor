@@ -11,6 +11,7 @@ namespace constants{
             CPU_USER,
             CPU_USER_ACUM,
             CPU_KERNEL,
+            CPU_TOTAL,
             CPU_KERNEL_ACUM,
             THROTTLE_TIME,
             THROTTLE_COUNT,
