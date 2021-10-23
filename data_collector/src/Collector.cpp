@@ -50,14 +50,15 @@ void Collector::startCapturing() {
     // add timer
 
     while(true){
-        captureService->initNewCapturing(); // global metric does not have generated path
+        captureService->globalNewCapturing(); // global metric does not have generated path
         // capture time
         containerExplorer.exploreNew(containers);
 
         for(Container & container : containers)
             captureService->newCapture(container, unCapturedMetrics );
         //sleep until delay
-        std::this_thread::sleep_for(5000ms);
+        std::cout << "---------------------" << std::endl;
+        std::this_thread::sleep_for(1000ms);
     };
 
 }

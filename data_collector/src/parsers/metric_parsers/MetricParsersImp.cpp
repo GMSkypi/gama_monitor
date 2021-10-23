@@ -1,6 +1,7 @@
 //
 // Created by gama on 16.10.21.
 //
+#include <iostream>
 #include "MetricParser.h"
 #include "../StringParser.h"
 
@@ -49,9 +50,9 @@ namespace metricParser{
         void parse(const std::string &data,
                    std::map<constants::metrics::Metrics,unsigned long>  & metrics ) override {
             std::vector<std::string> result = parser::tokenize(data, std::regex("\\D+"));
-            metrics[Metrics::MEM_CACHE] = parser::getUnsignedFromString(result[15]);
-            metrics[Metrics::MEM_RSS] = parser::getUnsignedFromString(result[16]);
-            metrics[Metrics::MEM_SWAP] = parser::getUnsignedFromString(result[20]);
+            metrics[Metrics::MEM_CACHE] = parser::getUnsignedFromString(result[19]);
+            metrics[Metrics::MEM_RSS] = parser::getUnsignedFromString(result[20]);
+            metrics[Metrics::MEM_SWAP] = parser::getUnsignedFromString(result[26]);
         }
     };
     class MemTotalParser : public MetricParser{
@@ -120,7 +121,22 @@ namespace metricParser{
     public:
         void parse(const std::string &data,
                    std::map<constants::metrics::Metrics,unsigned long>  & metrics ) override {
-            // TODO more then one interface
+            metrics[Metrics::NET_RECEIVE_ACC] = 0;
+            metrics[Metrics::NET_RECEIVE_ERROR_ACC] = 0;
+            metrics[Metrics::NET_TRANSMIT_ACC] = 0;
+            metrics[Metrics::NET_TRANSMIT_ERROR_ACC] = 0;
+
+            //auto matchLines = parser::matchRegex(data,regex("(([a-z]|[0-9])*:)(\\s+|[0-9])*"));
+            auto matchLines = parser::tokenize(data,std::regex("\\n"));
+            auto lineIter = matchLines.begin()+2;
+            for(;lineIter < matchLines.end(); ++lineIter){
+                std::vector<std::string> netMetrics = parser::tokenize(*lineIter, std::regex("\\s+|\\n"));
+                if(netMetrics.size() != 17) continue;
+                metrics[Metrics::NET_RECEIVE_ACC] +=  parser::getUnsignedFromString(netMetrics[1]);
+                metrics[Metrics::NET_RECEIVE_ERROR_ACC] += parser::getUnsignedFromString(netMetrics[3]);
+                metrics[Metrics::NET_TRANSMIT_ACC] += parser::getUnsignedFromString(netMetrics[9]);
+                metrics[Metrics::NET_TRANSMIT_ERROR_ACC] += parser::getUnsignedFromString(netMetrics[11]);
+            }
         }
     };
 }

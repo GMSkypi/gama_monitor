@@ -12,25 +12,26 @@
 #include "services/MetricsParserFactory.h"
 #include "services/file_reader/FileReader.h"
 
+using namespace constants::metrics;
+
 class Capture {
 private:
     std::vector<MetricsParserFactory::metricParserVP> globalUnCapturedMetrics;
     std::map<constants::Paths,std::string> globalPaths;
     std::map<constants::metrics::Metrics,unsigned long> lastGlobalMetrics;
-    std::map<constants::metrics::Metrics,unsigned long> actualGlobalMetrics;
     std::shared_ptr<FileReader> fileReader;
 public:
     Capture(std::vector<MetricsParserFactory::metricParserVP> globalUnCapturedMetrics,
             std::map<constants::Paths,std::string> globalPaths,
             std::shared_ptr<FileReader> fileReader);
     void newCapture(Container & container,std::vector<MetricsParserFactory::metricParserVP> unCapturedMetrics);
-    void initNewCapturing();
+    void globalNewCapturing();
 private:
     void postProcessing( std::map<constants::metrics::Metrics,unsigned long> & old,
                                 std::map<constants::metrics::Metrics,unsigned long> & actual);
-    unsigned calculateCPUinPer();
-
+    void globalPostProcessing(std::map<constants::metrics::Metrics,unsigned long> & actual);
+    unsigned long  calculateCPUPercent(unsigned long procUsage, unsigned long cpuUsage);
+    unsigned long  calculateTotalCPUPercent(unsigned long procUsage, unsigned long cpuUsage);
 };
-// TODO accept paths
 
 #endif //DATA_COLLECTOR_CAPTURE_H

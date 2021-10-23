@@ -9,7 +9,7 @@
 #include <map>
 #include "../../constants/Enums.h"
 #include <vector>
-#include "ContainerInterface.h"
+
 
 class Container {
 private:
@@ -19,7 +19,6 @@ private:
     std::string image;
     std::map<constants::metrics::Metrics,unsigned long> lastMetrics;
     std::map<constants::Paths,std::string> metricsPaths;
-    //std::vector<ContainerInterface> interfaces;
 public:
     Container(const std::string& id, const std::string& name, unsigned pid, const std::string& image);
 

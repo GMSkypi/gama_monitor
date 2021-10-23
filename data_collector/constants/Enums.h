@@ -8,16 +8,19 @@
 namespace constants{
     namespace metrics{
         enum Metrics{
-            CPU_USER,
-            CPU_USER_ACUM,
-            CPU_KERNEL,
-            CPU_TOTAL_ACUM,
-            CPU_TOTAL,
-            CPU_KERNEL_ACUM,
-            THROTTLE_TIME,
-            THROTTLE_COUNT,
-            CPU_PROC_TOTAL,
-
+            // https://docs.fedoraproject.org/en-US/Fedora/15/html/Resource_Management_Guide/sec-cpuacct.html
+            CPU_USER, // % period * 1000
+            CPU_USER_TIME, //period in USER_HZ
+            CPU_USER_ACUM, // total in USER_HZ
+            CPU_KERNEL, // % period
+            CPU_KERNEL_TIME, // period in USER_HZ
+            CPU_TOTAL_ACUM, // total in USER_HZ of seconds
+            CPU_TOTAL, //  total in USER_HZ of seconds
+            CPU_KERNEL_ACUM, // total in nanoseconds
+            THROTTLE_TIME, // total in nanoseconds
+            THROTTLE_COUNT, // total count
+            CPU_PROC_TOTAL, // total nanoseconds
+            CPU_PROC, // % period
             MEM_USED,
             MEM_USED_SWAP,
             MEM_RSS,

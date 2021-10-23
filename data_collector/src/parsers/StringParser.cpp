@@ -17,15 +17,18 @@ vector<string> parser::tokenize(const string & data,const regex& regex) {
 
     return tokenized;
 }
-unsigned parser::getUnsignedFromString(const std::string & number){
+unsigned long parser::getUnsignedFromString(const std::string & number){
     if(number.length() >= 19){
         return 0;
     }
     return std::stoul(number, nullptr,0);
 }
 std::string parser::firstMatchRegex(const std::string & data, const regex& regex){
+    return matchRegex(data,regex)[0];
+}
+std::smatch parser::matchRegex(const std::string & data, const regex& regex){
     std::smatch match;
     std::regex_search(data.begin(),data.end(),match,regex);
-    return match[0];
+    return match;
 }
 

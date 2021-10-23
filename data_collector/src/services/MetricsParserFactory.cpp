@@ -56,7 +56,7 @@ void MetricsParserFactory::addMemoryLimit() {
 void MetricsParserFactory::addMemoryLimitSwap() {
     metricSources.push_back({
         constants::MEM_LIMIT_SWAP,
-        std::shared_ptr<MetricParser>(new MemTotalSwapParser())});
+        std::shared_ptr<MetricParser>(new MemLimitsSwapParser())});
 }
 
 void MetricsParserFactory::addLimitHit() {
