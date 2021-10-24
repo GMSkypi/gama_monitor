@@ -20,7 +20,8 @@ private:
     std::shared_ptr<Executor> executor;
 public:
     Collector();
-    void startCapturing();
+
+    [[noreturn]] void startCapturing();
 private:
     constants::OS detectOS();
 };

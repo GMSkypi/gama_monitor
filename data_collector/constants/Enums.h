@@ -10,10 +10,10 @@ namespace constants{
         enum Metrics{
             // https://docs.fedoraproject.org/en-US/Fedora/15/html/Resource_Management_Guide/sec-cpuacct.html
             CPU_USER, // % period * 1000
-            CPU_USER_TIME, //period in USER_HZ
+            CPU_USER_TIME, //period in millisecond
             CPU_USER_ACUM, // total in USER_HZ
             CPU_KERNEL, // % period
-            CPU_KERNEL_TIME, // period in USER_HZ
+            CPU_KERNEL_TIME, // period in millisecond
             CPU_TOTAL_ACUM, // total in USER_HZ of seconds
             CPU_TOTAL, //  total in USER_HZ of seconds
             CPU_KERNEL_ACUM, // total in nanoseconds
@@ -21,32 +21,32 @@ namespace constants{
             THROTTLE_COUNT, // total count
             CPU_PROC_TOTAL, // total nanoseconds
             CPU_PROC, // % period
-            MEM_USED,
-            MEM_USED_SWAP,
-            MEM_RSS,
-            MEM_CACHE,
-            MEM_SWAP,
+            MEM_USED, // in bytes
+            MEM_USED_SWAP, // in bytes
+            MEM_RSS, // bytes of anonymous and swap cache memory
+            MEM_CACHE, // bytes of page cache memory
+            MEM_SWAP, // of bytes of swap usage
             MEM_FREE,
-            MEM_LIMIT,
-            MEM_SWAP_LIMIT,
+            MEM_LIMIT, // bytes of memory limit
+            MEM_SWAP_LIMIT, // bytes of memory+swap limit
             MEM_SWAP_FREE,
-            MEM_HIT_COUNT,
-            MEM_SWAP_HIT_COUNT,
+            MEM_HIT_COUNT, // show the number of memory usage hits limits
+            MEM_SWAP_HIT_COUNT, // show the number of memory+Swap hits limits
 
-            IO_READ_ACC,
-            IO_READ,
-            IO_WRITE_ACC,
-            IO_WRITE,
+            IO_READ_ACC, // bytes total
+            IO_READ, // period bytes
+            IO_WRITE_ACC, // bytes total
+            IO_WRITE, // period bytes
 
-            NET_RECEIVE_ACC,
-            NET_RECEIVE,
-            NET_RECEIVE_ERROR_ACC,
-            NET_RECEIVE_ERROR,
+            NET_RECEIVE_ACC, // bytes total
+            NET_RECEIVE, // period bytes
+            NET_RECEIVE_ERROR_ACC, // count total
+            NET_RECEIVE_ERROR, // period count
 
-            NET_TRANSMIT_ACC,
-            NET_TRANSMIT,
-            NET_TRANSMIT_ERROR_ACC,
-            NET_TRANSMIT_ERROR,
+            NET_TRANSMIT_ACC, // bytes total
+            NET_TRANSMIT, // period bytes
+            NET_TRANSMIT_ERROR_ACC, // count total
+            NET_TRANSMIT_ERROR, // period count
         };
     }
 

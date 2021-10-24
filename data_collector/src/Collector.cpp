@@ -3,6 +3,7 @@
 //
 
 #include <unistd.h>
+#include <memory>
 #include <utility>
 #include "Collector.h"
 #include "services/file_reader/LinuxFReader.h"
@@ -12,7 +13,6 @@
 #include "services/explorer/ContainerExplorer.h"
 #include "services/exec/ShellExec.h"
 #include "../constants/LinuxBashCommands.h"
-#include "services/exec/CurlExec.h"
 #include "parsers/DockerAPIParser.h"
 #include "parsers/DockerBashParser.h"
 #include "Capture.h"
@@ -31,7 +31,7 @@ Collector::Collector() {
     }
 }
 
-void Collector::startCapturing() {
+[[noreturn]] void Collector::startCapturing() {
     // TODO parser options
     ContainerExplorer containerExplorer = ContainerExplorer(executor,
                                                             shared_ptr<parser::DockerParser>(new parser::DockerBashParser),
@@ -44,13 +44,13 @@ void Collector::startCapturing() {
     metricsFactory.addAllGlobalMetrics();
     const vector<MetricsParserFactory::metricParserVP> globalUnCapturedMetrics = metricsFactory.getMetricSources();
 
-    auto captureService = shared_ptr<Capture>(new Capture(globalUnCapturedMetrics,
+    auto captureService = std::make_shared<Capture>(globalUnCapturedMetrics,
                                                           globalMetricsPaths,
-                                                          fileReader));
+                                                          fileReader);
     // add timer
 
     while(true){
-        captureService->globalNewCapturing(); // global metric does not have generated path
+        captureService->globalNewCapturing();
         // capture time
         containerExplorer.exploreNew(containers);
 
@@ -60,7 +60,6 @@ void Collector::startCapturing() {
         std::cout << "---------------------" << std::endl;
         std::this_thread::sleep_for(1000ms);
     };
-
 }
 
 constants::OS Collector::detectOS() {

@@ -54,14 +54,14 @@ void Capture::postProcessing( std::map<constants::metrics::Metrics,unsigned long
         if(actual.contains(Metrics::CPU_USER_ACUM)) {
             unsigned long cpuUser = actual[Metrics::CPU_USER_ACUM]
                                     - old[Metrics::CPU_USER_ACUM];
-            actual[Metrics::CPU_USER_TIME] = cpuUser;
+            actual[Metrics::CPU_USER_TIME] = (unsigned long)((((double)cpuUser) / sysconf(_SC_CLK_TCK)) * 1000);
             actual[Metrics::CPU_USER] = calculateCPUPercent(cpuUser,
                                                             lastGlobalMetrics[Metrics::CPU_TOTAL]);
         }
         if(actual.contains(Metrics::CPU_KERNEL_ACUM)) {
             unsigned long cpuKer = actual[Metrics::CPU_KERNEL_ACUM]
                                     - old[Metrics::CPU_KERNEL_ACUM];
-            actual[Metrics::CPU_KERNEL_TIME] = cpuKer;
+            actual[Metrics::CPU_KERNEL_TIME] = (unsigned long)((((double)cpuKer) / sysconf(_SC_CLK_TCK)) * 1000);
             actual[Metrics::CPU_KERNEL] = calculateCPUPercent(cpuKer,
                                                             lastGlobalMetrics[Metrics::CPU_TOTAL]);
         }
@@ -70,6 +70,23 @@ void Capture::postProcessing( std::map<constants::metrics::Metrics,unsigned long
                                    - old[Metrics::CPU_PROC_TOTAL];
             actual[Metrics::CPU_PROC] = calculateTotalCPUPercent(cpuTotal,
                                                               lastGlobalMetrics[Metrics::CPU_TOTAL]);
+        }
+        if(actual.contains(Metrics::IO_READ_ACC) && actual.contains((Metrics::IO_WRITE_ACC))){
+            actual[Metrics::IO_READ] = actual[Metrics::IO_READ_ACC]
+                                       - old[Metrics::IO_READ_ACC];
+            actual[Metrics::IO_WRITE] = actual[Metrics::IO_WRITE_ACC]
+                                       - old[Metrics::IO_WRITE_ACC];
+
+        }
+        if(actual.contains(Metrics::NET_RECEIVE_ACC)){
+            actual[Metrics::NET_RECEIVE] = actual[Metrics::NET_RECEIVE_ACC]
+                                       - old[Metrics::NET_RECEIVE_ACC];
+            actual[Metrics::NET_RECEIVE_ERROR] = actual[Metrics::NET_RECEIVE_ERROR_ACC]
+                                        - old[Metrics::NET_RECEIVE_ERROR_ACC];
+            actual[Metrics::NET_TRANSMIT] = actual[Metrics::NET_TRANSMIT_ACC]
+                                                 - old[Metrics::NET_TRANSMIT_ACC];
+            actual[Metrics::NET_TRANSMIT_ERROR] = actual[Metrics::NET_TRANSMIT_ERROR_ACC]
+                                            - old[Metrics::NET_TRANSMIT_ERROR_ACC];
         }
     }
 }
