@@ -39,7 +39,17 @@ int iniLoader::loadConfig(const std::string & iniPath,  std::shared_ptr<Config> 
             blackList.emplace_back(ini.GetValue("black_list", key.pItem));
         }
 
-        conf = std::make_shared<Config>(DBConfig(database_IP,login,password),metricDelay,exportDelay,blackList);
+        const char* explorerParserOptionString;
+        explorerParserOptionString = ini.GetValue("other", "explorer_parser_option");
+        unsigned long explorerParserOption = parser::getUnsignedFromString(explorerParserOptionString);
+
+
+        conf = std::make_shared<Config>(
+                DBConfig(database_IP,login,password),
+                metricDelay,
+                exportDelay,
+                blackList,
+                explorerParserOption);
 
         return 0;
     }

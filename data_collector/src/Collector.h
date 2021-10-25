@@ -12,6 +12,7 @@
 #include "../constants/Enums.h"
 #include "services/exec/Executor.h"
 #include "obj/Config.h"
+#include "services/explorer/ContainerExplorer.h"
 
 class Collector {
 private:
@@ -26,6 +27,7 @@ public:
     [[noreturn]] void startCapturing();
 private:
     constants::OS detectOS();
+    ContainerExplorer loadExplorer();
 };
 
 

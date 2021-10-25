@@ -16,6 +16,7 @@
 #include "parsers/DockerAPIParser.h"
 #include "parsers/DockerBashParser.h"
 #include "Capture.h"
+#include "services/exec/CurlExec.h"
 #include <thread>
 
 Collector::Collector(const shared_ptr<Config>& conf) {
@@ -33,10 +34,7 @@ Collector::Collector(const shared_ptr<Config>& conf) {
 }
 
 [[noreturn]] void Collector::startCapturing() {
-    // TODO parser options
-    ContainerExplorer containerExplorer = ContainerExplorer(executor,
-                                                            shared_ptr<parser::DockerParser>(new parser::DockerBashParser),
-                                                            pathGenerator);
+    ContainerExplorer containerExplorer = loadExplorer();
     vector<Container> containers = containerExplorer.explore();
     const map<constants::Paths,std::string> globalMetricsPaths = containerExplorer.globalPathInit();
     MetricsParserFactory metricsFactory;
@@ -102,4 +100,21 @@ constants::OS Collector::detectOS() {
         // unknown
         return constants::UNKNOWN;
     #endif
+}
+
+ContainerExplorer Collector::loadExplorer() {
+    switch(conf->explorerParserOption){
+        case 1:
+            return ContainerExplorer(executor,
+                                      shared_ptr<parser::DockerParser>(new parser::DockerBashParser),
+                                      pathGenerator);
+        case 2:
+            return ContainerExplorer(shared_ptr<Executor>(new CurlExec),
+                                     shared_ptr<parser::DockerParser>(new parser::DockerAPIParser),
+                                     pathGenerator);
+        default:
+            return ContainerExplorer(shared_ptr<Executor>(new CurlExec),
+                                     shared_ptr<parser::DockerParser>(new parser::DockerAPIParser),
+                                     pathGenerator);
+    }
 }

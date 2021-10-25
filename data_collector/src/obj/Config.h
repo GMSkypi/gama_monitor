@@ -30,13 +30,16 @@ public:
     unsigned metricDelay;
     unsigned exploreDelay;
     std::vector<std::string> blackList;
+    unsigned explorerParserOption;
     Config(DBConfig db,
            unsigned metricDelay,
            unsigned exploreDelay,
-           std::vector<std::string> blackList) : database(std::move(db)),
-                                                 metricDelay(metricDelay),
-                                                 exploreDelay(exploreDelay),
-                                                 blackList(std::move(blackList)) {}
+           std::vector<std::string> blackList,
+           unsigned explorerParserOption) : database(std::move(db)),
+                                            metricDelay(metricDelay),
+                                            exploreDelay(exploreDelay),
+                                            blackList(std::move(blackList)),
+                                            explorerParserOption(explorerParserOption){}
 };
 
 
