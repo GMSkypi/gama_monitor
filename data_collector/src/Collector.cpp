@@ -18,7 +18,7 @@
 #include "Capture.h"
 #include <thread>
 
-Collector::Collector() {
+Collector::Collector(const shared_ptr<Config>& conf) {
     oSystem = detectOS();
     switch(oSystem){
         case constants::LINUX:
@@ -29,9 +29,10 @@ Collector::Collector() {
         default:
             throw runtime_error("Support for this system is not implemented yet");
     }
+    this->conf = conf;
 }
 
-[[noreturn]] void Collector::startCapturing() {
+void Collector::startCapturing() {
     // TODO parser options
     ContainerExplorer containerExplorer = ContainerExplorer(executor,
                                                             shared_ptr<parser::DockerParser>(new parser::DockerBashParser),
@@ -50,6 +51,7 @@ Collector::Collector() {
     // add timer
 
     while(true){
+    //for(int i = 0; i < 3; i++){
         captureService->globalNewCapturing();
         // capture time
         containerExplorer.exploreNew(containers);

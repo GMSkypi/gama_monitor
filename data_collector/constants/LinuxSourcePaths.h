@@ -30,6 +30,8 @@ namespace linuxSourcePaths{
     const string pidsFile = "task";
     const string proc = "/proc/";
     const string networkTrafficFile = "net/dev";
+
+    const string iniPath = "../config/config.ini";
 }
 
 
