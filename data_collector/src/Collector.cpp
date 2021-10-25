@@ -32,7 +32,7 @@ Collector::Collector(const shared_ptr<Config>& conf) {
     this->conf = conf;
 }
 
-void Collector::startCapturing() {
+[[noreturn]] void Collector::startCapturing() {
     // TODO parser options
     ContainerExplorer containerExplorer = ContainerExplorer(executor,
                                                             shared_ptr<parser::DockerParser>(new parser::DockerBashParser),
@@ -48,19 +48,37 @@ void Collector::startCapturing() {
     auto captureService = std::make_shared<Capture>(globalUnCapturedMetrics,
                                                           globalMetricsPaths,
                                                           fileReader);
-    // add timer
 
+    std::chrono::steady_clock::time_point exploreNewTimePoint =
+            std::chrono::steady_clock::now() + std::chrono::milliseconds(conf->exploreDelay);
+    std::chrono::steady_clock::time_point metricCaptureTimePoint = std::chrono::steady_clock::now();
     while(true){
     //for(int i = 0; i < 3; i++){
-        captureService->globalNewCapturing();
-        // capture time
-        containerExplorer.exploreNew(containers);
+        std::chrono::steady_clock::time_point startTimePoint = std::chrono::steady_clock::now();
+        if(std::chrono::duration_cast<std::chrono::milliseconds>(exploreNewTimePoint - startTimePoint).count() <=0){
+            containerExplorer.exploreNew(containers);
+            exploreNewTimePoint = std::chrono::steady_clock::now() + std::chrono::milliseconds(conf->exploreDelay);
+        }
 
-        for(Container & container : containers)
-            captureService->newCapture(container, unCapturedMetrics );
-        //sleep until delay
+
+        if(std::chrono::duration_cast<std::chrono::milliseconds>(metricCaptureTimePoint - startTimePoint).count() <= 0){
+            captureService->globalNewCapturing();
+            for(Container & container : containers)
+                captureService->newCapture(container, unCapturedMetrics );
+            metricCaptureTimePoint = std::chrono::steady_clock::now() + std::chrono::milliseconds(conf->metricDelay);
+        }
         std::cout << "---------------------" << std::endl;
-        std::this_thread::sleep_for(1000ms);
+
+        std::chrono::steady_clock::time_point endTimePoint = std::chrono::steady_clock::now();
+
+        if(exploreNewTimePoint > metricCaptureTimePoint){
+            auto sleepFor = std::chrono::duration_cast<std::chrono::milliseconds>(metricCaptureTimePoint - endTimePoint);
+            std::this_thread::sleep_for(sleepFor);
+            continue;
+        }
+        auto sleepFor = std::chrono::duration_cast<std::chrono::milliseconds>(exploreNewTimePoint - endTimePoint);
+        std::this_thread::sleep_for(sleepFor);
+
     };
 }
 
