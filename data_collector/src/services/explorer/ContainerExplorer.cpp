@@ -98,3 +98,4 @@ void ContainerExplorer::excludeBlackList(std::vector<Container> & containers) co
         }
     }
 }
+

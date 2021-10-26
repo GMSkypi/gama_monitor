@@ -17,6 +17,7 @@
 #include "parsers/DockerBashParser.h"
 #include "Capture.h"
 #include "services/exec/CurlExec.h"
+#include "services/Timer.h"
 #include <thread>
 
 Collector::Collector(const shared_ptr<Config>& conf) {
@@ -46,37 +47,24 @@ Collector::Collector(const shared_ptr<Config>& conf) {
     auto captureService = std::make_shared<Capture>(globalUnCapturedMetrics,
                                                           globalMetricsPaths,
                                                           fileReader);
-
-    std::chrono::steady_clock::time_point exploreNewTimePoint =
-            std::chrono::steady_clock::now() + std::chrono::milliseconds(conf->exploreDelay);
-    std::chrono::steady_clock::time_point metricCaptureTimePoint = std::chrono::steady_clock::now();
+    Timer timer = Timer(conf);
     while(true){
     //for(int i = 0; i < 3; i++){
-        std::chrono::steady_clock::time_point startTimePoint = std::chrono::steady_clock::now();
-        if(std::chrono::duration_cast<std::chrono::milliseconds>(exploreNewTimePoint - startTimePoint).count() - 50 <=0){
-            containerExplorer.exploreNew(containers);
-            exploreNewTimePoint = std::chrono::steady_clock::now() + std::chrono::milliseconds(conf->exploreDelay);
-        }
-
-
-        if(std::chrono::duration_cast<std::chrono::milliseconds>(metricCaptureTimePoint - startTimePoint).count() -50  <= 0){
-            captureService->globalNewCapturing();
-            for(Container & container : containers)
-                captureService->newCapture(container, unCapturedMetrics );
-            metricCaptureTimePoint = std::chrono::steady_clock::now() + std::chrono::milliseconds(conf->metricDelay);
+        const std::vector<constants::Actions> * actions = timer.getActions();
+        for(const constants::Actions action : *actions){
+            switch(action){
+                case constants::Actions::EXPLORE_NEW:
+                    containerExplorer.exploreNew(containers);
+                    continue;
+                case constants::Actions::CAPTURE:
+                    captureService->globalNewCapturing();
+                    for(Container & container : containers)
+                        captureService->newCapture(container, unCapturedMetrics );
+                    continue;
+            }
         }
         std::cout << "---------------------" << std::endl;
-
-        std::chrono::steady_clock::time_point endTimePoint = std::chrono::steady_clock::now();
-
-        if(exploreNewTimePoint > metricCaptureTimePoint){
-            auto sleepFor = std::chrono::duration_cast<std::chrono::milliseconds>(metricCaptureTimePoint - endTimePoint);
-            std::this_thread::sleep_for(sleepFor);
-            continue;
-        }
-        auto sleepFor = std::chrono::duration_cast<std::chrono::milliseconds>(exploreNewTimePoint - endTimePoint);
-        std::this_thread::sleep_for(sleepFor);
-
+        std::this_thread::sleep_for(std::chrono::milliseconds(timer.sleepFor()));
     };
 }
 
