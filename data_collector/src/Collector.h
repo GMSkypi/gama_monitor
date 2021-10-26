@@ -19,7 +19,6 @@ private:
     std::shared_ptr<PathGenerator> pathGenerator;
     std::shared_ptr<FileReader> fileReader;
     constants::OS oSystem;
-    std::shared_ptr<Executor> executor;
     std::shared_ptr<Config> conf;
 public:
     Collector(const shared_ptr<Config>& conf);

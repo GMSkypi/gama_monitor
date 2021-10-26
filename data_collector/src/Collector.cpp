@@ -25,7 +25,6 @@ Collector::Collector(const shared_ptr<Config>& conf) {
         case constants::LINUX:
             pathGenerator = shared_ptr<PathGenerator>(new LinuxPathGenerator());
             fileReader = shared_ptr<FileReader>(new LinuxFReader());
-            executor = shared_ptr<Executor>(new ShellExec());
             break;
         default:
             throw runtime_error("Support for this system is not implemented yet");
@@ -36,6 +35,7 @@ Collector::Collector(const shared_ptr<Config>& conf) {
 [[noreturn]] void Collector::startCapturing() {
     ContainerExplorer containerExplorer = loadExplorer();
     vector<Container> containers = containerExplorer.explore();
+    // TODO get node info
     const map<constants::Paths,std::string> globalMetricsPaths = containerExplorer.globalPathInit();
     MetricsParserFactory metricsFactory;
     metricsFactory.addAllMetrics();
@@ -53,13 +53,13 @@ Collector::Collector(const shared_ptr<Config>& conf) {
     while(true){
     //for(int i = 0; i < 3; i++){
         std::chrono::steady_clock::time_point startTimePoint = std::chrono::steady_clock::now();
-        if(std::chrono::duration_cast<std::chrono::milliseconds>(exploreNewTimePoint - startTimePoint).count() <=0){
+        if(std::chrono::duration_cast<std::chrono::milliseconds>(exploreNewTimePoint - startTimePoint).count() - 50 <=0){
             containerExplorer.exploreNew(containers);
             exploreNewTimePoint = std::chrono::steady_clock::now() + std::chrono::milliseconds(conf->exploreDelay);
         }
 
 
-        if(std::chrono::duration_cast<std::chrono::milliseconds>(metricCaptureTimePoint - startTimePoint).count() <= 0){
+        if(std::chrono::duration_cast<std::chrono::milliseconds>(metricCaptureTimePoint - startTimePoint).count() -50  <= 0){
             captureService->globalNewCapturing();
             for(Container & container : containers)
                 captureService->newCapture(container, unCapturedMetrics );
@@ -105,16 +105,19 @@ constants::OS Collector::detectOS() {
 ContainerExplorer Collector::loadExplorer() {
     switch(conf->explorerParserOption){
         case 1:
-            return ContainerExplorer(executor,
+            return ContainerExplorer(shared_ptr<Executor>(new ShellExec()),
                                       shared_ptr<parser::DockerParser>(new parser::DockerBashParser),
-                                      pathGenerator);
+                                      pathGenerator,
+                                      conf->blackList);
         case 2:
             return ContainerExplorer(shared_ptr<Executor>(new CurlExec),
                                      shared_ptr<parser::DockerParser>(new parser::DockerAPIParser),
-                                     pathGenerator);
+                                     pathGenerator,
+                                     conf->blackList);
         default:
             return ContainerExplorer(shared_ptr<Executor>(new CurlExec),
                                      shared_ptr<parser::DockerParser>(new parser::DockerAPIParser),
-                                     pathGenerator);
+                                     pathGenerator,
+                                     conf->blackList);
     }
 }

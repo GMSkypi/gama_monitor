@@ -8,19 +8,20 @@
 
 ContainerExplorer::ContainerExplorer(std::shared_ptr<Executor> executor,
                                      std::shared_ptr<parser::DockerParser> parser,
-                                     std::shared_ptr<PathGenerator> pathGenerator) {
+                                     std::shared_ptr<PathGenerator> pathGenerator,
+                                     std::vector<std::string> blackList) {
     this->executor = executor;
     this->parser = parser;
     this->pathGenerator = pathGenerator;
+    this->blackList = blackList;
 }
 vector<Container> ContainerExplorer::explore() const {
     string data = executor->getContainers();
     vector<Container> exploredContainers = parser->parseContainerData(data);
+    excludeBlackList(exploredContainers);
     std::for_each(exploredContainers.begin(), exploredContainers.end(),
                   [this](Container & container){
-                      unsigned pid = parser->parseContainerPid(executor->getPid(container.getId()));
-                      container.setPid(pid);
-                      containerPathInit(container);
+                      initContainer(container);
                   });
     return exploredContainers;
 }
@@ -28,6 +29,7 @@ vector<Container> ContainerExplorer::explore() const {
 void ContainerExplorer::exploreNew(vector<Container> &existing) const {
     string data = executor->getContainers();
     vector<Container> exploredContainers = parser->parseContainerData(data);
+    excludeBlackList(exploredContainers);
     for( Container & expContainer : exploredContainers) {
         bool exist = std::find_if(existing.begin(),
                                   existing.end(),
@@ -82,4 +84,17 @@ void ContainerExplorer::initContainer(Container &container) const {
     unsigned pid = parser->parseContainerPid(executor->getPid(container.getId()));
     container.setPid(pid);
     containerPathInit(container);
+}
+
+void ContainerExplorer::excludeBlackList(std::vector<Container> & containers) const{
+    for( const std::string & name : blackList) {
+        auto exist = std::find_if(containers.begin(),
+                                  containers.end(),
+                                  [this, &name](const Container &container) {
+                                      return container.getImage() == name;
+                                  });
+        if (exist != containers.end()) {
+            containers.erase(exist);
+        }
+    }
 }
