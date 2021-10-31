@@ -14,8 +14,14 @@ std::vector<Container> parser::DockerAPIParser::parseContainerData(const std::st
     for (rapidjson::Value::ConstValueIterator itr = jsonDoc.Begin(); itr != jsonDoc.End(); ++itr) {
         const rapidjson::Value& attribute = *itr;
         assert(attribute.IsObject()); // each attribute is an object
+        const rapidjson::Value& namesValue = attribute["Names"];
+
+        std::vector<std::string> namesArray;
+        for (rapidjson::SizeType i = 0; i < namesValue.Size(); i++)
+            namesArray.emplace_back(namesValue[i].GetString());
+
         exploredContainers.emplace_back(attribute["Id"].GetString(),
-                                      "",
+                                        namesArray,
                                       0,
                                       attribute["Image"].GetString());
     }

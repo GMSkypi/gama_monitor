@@ -15,7 +15,9 @@ std::vector <Container> parser::DockerBashParser::parseContainerData(const std::
         vector<string> values = tokenize(line,regex("\\s\\s"));
         if(values.size() != 6 and values.size() != 7  ) // size of docker ps
             throw out_of_range("Parsing Docker PS error");
-        exploredContainers.emplace_back(values[0],values[values.size()],0,values[1]);
+        vector<string> names = tokenize(values[values.size()-1],regex(","));
+        if(names.empty()) names.push_back(values[values.size()]);
+        exploredContainers.emplace_back(values[0],names,0,values[1]);
     }
     return exploredContainers;
 }

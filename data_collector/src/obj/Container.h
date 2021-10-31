@@ -14,17 +14,17 @@
 class Container {
 private:
     std::string id;
-    std::string name;
+    std::vector<std::string> names;
     unsigned pid;
     std::string image;
     std::map<constants::metrics::Metrics,unsigned long> lastMetrics;
     std::map<constants::Paths,std::string> metricsPaths;
 public:
-    Container(const std::string& id, const std::string& name, unsigned pid, const std::string& image);
+    Container(const std::string& id, const std::vector<std::string>& names, unsigned pid, const std::string& image);
 
     void setPid(unsigned pid);
     [[nodiscard]] std::string getId() const;
-    [[nodiscard]] std::string getName() const;
+    [[nodiscard]] std::vector<std::string> getNames() const;
     [[nodiscard]] unsigned getPid() const;
     [[nodiscard]] std::string getImage() const;
     [[nodiscard]] std::map<constants::metrics::Metrics,unsigned long> & getLastMetrics();

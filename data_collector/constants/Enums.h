@@ -75,6 +75,11 @@ namespace constants{
         POSIX,
         UNKNOWN,
     };
+
+    enum Actions{
+        EXPLORE_NEW,
+        CAPTURE,
+    };
 }
 
 
