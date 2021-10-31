@@ -5,9 +5,9 @@
 #include "Container.h"
 
 
-Container::Container(const std::string& id, const std::string& name, unsigned int pid, const std::string& image) {
+Container::Container(const std::string& id, const std::vector<std::string>& names, unsigned int pid, const std::string& image) {
     this->id = id;
-    this->name = name;
+    this->names = names;
     this->pid = pid;
     this->image = image;
 }
@@ -20,8 +20,8 @@ std::string Container::getId() const {
     return id;
 }
 
-std::string Container::getName() const {
-    return name;
+std::vector<std::string> Container::getNames() const {
+    return names;
 }
 
 unsigned Container::getPid() const {
