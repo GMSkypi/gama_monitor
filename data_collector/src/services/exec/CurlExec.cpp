@@ -19,9 +19,11 @@ string CurlExec::exec(const char *cmd) {
     if (response == CURLE_OK){
         string result(mem.response);
         free(mem.response);
+        curl_easy_cleanup(curl);
         return result;
     }
     free(mem.response);
+    curl_easy_cleanup(curl);
     // TODO throw
     return std::string();
 }
