@@ -23,7 +23,7 @@ private:
 public:
     Collector(const shared_ptr<Config>& conf);
 
-    [[noreturn]] void startCapturing();
+    void startCapturing();
 private:
     constants::OS detectOS();
     ContainerExplorer loadExplorer();

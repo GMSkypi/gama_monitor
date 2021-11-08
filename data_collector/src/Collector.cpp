@@ -18,7 +18,10 @@
 #include "Capture.h"
 #include "services/exec/CurlExec.h"
 #include "services/Timer.h"
+#include "exporters/FileExporter.h"
 #include <thread>
+#include <signal.h>
+static bool stopIter = false;
 
 Collector::Collector(const shared_ptr<Config>& conf) {
     oSystem = detectOS();
@@ -33,7 +36,8 @@ Collector::Collector(const shared_ptr<Config>& conf) {
     this->conf = conf;
 }
 
-[[noreturn]] void Collector::startCapturing() {
+void Collector::startCapturing() {
+    signal(SIGINT, [] (int signum){stopIter = true;});
     ContainerExplorer containerExplorer = loadExplorer();
     vector<Container> containers = containerExplorer.explore();
     // TODO get node info
@@ -43,12 +47,13 @@ Collector::Collector(const shared_ptr<Config>& conf) {
     const vector<MetricsParserFactory::metricParserVP> unCapturedMetrics = metricsFactory.getMetricSources();
     metricsFactory.addAllGlobalMetrics();
     const vector<MetricsParserFactory::metricParserVP> globalUnCapturedMetrics = metricsFactory.getMetricSources();
-
+    FileExporter exporter("container_metrics");
     auto captureService = std::make_shared<Capture>(globalUnCapturedMetrics,
                                                           globalMetricsPaths,
                                                           fileReader);
     Timer timer = Timer(conf);
-    while(true){
+
+    while(!stopIter){
     //for(int i = 0; i < 3; i++){
         const std::vector<constants::Actions> * actions = timer.getActions();
         for(const constants::Actions action : *actions){
@@ -58,8 +63,10 @@ Collector::Collector(const shared_ptr<Config>& conf) {
                     continue;
                 case constants::Actions::CAPTURE:
                     captureService->globalNewCapturing();
-                    for(Container & container : containers)
+                    for(Container & container : containers){
                         captureService->newCapture(container, unCapturedMetrics );
+                        exporter.exportMetrics(&container);
+                    }
                     continue;
             }
         }
