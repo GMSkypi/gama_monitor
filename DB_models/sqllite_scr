@@ -1,0 +1,69 @@
+PRAGMA foreign_keys = ON;
+/* Table 'Container' */
+CREATE TABLE "Container"(
+  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  docekr_id TEXT,
+  names TEXT,
+  image TEXT
+);
+
+/* Table 'CPU' */
+CREATE TABLE "CPU"(
+  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  u_space_pr INTEGER,
+  k_space_pr INTEGER,
+  u_space_ms INTEGER,
+  k_space_ms INTEGER,
+  throttle_ns INTEGER,
+  throttle_cnt INTEGER,
+  total_ns INTEGER,
+  total_pr INTEGER,
+  date_time TEXT,
+  "Container_id" INTEGER NOT NULL,
+  CONSTRAINT "Container_CPU"
+    FOREIGN KEY ("Container_id") REFERENCES "Container" (id)
+);
+
+/* Table 'Memory' */
+CREATE TABLE "Memory"(
+  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  mem_used INTEGER,
+  mem_swap_used INTEGER,
+  rss INTEGER,
+  cache INTEGER,
+  swap INTEGER,
+  mem_limit INTEGER,
+  mem_swap_limit INTEGER,
+  mem_hit_cnt INTEGER,
+  mem_swap_hit_cnt INTEGER,
+  date_time TEXT,
+  "Container_id" INTEGER NOT NULL,
+  CONSTRAINT "Container_Memory"
+    FOREIGN KEY ("Container_id") REFERENCES "Container" (id)
+);
+
+/* Table 'IO' */
+CREATE TABLE "IO"(
+  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  read INTEGER,
+  write INTEGER,
+  date_time TEXT,
+  "Container_id" INTEGER NOT NULL,
+  CONSTRAINT "Container_IO"
+    FOREIGN KEY ("Container_id") REFERENCES "Container" (id)
+);
+
+/* Table 'NET' */
+CREATE TABLE "NET"(
+  id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  receive INTEGER,
+  receive_error INTEGER,
+  receive_error_total INTEGER,
+  transmit INTEGER,
+  transmit_error INTEGER,
+  transmit_error_total INTEGER,
+  date_time TEXT,
+  "Container_id" INTEGER NOT NULL,
+  CONSTRAINT "Container_NET"
+    FOREIGN KEY ("Container_id") REFERENCES "Container" (id)
+);
