@@ -23,8 +23,11 @@ void Capture::newCapture(Container & container, std::vector<MetricsParserFactory
     }
     std::cout << container.getImage() + "  ->";
     postProcessing(container.getLastMetrics(),actualMetric);
-    if(actualMetric.contains(Metrics::CPU_USER))
-        std::cout << ((double) actualMetric[Metrics::CPU_USER]) / 1000 << std::endl;
+    if(actualMetric.contains(Metrics::CPU_PROC)) {
+        std::cout << ((double) actualMetric[Metrics::CPU_PROC]) / 1000;
+        std::cout << " , ";
+        std::cout << (((double) actualMetric[Metrics::CPU_USER]) / 1000 + ((double) actualMetric[Metrics::CPU_KERNEL]) / 1000) << std::endl;
+    }
     container.setLastMetrics(actualMetric);
 }
 

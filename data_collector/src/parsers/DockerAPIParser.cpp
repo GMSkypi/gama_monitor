@@ -25,9 +25,6 @@ std::vector<Container> parser::DockerAPIParser::parseContainerData(const std::st
                                       0,
                                       attribute["Image"].GetString());
     }
-    if(exploredContainers.size() > 5){
-        std::cout << "dwa";
-    }
     return exploredContainers;
 }
 
