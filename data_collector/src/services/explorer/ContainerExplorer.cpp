@@ -44,15 +44,13 @@ void ContainerExplorer::exploreNew(vector<Container> &existing) const {
     }
     // Some container is not running
     if (existing.size() > exploredContainers.size()) {
-        for (auto exCont = existing.begin(); exCont != existing.end(); ++exCont) {
-            if(std::find_if(exploredContainers.begin(),
-                                     exploredContainers.end(),
-                                     [this, &exCont](const Container &explored) {
-                                         return exCont->getId() == explored.getId();
-                                     }) == exploredContainers.end()){
-                existing.erase(exCont);
-            }
-        }
+        std::erase_if(existing,
+                      [&exploredContainers] (Container & exCont) {
+            return (std::find_if(exploredContainers.begin(),
+                                 exploredContainers.end(),
+                                 [&exCont](const Container &explored) {
+                                            return exCont.getId() == explored.getId();
+                                            }) == exploredContainers.end());} );
     }
 }
 // TODO move to new class ?
