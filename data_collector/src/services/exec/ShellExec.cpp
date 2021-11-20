@@ -1,11 +1,10 @@
 //
-// Created by gama on 06.10.21.
+// Created by gama on 20.11.21.
 //
 
 #include "ShellExec.h"
-#include "../../../constants/LinuxBashCommands.h"
 
-string ShellExec::exec(const char *cmd){
+string ShellExec::exec(const char *cmd) {
     array<char, 128> buffer{};
     unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
     if (!pipe) {
@@ -18,10 +17,6 @@ string ShellExec::exec(const char *cmd){
     return output;
 }
 
-string ShellExec::getPid(const string & containerID) {
-    return exec((linuxBashCommands::dockerPIDCommandLinux + containerID).c_str());
-}
+void ShellExec::init() {}
 
-string ShellExec::getContainers() {
-    return exec(linuxBashCommands::dockerPSCommandLinux.c_str());
-}
+void ShellExec::exit() {}

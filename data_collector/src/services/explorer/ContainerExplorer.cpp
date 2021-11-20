@@ -6,7 +6,7 @@
 #include "../../parsers/StringParser.h"
 #include <regex>
 
-ContainerExplorer::ContainerExplorer(std::shared_ptr<Executor> executor,
+ContainerExplorer::ContainerExplorer(std::shared_ptr<DockerExecutor> executor,
                                      std::shared_ptr<parser::DockerParser> parser,
                                      std::shared_ptr<PathGenerator> pathGenerator,
                                      std::vector<std::string> blackList) {
@@ -82,6 +82,7 @@ void ContainerExplorer::initContainer(Container &container) const {
     unsigned pid = parser->parseContainerPid(executor->getPid(container.getId()));
     container.setPid(pid);
     containerPathInit(container);
+    // TODO init in database and get ID
 }
 
 void ContainerExplorer::excludeBlackList(std::vector<Container> & containers) const{

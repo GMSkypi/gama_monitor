@@ -8,18 +8,18 @@
 #include <memory>
 #include "../../obj/Container.h"
 #include "vector"
-#include "../exec/Executor.h"
+#include "../exec/docker_exec/DockerExecutor.h"
 #include "../../parsers/DockerParser.h"
 #include "../path_generator/PathGenerator.h"
 
 class ContainerExplorer{
 private:
-    std::shared_ptr<Executor> executor;
+    std::shared_ptr<DockerExecutor> executor;
     std::shared_ptr<parser::DockerParser> parser;
     std::shared_ptr<PathGenerator> pathGenerator;
     std::vector<std::string> blackList;
 public:
-    explicit ContainerExplorer(std::shared_ptr<Executor> executor,
+    explicit ContainerExplorer(std::shared_ptr<DockerExecutor> executor,
                                std::shared_ptr<parser::DockerParser> parser,
                                std::shared_ptr<PathGenerator> pathGenerator,
                                std::vector<std::string> blackList);
