@@ -11,16 +11,16 @@
 
 class DBConfig {
 public:
-    std::string database_IP;
-    std::string login;
-    std::string password;
+    std::string dbSocket;
+    int socketPort;
+    std::string questdbURL;
 
-    DBConfig(std::string database_IP,
-             std::string login,
-             std::string password) :
-            database_IP(std::move(database_IP)),
-            login(std::move(login)),
-            password(std::move(password)) {}
+    DBConfig(std::string dbSocket,
+             int socketPort,
+             std::string questdbURL) :
+            dbSocket(std::move(dbSocket)),
+            socketPort(socketPort),
+            questdbURL(std::move(questdbURL)) {}
 
 };
 

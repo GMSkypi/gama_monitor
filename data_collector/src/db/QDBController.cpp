@@ -10,7 +10,7 @@
 using namespace constants::metrics;
 void QDBController::initContainer(Container &container) {
     container.setUniqueID(container.getImage());
-    std::string containerIDJson = curlExecutor.exec("http://localhost:9000/exec",
+    std::string containerIDJson = curlExecutor.exec((conf->database.questdbURL + "exec").c_str(),
                                                               ("select id from Container where id = '" + container.getUniqueID() + "'").c_str());
     unsigned count = parser.parseNumberOfColumn(containerIDJson);
     if(count == 0){
@@ -21,14 +21,14 @@ void QDBController::initContainer(Container &container) {
         .addAttribute("docekr_id", container.getId())
         .addAttribute("names", container.getNamesInSingleString())
         .addAttribute("image", container.getImage());
-        socExecutor.init();
-        socExecutor.exec(exporter.exportData().c_str());
-        socExecutor.exit();
+        socExecutor->init();
+        socExecutor->exec(exporter.exportData().c_str());
+        socExecutor->exit();
     }
 }
 
 void QDBController::insertMetrics(const std::vector<Container>& containers) {
-    socExecutor.init();
+    socExecutor->init();
     for(const Container & container : containers){
         const std::map<constants::metrics::Metrics, unsigned long> & metrics = container.getLastMetrics();
         InfluxLineProtocolExporter exporter;
@@ -44,7 +44,7 @@ void QDBController::insertMetrics(const std::vector<Container>& containers) {
                 .addAttribute("throttle_cnt",defaultIfNotExists(metrics,Metrics::THROTTLE_COUNT))
                 .addAttribute("total_ns",defaultIfNotExists(metrics,Metrics::CPU_PROC_TIME))
                 .addAttribute("total_pr",defaultIfNotExists(metrics,Metrics::CPU_PROC));
-        socExecutor.exec(exporter.exportData().c_str());
+        socExecutor->exec(exporter.exportData().c_str());
 
         exporter = InfluxLineProtocolExporter();
         exporter
@@ -60,7 +60,7 @@ void QDBController::insertMetrics(const std::vector<Container>& containers) {
                 .addAttribute("mem_swap_limit",defaultIfNotExists(metrics,Metrics::MEM_SWAP_LIMIT))
                 .addAttribute("mem_hit_cnt",defaultIfNotExists(metrics,Metrics::MEM_HIT_COUNT))
                 .addAttribute("mem_swap_hit_cnt",defaultIfNotExists(metrics,Metrics::MEM_SWAP_HIT_COUNT));
-        socExecutor.exec(exporter.exportData().c_str());
+        socExecutor->exec(exporter.exportData().c_str());
 
         exporter = InfluxLineProtocolExporter();
         exporter
@@ -69,7 +69,7 @@ void QDBController::insertMetrics(const std::vector<Container>& containers) {
                 .addTag("Container_id",container.getUniqueID())
                 .addAttribute("read",defaultIfNotExists(metrics,Metrics::IO_READ))
                 .addAttribute("write",defaultIfNotExists(metrics,Metrics::IO_WRITE));
-        socExecutor.exec(exporter.exportData().c_str());
+        socExecutor->exec(exporter.exportData().c_str());
 
         exporter = InfluxLineProtocolExporter();
         exporter
@@ -82,14 +82,15 @@ void QDBController::insertMetrics(const std::vector<Container>& containers) {
                 .addAttribute("transmit",defaultIfNotExists(metrics,Metrics::NET_TRANSMIT))
                 .addAttribute("transmit_error",defaultIfNotExists(metrics,Metrics::NET_TRANSMIT_ERROR))
                 .addAttribute("transmit_error_total",defaultIfNotExists(metrics,Metrics::NET_TRANSMIT_ERROR_ACC));
-        socExecutor.exec(exporter.exportData().c_str());
+        socExecutor->exec(exporter.exportData().c_str());
     }
 
-    socExecutor.exit();
+    socExecutor->exit();
 }
 
 QDBController::QDBController(std::shared_ptr<Config> conf) {
     this->conf = std::move(conf);
+    socExecutor = make_shared<SocketExec>(this->conf->database.dbSocket,true,this->conf->database.socketPort);
 }
 
 unsigned long QDBController::defaultIfNotExists(const std::map<constants::metrics::Metrics, unsigned long> & metrics,

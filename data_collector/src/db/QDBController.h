@@ -14,7 +14,7 @@
 
 class QDBController {
 private:
-    SocketExec socExecutor = SocketExec("127.0.0.1",true,9009); // TODO sharedptr because params
+    std::shared_ptr<SocketExec> socExecutor;
     CurlExec curlExecutor = CurlExec();
     parser::QDBAPIParser parser = parser::QDBAPIParser();
     std::shared_ptr<Config> conf;
