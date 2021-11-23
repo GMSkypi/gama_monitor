@@ -21,6 +21,7 @@ namespace constants{
             THROTTLE_COUNT, // total count
             CPU_PROC_TOTAL, // total nanoseconds
             CPU_PROC, // % period
+            CPU_PROC_TIME, // period millisecond
             MEM_USED, // in bytes
             MEM_USED_SWAP, // in bytes
             MEM_RSS, // bytes of anonymous and swap cache memory

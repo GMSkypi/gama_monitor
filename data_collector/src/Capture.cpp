@@ -71,6 +71,7 @@ void Capture::postProcessing( std::map<constants::metrics::Metrics,unsigned long
         if(actual.contains(Metrics::CPU_PROC_TOTAL)) {
             unsigned long cpuTotal = actual[Metrics::CPU_PROC_TOTAL]
                                    - old[Metrics::CPU_PROC_TOTAL];
+            actual[Metrics::CPU_PROC_TIME] = (unsigned long)(cpuTotal / 1000000);
             actual[Metrics::CPU_PROC] = calculateTotalCPUPercent(cpuTotal,
                                                               lastGlobalMetrics[Metrics::CPU_TOTAL]);
         }
