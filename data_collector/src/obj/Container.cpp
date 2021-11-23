@@ -47,3 +47,29 @@ std::map<constants::Paths, std::string> Container::getMetricsPath() const {
 void Container::setMetricsPath(std::map<constants::Paths, std::string> &paths) {
     metricsPaths = paths;
 }
+
+void Container::setTimestamp(std::chrono::nanoseconds newTimestamp) {
+    this->timestamp = newTimestamp;
+}
+
+std::chrono::nanoseconds Container::getTimestamp() const {
+    return timestamp;
+}
+
+void Container::setUniqueID(std::string newUniqueID) {
+    this->uniqueID = move(newUniqueID);
+}
+
+std::string Container::getUniqueID() const {
+    return uniqueID;
+}
+
+std::string Container::getNamesInSingleString() const {
+    std::string concatNames;
+    std::for_each(names.begin(),names.end(),[&concatNames](const std::string& name){concatNames += name + ",";});
+    return concatNames;
+}
+
+std::map<constants::metrics::Metrics, unsigned long> Container::getLastMetrics() const {
+    return lastMetrics;
+}

@@ -65,3 +65,9 @@ CurlExec::CurlExec(const std::string & socketPath) {
 }
 
 CurlExec::CurlExec() {}
+
+std::string CurlExec::exec(const char *cmd, const char *query) {
+    char * queryEncoded = curl_easy_escape(nullptr,query,strlen(query));
+    std::string newCmd = std::string(cmd) + "?query=" + std::string(queryEncoded);
+    return exec(newCmd.c_str());
+}

@@ -15,6 +15,7 @@
 #include "Capture.h"
 #include "services/exec/docker_exec/CurlDockerExec.h"
 #include "services/Timer.h"
+#include "db/QDBController.h"
 #include <thread>
 #include <iostream>
 
@@ -32,8 +33,9 @@ Collector::Collector(const shared_ptr<Config>& conf) {
 }
 
 [[noreturn]] void Collector::startCapturing() {
+    QDBController dbController = QDBController(conf);
     ContainerExplorer containerExplorer = loadExplorer();
-    vector<Container> containers = containerExplorer.explore();
+    vector<Container> containers = containerExplorer.explore(dbController);
     // TODO get node info
     const map<constants::Paths,std::string> globalMetricsPaths = containerExplorer.globalPathInit();
     MetricsParserFactory metricsFactory;
@@ -46,18 +48,20 @@ Collector::Collector(const shared_ptr<Config>& conf) {
                                                           globalMetricsPaths,
                                                           fileReader);
     Timer timer = Timer(conf);
+
     while(true){
     //for(int i = 0; i < 3; i++){
         const std::vector<constants::Actions> * actions = timer.getActions();
         for(const constants::Actions action : *actions){
             switch(action){
                 case constants::Actions::EXPLORE_NEW:
-                    containerExplorer.exploreNew(containers);
+                    containerExplorer.exploreNew(containers, dbController);
                     continue;
                 case constants::Actions::CAPTURE:
                     captureService->globalNewCapturing();
                     for(Container & container : containers)
                         captureService->newCapture(container, unCapturedMetrics );
+                    dbController.insertMetrics(containers);
                     continue;
             }
         }

@@ -23,6 +23,7 @@ void Capture::newCapture(Container & container, std::vector<MetricsParserFactory
     }
     std::cout << container.getImage() + "  ->";
     postProcessing(container.getLastMetrics(),actualMetric);
+    container.setTimestamp(duration_cast< std::chrono::nanoseconds >(std::chrono::system_clock::now().time_since_epoch()));
     if(actualMetric.contains(Metrics::CPU_PROC)) {
         std::cout << ((double) actualMetric[Metrics::CPU_PROC]) / 1000;
         std::cout << " , ";

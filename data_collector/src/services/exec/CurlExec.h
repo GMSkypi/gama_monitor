@@ -17,10 +17,12 @@ public:
     CurlExec(const std::string & socketPath);
     CurlExec();
     std::string exec(const char *cmd) override;
+    std::string exec(const char *cmd, const char *query);
 
     void init() override;
 
     void exit() override;
+
 private:
     struct Memory {
         char *response;
