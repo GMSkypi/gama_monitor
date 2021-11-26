@@ -11,6 +11,8 @@ namespace parser {
     class QDBAPIParser {
     public:
         unsigned parseNumberOfColumn(const std::string& data);
+        bool checkForError(const std::string & data);
+        bool checkCreate(const std::string & data);
     };
 }
 

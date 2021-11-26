@@ -5,7 +5,9 @@
 #include "QDBController.h"
 
 #include <utility>
+#include <fstream>
 #include "exporters/InfluxLineProtocolExporter.h"
+#include "../../constants/LinuxSourcePaths.h"
 
 using namespace constants::metrics;
 void QDBController::initContainer(Container &container) {
@@ -91,10 +93,26 @@ void QDBController::insertMetrics(const std::vector<Container>& containers) {
 QDBController::QDBController(std::shared_ptr<Config> conf) {
     this->conf = std::move(conf);
     socExecutor = make_shared<SocketExec>(this->conf->database.dbSocket,true,this->conf->database.socketPort);
+    this->initDB();
 }
 
 unsigned long QDBController::defaultIfNotExists(const std::map<constants::metrics::Metrics, unsigned long> & metrics,
                                             constants::metrics::Metrics toFind) {
     auto search = metrics.find(toFind);
     return search != metrics.end() ? search->second : 0;
+}
+
+void QDBController::initDB() {
+    std::string containerIDJson = curlExecutor.exec((conf->database.questdbURL + "exec").c_str(),
+                                                    "select id from Container limit 1");
+    if(parser.checkForError(containerIDJson)){
+        std::ifstream infile(linuxSourcePaths::questDBcsPath);
+        std::string line;
+        while (std::getline(infile, line)){
+            if(!line.empty() && line[0] != '/'){
+                if(!parser.checkCreate(curlExecutor.exec((conf->database.questdbURL + "exec").c_str(),
+                                  line.c_str()))) throw std::runtime_error("Database can not be created");
+            }
+        }
+    }
 }

@@ -22,9 +22,11 @@ public:
     QDBController(std::shared_ptr<Config> conf);
     void insertMetrics(const std::vector<Container>& containers); // socket
     void initContainer(Container & containers); // curl // socket
+
 private:
     unsigned long defaultIfNotExists(const std::map<constants::metrics::Metrics, unsigned long> & metrics,
                                  constants::metrics::Metrics toFind);
+    void initDB();
 };
 
 

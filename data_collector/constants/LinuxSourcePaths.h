@@ -32,6 +32,7 @@ namespace linuxSourcePaths{
     const string networkTrafficFile = "net/dev";
 
     const string iniPath = "../config/config.ini";
+    const string questDBcsPath = "../config/questDB-create-script.sql";
 }
 
 

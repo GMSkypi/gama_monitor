@@ -3,6 +3,7 @@
 //
 
 #include "CurlExec.h"
+#include <stdexcept>
 
 std::string CurlExec::exec(const char *cmd) {
     Memory mem{};
@@ -22,8 +23,7 @@ std::string CurlExec::exec(const char *cmd) {
     }
     free(mem.response);
     curl_easy_cleanup(curl);
-    // TODO throw
-    return std::string();
+    throw std::runtime_error("CURL RESPONSE FAILED, CMD:" + std::string(cmd) + "RESPONSE:" + curl_easy_strerror(response));
 }
 
 void CurlExec::init() {
