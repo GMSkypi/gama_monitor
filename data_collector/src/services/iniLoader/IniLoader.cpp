@@ -25,6 +25,9 @@ int iniLoader::loadConfig(const std::string & iniPath,  std::shared_ptr<Config> 
         const char* questdbURL;
         questdbURL = ini.GetValue("config_db", "questdb_url");
 
+        const char* questdbHealthUrl;
+        questdbHealthUrl = ini.GetValue("config_db", "questdb_Health_url");
+
         const char* metricDelayString;
         metricDelayString = ini.GetValue("delays", "metric_delay");
         unsigned long metricDelay = parser::getUnsignedFromString(metricDelayString);
@@ -46,7 +49,7 @@ int iniLoader::loadConfig(const std::string & iniPath,  std::shared_ptr<Config> 
 
 
         conf = std::make_shared<Config>(
-                DBConfig(dbSocket,socketPort,questdbURL),
+                DBConfig(dbSocket,socketPort,questdbURL, questdbHealthUrl),
                 metricDelay,
                 exportDelay,
                 blackList,

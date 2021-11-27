@@ -14,12 +14,15 @@ public:
     std::string dbSocket;
     int socketPort;
     std::string questdbURL;
+    std::string questdbHealthUrl;
 
     DBConfig(std::string dbSocket,
              int socketPort,
-             std::string questdbURL) :
+             std::string questdbURL,
+             std::string questdbHealthUrl) :
             dbSocket(std::move(dbSocket)),
             socketPort(socketPort),
+            questdbHealthUrl(std::move(questdbHealthUrl)),
             questdbURL(std::move(questdbURL)) {}
 
 };

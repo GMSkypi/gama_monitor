@@ -27,6 +27,7 @@ private:
     unsigned long defaultIfNotExists(const std::map<constants::metrics::Metrics, unsigned long> & metrics,
                                  constants::metrics::Metrics toFind);
     void initDB();
+    void waitForDB();
 };
 
 

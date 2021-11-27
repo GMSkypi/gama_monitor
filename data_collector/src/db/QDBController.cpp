@@ -6,6 +6,7 @@
 
 #include <utility>
 #include <fstream>
+#include <thread>
 #include "exporters/InfluxLineProtocolExporter.h"
 #include "../../constants/LinuxSourcePaths.h"
 
@@ -103,6 +104,7 @@ unsigned long QDBController::defaultIfNotExists(const std::map<constants::metric
 }
 
 void QDBController::initDB() {
+    waitForDB();
     std::string containerIDJson = curlExecutor.exec((conf->database.questdbURL + "exec").c_str(),
                                                     "select id from Container limit 1");
     if(parser.checkForError(containerIDJson)){
@@ -115,4 +117,17 @@ void QDBController::initDB() {
             }
         }
     }
+}
+
+void QDBController::waitForDB() {
+    for(unsigned i = 0; i < 3 ; i++){
+        try{
+            curlExecutor.exec((conf->database.questdbHealthUrl).c_str());
+            return;
+        }
+        catch(std::runtime_error & e){
+            std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+        }
+    }
+    throw std::runtime_error("Unable to connect to database");
 }
