@@ -23,8 +23,12 @@ void Capture::newCapture(Container & container, std::vector<MetricsParserFactory
     }
     std::cout << container.getImage() + "  ->";
     postProcessing(container.getLastMetrics(),actualMetric);
-    if(actualMetric.contains(Metrics::CPU_USER))
-        std::cout << ((double) actualMetric[Metrics::CPU_USER]) / 1000 << std::endl;
+    container.setTimestamp(duration_cast< std::chrono::nanoseconds >(std::chrono::system_clock::now().time_since_epoch()));
+    if(actualMetric.contains(Metrics::CPU_PROC)) {
+        std::cout << ((double) actualMetric[Metrics::CPU_PROC]) / 1000;
+        std::cout << " , ";
+        std::cout << (((double) actualMetric[Metrics::CPU_USER]) / 1000 + ((double) actualMetric[Metrics::CPU_KERNEL]) / 1000) << std::endl;
+    }
     container.setLastMetrics(actualMetric);
 }
 
@@ -68,6 +72,7 @@ void Capture::postProcessing( std::map<constants::metrics::Metrics,unsigned long
         if(actual.contains(Metrics::CPU_PROC_TOTAL)) {
             unsigned long cpuTotal = actual[Metrics::CPU_PROC_TOTAL]
                                    - old[Metrics::CPU_PROC_TOTAL];
+            actual[Metrics::CPU_PROC_TIME] = (unsigned long)(cpuTotal / 1000000);
             actual[Metrics::CPU_PROC] = calculateTotalCPUPercent(cpuTotal,
                                                               lastGlobalMetrics[Metrics::CPU_TOTAL]);
         }

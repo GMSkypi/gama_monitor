@@ -1,12 +1,11 @@
 //
-// Created by gama on 17.10.21.
+// Created by gama on 20.11.21.
 //
 
-#include <cstring>
 #include "CurlExec.h"
-#include "../../../constants/DockerAPICommands.h"
+#include <stdexcept>
 
-string CurlExec::exec(const char *cmd) {
+std::string CurlExec::exec(const char *cmd) {
     Memory mem{};
     initMemory(&mem);
     auto curl = curl_easy_init();
@@ -17,26 +16,23 @@ string CurlExec::exec(const char *cmd) {
     curl_easy_reset(curl);
 
     if (response == CURLE_OK){
-        string result(mem.response);
+        std::string result(mem.response);
         free(mem.response);
         curl_easy_cleanup(curl);
         return result;
     }
     free(mem.response);
     curl_easy_cleanup(curl);
-    // TODO throw
-    return std::string();
+    throw std::runtime_error("CURL RESPONSE FAILED, CMD:" + std::string(cmd) + "RESPONSE:" + curl_easy_strerror(response));
 }
 
-string CurlExec::getPid(const string &containerID) {
-    return exec((dockerAPI::containersSpecURL + containerID + "/top").c_str());
+void CurlExec::init() {
+
 }
 
-string CurlExec::getContainers() {
-    return exec(dockerAPI::containersURL.c_str());;
+void CurlExec::exit() {
+
 }
-
-
 size_t CurlExec::writeFunction(void *data, size_t size, size_t nmemb, void *buffer) {
     size_t realSize = size * nmemb;
     auto *mem = (struct Memory *)buffer;
@@ -53,7 +49,8 @@ size_t CurlExec::writeFunction(void *data, size_t size, size_t nmemb, void *buff
 }
 
 void CurlExec::initCurl(Memory * mem , CURL *curl) {
-    curl_easy_setopt(curl, CURLOPT_UNIX_SOCKET_PATH, "/var/run/docker.sock");
+    if(!this->socketPath.empty())
+        curl_easy_setopt(curl, CURLOPT_UNIX_SOCKET_PATH, socketPath.c_str());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeFunction);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, mem);
 }
@@ -61,4 +58,16 @@ void CurlExec::initCurl(Memory * mem , CURL *curl) {
 void CurlExec::initMemory(CurlExec::Memory * mem) {
     mem->response = (char *) malloc(1);
     mem->size = 0;
+}
+
+CurlExec::CurlExec(const std::string & socketPath) {
+    this->socketPath = socketPath;
+}
+
+CurlExec::CurlExec() {}
+
+std::string CurlExec::exec(const char *cmd, const char *query) {
+    char * queryEncoded = curl_easy_escape(nullptr,query,strlen(query));
+    std::string newCmd = std::string(cmd) + "?query=" + std::string(queryEncoded);
+    return exec(newCmd.c_str());
 }

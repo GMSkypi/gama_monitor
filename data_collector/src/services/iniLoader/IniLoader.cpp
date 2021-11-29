@@ -17,12 +17,16 @@ int iniLoader::loadConfig(const std::string & iniPath,  std::shared_ptr<Config> 
     if (rc < 0) { /* 1handle error */ };
     if(rc ==  SI_OK){
 
-        const char* database_IP;
-        database_IP = ini.GetValue("config", "database_IP");
-        const char* login;
-        login = ini.GetValue("config", "login");
-        const char* password;
-        password = ini.GetValue("config", "password");
+        const char* dbSocket;
+        dbSocket = ini.GetValue("config_db", "socket");
+        const char* socketPortChar;
+        socketPortChar = ini.GetValue("config_db", "socket_port");
+        int socketPort = parser::getUnsignedFromString(socketPortChar);
+        const char* questdbURL;
+        questdbURL = ini.GetValue("config_db", "questdb_url");
+
+        const char* questdbHealthUrl;
+        questdbHealthUrl = ini.GetValue("config_db", "questdb_Health_url");
 
         const char* metricDelayString;
         metricDelayString = ini.GetValue("delays", "metric_delay");
@@ -45,7 +49,7 @@ int iniLoader::loadConfig(const std::string & iniPath,  std::shared_ptr<Config> 
 
 
         conf = std::make_shared<Config>(
-                DBConfig(database_IP,login,password),
+                DBConfig(dbSocket,socketPort,questdbURL, questdbHealthUrl),
                 metricDelay,
                 exportDelay,
                 blackList,

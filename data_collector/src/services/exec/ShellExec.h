@@ -1,25 +1,24 @@
 //
-// Created by gama on 06.10.21.
+// Created by gama on 20.11.21.
 //
 
 #ifndef DATA_COLLECTOR_SHELLEXEC_H
 #define DATA_COLLECTOR_SHELLEXEC_H
-#include <cstdio>
-#include <iostream>
-#include <memory>
-#include <stdexcept>
-#include <string>
-#include <array>
+
+
 #include "Executor.h"
+#include <stdexcept>
+#include <memory>
 
 using namespace std;
-class ShellExec : public Executor {
+
+class ShellExec : public Executor{
 public:
-    string exec(const char* cmd) override ;
+    string exec(const char *cmd) override;
 
-    string getPid(const string & containerID) override;
+    void init() override;
 
-    string getContainers() override;
+    void exit() override;
 };
 
 

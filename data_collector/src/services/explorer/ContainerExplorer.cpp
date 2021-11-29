@@ -6,7 +6,7 @@
 #include "../../parsers/StringParser.h"
 #include <regex>
 
-ContainerExplorer::ContainerExplorer(std::shared_ptr<Executor> executor,
+ContainerExplorer::ContainerExplorer(std::shared_ptr<DockerExecutor> executor,
                                      std::shared_ptr<parser::DockerParser> parser,
                                      std::shared_ptr<PathGenerator> pathGenerator,
                                      std::vector<std::string> blackList) {
@@ -15,18 +15,19 @@ ContainerExplorer::ContainerExplorer(std::shared_ptr<Executor> executor,
     this->pathGenerator = pathGenerator;
     this->blackList = blackList;
 }
-vector<Container> ContainerExplorer::explore() const {
+vector<Container> ContainerExplorer::explore(QDBController & dBController) const {
     string data = executor->getContainers();
     vector<Container> exploredContainers = parser->parseContainerData(data);
     excludeBlackList(exploredContainers);
     std::for_each(exploredContainers.begin(), exploredContainers.end(),
-                  [this](Container & container){
+                  [this, &dBController](Container & container){
                       initContainer(container);
+                      dBController.initContainer(container);
                   });
     return exploredContainers;
 }
 
-void ContainerExplorer::exploreNew(vector<Container> &existing) const {
+void ContainerExplorer::exploreNew(vector<Container> &existing, QDBController & dBController) const {
     string data = executor->getContainers();
     vector<Container> exploredContainers = parser->parseContainerData(data);
     excludeBlackList(exploredContainers);
@@ -39,6 +40,7 @@ void ContainerExplorer::exploreNew(vector<Container> &existing) const {
         // Container is new
         if (!exist) {
             initContainer(expContainer);
+            dBController.initContainer((expContainer));
             existing.push_back(expContainer);
         }
     }
@@ -53,7 +55,6 @@ void ContainerExplorer::exploreNew(vector<Container> &existing) const {
                                             }) == exploredContainers.end());} );
     }
 }
-// TODO move to new class ?
 void ContainerExplorer::containerPathInit(Container &container) const {
     const std::string & id = container.getId();
     std::map<constants::Paths,std::string> metricsPaths;
@@ -82,6 +83,7 @@ void ContainerExplorer::initContainer(Container &container) const {
     unsigned pid = parser->parseContainerPid(executor->getPid(container.getId()));
     container.setPid(pid);
     containerPathInit(container);
+    // TODO init in database and get ID
 }
 
 void ContainerExplorer::excludeBlackList(std::vector<Container> & containers) const{

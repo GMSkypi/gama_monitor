@@ -2,23 +2,22 @@
 // Created by gama on 14.10.21.
 //
 
-#include <unistd.h>
 #include <memory>
-#include <utility>
 #include "Collector.h"
 #include "services/file_reader/LinuxFReader.h"
 #include "services/path_generator/LinuxPathGenerator.h"
 #include "services/MetricsParserFactory.h"
 #include "obj/Container.h"
 #include "services/explorer/ContainerExplorer.h"
-#include "services/exec/ShellExec.h"
-#include "../constants/LinuxBashCommands.h"
+#include "services/exec/docker_exec/ShellDockerExec.h"
 #include "parsers/DockerAPIParser.h"
 #include "parsers/DockerBashParser.h"
 #include "Capture.h"
-#include "services/exec/CurlExec.h"
+#include "services/exec/docker_exec/CurlDockerExec.h"
 #include "services/Timer.h"
+#include "db/QDBController.h"
 #include <thread>
+#include <iostream>
 
 Collector::Collector(const shared_ptr<Config>& conf) {
     oSystem = detectOS();
@@ -34,8 +33,9 @@ Collector::Collector(const shared_ptr<Config>& conf) {
 }
 
 [[noreturn]] void Collector::startCapturing() {
+    QDBController dbController = QDBController(conf);
     ContainerExplorer containerExplorer = loadExplorer();
-    vector<Container> containers = containerExplorer.explore();
+    vector<Container> containers = containerExplorer.explore(dbController);
     // TODO get node info
     const map<constants::Paths,std::string> globalMetricsPaths = containerExplorer.globalPathInit();
     MetricsParserFactory metricsFactory;
@@ -48,18 +48,20 @@ Collector::Collector(const shared_ptr<Config>& conf) {
                                                           globalMetricsPaths,
                                                           fileReader);
     Timer timer = Timer(conf);
+
     while(true){
     //for(int i = 0; i < 3; i++){
         const std::vector<constants::Actions> * actions = timer.getActions();
         for(const constants::Actions action : *actions){
             switch(action){
                 case constants::Actions::EXPLORE_NEW:
-                    containerExplorer.exploreNew(containers);
+                    containerExplorer.exploreNew(containers, dbController);
                     continue;
                 case constants::Actions::CAPTURE:
                     captureService->globalNewCapturing();
                     for(Container & container : containers)
                         captureService->newCapture(container, unCapturedMetrics );
+                    dbController.insertMetrics(containers);
                     continue;
             }
         }
@@ -93,17 +95,17 @@ constants::OS Collector::detectOS() {
 ContainerExplorer Collector::loadExplorer() {
     switch(conf->explorerParserOption){
         case 1:
-            return ContainerExplorer(shared_ptr<Executor>(new ShellExec()),
+            return ContainerExplorer(shared_ptr<DockerExecutor>(new ShellDockerExec()),
                                       shared_ptr<parser::DockerParser>(new parser::DockerBashParser),
                                       pathGenerator,
                                       conf->blackList);
         case 2:
-            return ContainerExplorer(shared_ptr<Executor>(new CurlExec),
+            return ContainerExplorer(shared_ptr<DockerExecutor>(new CurlDockerExec),
                                      shared_ptr<parser::DockerParser>(new parser::DockerAPIParser),
                                      pathGenerator,
                                      conf->blackList);
         default:
-            return ContainerExplorer(shared_ptr<Executor>(new CurlExec),
+            return ContainerExplorer(shared_ptr<DockerExecutor>(new CurlDockerExec),
                                      shared_ptr<parser::DockerParser>(new parser::DockerAPIParser),
                                      pathGenerator,
                                      conf->blackList);
