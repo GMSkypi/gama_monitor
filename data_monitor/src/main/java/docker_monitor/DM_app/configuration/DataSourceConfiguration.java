@@ -1,7 +1,7 @@
 package docker_monitor.DM_app.configuration;
 
-import docker_monitor.DM_app.process.database.DataSource;
-import docker_monitor.DM_app.process.database.DataSourceImp;
+import docker_monitor.DM_app.process.database.db_source.DataSource;
+import docker_monitor.DM_app.process.database.db_source.DataSourceImp;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

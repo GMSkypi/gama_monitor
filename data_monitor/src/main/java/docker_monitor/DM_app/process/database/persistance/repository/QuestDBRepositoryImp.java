@@ -1,7 +1,7 @@
 package docker_monitor.DM_app.process.database.persistance.repository;
 
 
-import docker_monitor.DM_app.process.database.DataSource;
+import docker_monitor.DM_app.process.database.db_source.DataSource;
 import docker_monitor.DM_app.process.database.db_mapper.QuestDBDataMapper;
 import docker_monitor.DM_app.process.database.persistance.anotation.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
