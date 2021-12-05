@@ -1,6 +1,10 @@
 package docker_monitor.DM_app.web.controllers;
 
 
+import docker_monitor.DM_app.process.database.db_mapper.QuestDBDataMapper;
+import docker_monitor.DM_app.process.database.entities.Container;
+import docker_monitor.DM_app.process.database.repository.ContainerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.validation.annotation.Validated;
@@ -14,6 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 public class TestController {
 
+    @Autowired
+    ContainerRepository containerRepository;
+
     @GetMapping(value = "private")
     @PreAuthorize("hasAuthority('USER')")
     String privateAccess() {
@@ -25,8 +32,9 @@ public class TestController {
         return "private admin test success";
     }
     @GetMapping(value = "public")
-    String publicAccess() {
-        return "public test success";
+
+    Iterable<Container> publicAccess() {
+        return containerRepository.findAll();
     }
 
 }
