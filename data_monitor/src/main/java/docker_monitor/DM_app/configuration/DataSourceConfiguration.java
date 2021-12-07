@@ -2,6 +2,8 @@ package docker_monitor.DM_app.configuration;
 
 import docker_monitor.DM_app.process.database.db_source.DataSource;
 import docker_monitor.DM_app.process.database.db_source.DataSourceImp;
+import docker_monitor.DM_app.process.database.db_source.NotificationDataSource;
+import docker_monitor.DM_app.process.database.db_source.NotificationDataSourceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -24,5 +26,9 @@ public class DataSourceConfiguration {
                 env.getProperty("spring.datasource.sslmode"),
                 env.getProperty("spring.datasource.jdbc-url"),
                 15);
+    }
+    @Bean
+    public NotificationDataSource getNotificationDatasource(){
+        return new NotificationDataSourceImp(env.getProperty("spring.notification-datasource.path"));
     }
 }
