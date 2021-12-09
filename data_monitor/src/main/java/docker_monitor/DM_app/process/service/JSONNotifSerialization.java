@@ -37,18 +37,18 @@ public class JSONNotifSerialization implements NotificationSerialization{
     }
 
     @Override
-    public ArrayList<Notification> loadObjects() {
+    public List<Notification> loadObjects() {
         try{
             ObjectMapper objectMapper = new ObjectMapper();
             String data = dataSource.getNotifications();
-            return objectMapper.readValue(data, new TypeReference<ArrayList<Notification>>(){});
+            return objectMapper.readValue(data, new TypeReference<List<Notification>>(){});
         } catch(FileNotFoundException e){
-            e.printStackTrace();
+            System.out.println("Notification file not found, creating new file.");
         } catch (JsonMappingException e) {
             e.printStackTrace();
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        return null;
+        return  new ArrayList<Notification>();
     }
 }

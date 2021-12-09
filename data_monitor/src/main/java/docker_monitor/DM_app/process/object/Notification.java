@@ -4,6 +4,7 @@ package docker_monitor.DM_app.process.object;
 import com.fasterxml.jackson.annotation.JsonView;
 
 public class Notification {
+    long id;
     String containerId;
     String valueToMonitor;
     String message;
@@ -43,6 +44,7 @@ public class Notification {
         this.changeNotify = notif.changeNotify;
         this.type = notif.type;
         this.thresholdNotify = notif.thresholdNotify;
+        this.id = notif.id;
     }
 
     public String getContainerId() {
@@ -107,5 +109,13 @@ public class Notification {
 
     public void setThresholdNotify(ThresholdNotify thresholdNotify) {
         this.thresholdNotify = thresholdNotify;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }
