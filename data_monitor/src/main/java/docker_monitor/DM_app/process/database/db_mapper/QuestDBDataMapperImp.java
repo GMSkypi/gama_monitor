@@ -6,11 +6,12 @@ import docker_monitor.DM_app.process.database.persistance.anotation.Column;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.*;
-import java.sql.Date;
+import java.util.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 
 @Service
@@ -24,7 +25,7 @@ public class QuestDBDataMapperImp implements QuestDBDataMapper {
         public Field filed;
     }
     @Override
-    public <C> Iterable<C> mapResultSet(ResultSet resultSet, Class<C> clazz) throws SQLException {
+    public <C> List<C> mapResultSet(ResultSet resultSet, Class<C> clazz) throws SQLException {
         ArrayList<FieldIndex> fieldIndices = new ArrayList<>();
         for (Field f: clazz.getDeclaredFields()) {
             Column column = f.getAnnotation(Column.class);
@@ -74,8 +75,8 @@ public class QuestDBDataMapperImp implements QuestDBDataMapper {
         } else if (int.class.equals(fieldType)) {
             return ResultSet.class.getMethod("getInt", int.class);
         } else if (Date.class.equals(fieldType)){
-            return ResultSet.class.getMethod("getDate", int.class);
-        } else if (Long.class.equals(fieldType)){
+            return ResultSet.class.getMethod("getTimestamp", int.class);
+        } else if ( long.class.equals(fieldType)){
             return ResultSet.class.getMethod("getLong", int.class);
         }
         return ResultSet.class.getMethod("getString",int.class);

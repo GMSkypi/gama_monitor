@@ -1,6 +1,10 @@
 package docker_monitor.DM_app.web.controllers;
 
 
+import docker_monitor.DM_app.constants.Group;
+import docker_monitor.DM_app.constants.Metrics;
+import docker_monitor.DM_app.process.database.entities.Cpu;
+import docker_monitor.DM_app.process.database.repository.CpuRepository;
 import docker_monitor.DM_app.process.service.cache.NotificationCache;
 import docker_monitor.DM_app.process.database.entities.Container;
 import docker_monitor.DM_app.process.database.repository.ContainerRepository;
@@ -22,6 +26,9 @@ public class TestController {
 
     @Autowired
     ContainerRepository containerRepository;
+
+    @Autowired
+    CpuRepository cpuRepository;
 
     //@Autowired
     //JSONNotifSerialization serialization;
@@ -51,13 +58,18 @@ public class TestController {
         return null;
 
     }
+    @GetMapping(value = "public/cpu")
+    List<Cpu> loadCPU(){
+        return cpuRepository.findAll();
+    }
+
     @GetMapping(value = "public/show")
     List<Notification> loadObjects(){
         return notificationCache.getNotifications().stream().map(ActiveNotification::getNotification).collect(Collectors.toList());
     }
     @GetMapping(value = "public/insert")
     List<Notification> insert(){
-        notificationCache.addNotification((new Notification("dontCreate","CPUACC","message",10,1,new ThresholdNotify(Trigger.ABOVE, Threshold.AVERAGE))));
+        notificationCache.addNotification((new Notification("questdb/questdb:latest", Metrics.TOTAL_PR, Group.CPU," ...",100,10000,new ThresholdNotify(Trigger.ABOVE, Threshold.MAX), 50)));
         return notificationCache.getNotifications().stream().map(ActiveNotification::getNotification).collect(Collectors.toList());
     }
 

@@ -5,6 +5,7 @@ import docker_monitor.DM_app.process.object.Notification;
 import docker_monitor.DM_app.process.service.NotificationSerialization;
 import org.springframework.stereotype.Component;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,7 +22,11 @@ public class NotificationCache {
         else
             newNotification.setId(notifications.get(notifications.size() - 1).getNotification().getId() + 1);
         notifications.add(new ActiveNotification(newNotification));
+
+        notifications.sort(Comparator.comparing(o -> o.getNotification().getContainerId()));
         serialization.serialize((notifications.stream().map(ActiveNotification::getNotification).collect(Collectors.toList())));
+
+
     }
     public void removeNotification(ActiveNotification toBeRemoved){
         notifications.remove(toBeRemoved);
@@ -41,4 +46,9 @@ public class NotificationCache {
     public void setNotifications(List<ActiveNotification> notifications) {
         this.notifications = notifications;
     }
+
+    private boolean checkNotificationMetric(Notification newNotification){
+        return false;
+    }
+
 }

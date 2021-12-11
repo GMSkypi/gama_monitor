@@ -3,8 +3,10 @@ package docker_monitor.DM_app.process.database.repository;
 
 import docker_monitor.DM_app.process.database.entities.Net;
 import docker_monitor.DM_app.process.database.persistance.repository.QuestDBRepositoryImp;
+import org.springframework.stereotype.Repository;
 
-public class NetRepository extends QuestDBRepositoryImp<Net> {
+@Repository
+public class NetRepository extends MetricsRepository<Net> {
     public NetRepository() {
         super(Net.class);
     }

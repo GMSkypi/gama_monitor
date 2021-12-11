@@ -1,43 +1,51 @@
 package docker_monitor.DM_app.process.object;
 
 
-import com.fasterxml.jackson.annotation.JsonView;
+import docker_monitor.DM_app.constants.Group;
+import docker_monitor.DM_app.constants.Metrics;
 
 public class Notification {
     long id;
     String containerId;
-    String valueToMonitor;
+    Metrics metricToMonitor;
+    Group metricGroup;
     String message;
     long value;
     long overTime;
+
+    long notificationDelay;
 
     NotificationType type;
     ChangeNotify changeNotify;
     ThresholdNotify thresholdNotify;
 
-    public Notification(String containerId, String valueToMonitor, String message, long value, long overTime, ThresholdNotify thresholdNotify) {
+    public Notification(String containerId, Metrics valueToMonitor,Group group, String message, long value, long overTime, ThresholdNotify thresholdNotify, long delay) {
         this.containerId = containerId;
-        this.valueToMonitor = valueToMonitor;
+        this.metricToMonitor = valueToMonitor;
         this.message = message;
         this.value = value;
         this.overTime = overTime;
         this.thresholdNotify = thresholdNotify;
         type = NotificationType.THRESHOLD;
+        this.metricGroup = group;
+        this.notificationDelay = delay;
     }
     public Notification(){}
 
-    public Notification(String containerId, String valueToMonitor, String message, long value, long overTime, ChangeNotify changeNotify) {
+    public Notification(String containerId, Metrics valueToMonitor, Group group, String message, long value, long overTime, ChangeNotify changeNotify, long delay) {
         this.containerId = containerId;
-        this.valueToMonitor = valueToMonitor;
+        this.metricToMonitor = valueToMonitor;
         this.message = message;
         this.value = value;
         this.overTime = overTime;
         this.changeNotify = changeNotify;
         type = NotificationType.CHANGE;
+        this.metricGroup = group;
+        this.notificationDelay = delay;
     }
     public Notification(Notification notif) {
         this.containerId = notif.containerId;
-        this.valueToMonitor = notif.valueToMonitor;
+        this.metricToMonitor = notif.metricToMonitor;
         this.message = notif.message;
         this.value = notif.value;
         this.overTime = notif.overTime;
@@ -45,6 +53,8 @@ public class Notification {
         this.type = notif.type;
         this.thresholdNotify = notif.thresholdNotify;
         this.id = notif.id;
+        this.metricGroup = notif.metricGroup;
+        this.notificationDelay = notif.notificationDelay;
     }
 
     public String getContainerId() {
@@ -55,12 +65,12 @@ public class Notification {
         this.containerId = containerId;
     }
 
-    public String getValueToMonitor() {
-        return valueToMonitor;
+    public Metrics getMetricToMonitor() {
+        return metricToMonitor;
     }
 
-    public void setValueToMonitor(String valueToMonitor) {
-        this.valueToMonitor = valueToMonitor;
+    public void setMetricToMonitor(Metrics metricToMonitor) {
+        this.metricToMonitor = metricToMonitor;
     }
 
     public String getMessage() {
@@ -117,5 +127,21 @@ public class Notification {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public Group getMetricGroup() {
+        return metricGroup;
+    }
+
+    public void setMetricGroup(Group metricGroup) {
+        this.metricGroup = metricGroup;
+    }
+
+    public long getNotificationDelay() {
+        return notificationDelay;
+    }
+
+    public void setNotificationDelay(long notificationDelay) {
+        this.notificationDelay = notificationDelay;
     }
 }

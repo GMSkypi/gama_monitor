@@ -48,7 +48,8 @@ public class DataSourceImp implements DataSource {
     public ResultSet executeQuery(String query) throws SQLException {
         connectionOpen();
         PreparedStatement preparedStatement = connection.prepareStatement(query);
-        return preparedStatement.executeQuery();
+        ResultSet r = preparedStatement.executeQuery();
+        return r;
 
     }
     @Override

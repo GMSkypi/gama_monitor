@@ -1,7 +1,10 @@
 package docker_monitor.DM_app.process.database.persistance.repository;
 
 
+import java.util.Date;
+import java.util.List;
+
 public interface QuestDBRepository<C> {
-    Iterable<C> findAll();
-    Iterable<C> executeQuery(String query);
+    List<C> executeQuery(String query);
+    List<C> findAll();
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class QuestDBRepositoryImp <C> implements QuestDBRepository<C> {
 
@@ -25,10 +26,10 @@ public abstract class QuestDBRepositoryImp <C> implements QuestDBRepository<C> {
     }
 
     @Override
-    public Iterable<C> executeQuery(String query) {
+    public List<C> executeQuery(String query) {
         try{
             ResultSet resultset = datasource.executeQuery(query);
-            Iterable<C> cc = dataMapper.mapResultSet(resultset,clazz);
+            List<C> cc = dataMapper.mapResultSet(resultset,clazz);
             resultset.close();
             return cc;
         }
@@ -39,7 +40,7 @@ public abstract class QuestDBRepositoryImp <C> implements QuestDBRepository<C> {
     }
 
     @Override
-    public Iterable<C> findAll() {
+    public List<C> findAll() {
         return executeQuery("SELECT * FROM " + clazz.getAnnotation(Entity.class).name());
     }
 }

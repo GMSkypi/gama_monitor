@@ -4,7 +4,7 @@ import docker_monitor.DM_app.process.database.persistance.anotation.Column;
 import docker_monitor.DM_app.process.database.persistance.anotation.Entity;
 import docker_monitor.DM_app.process.database.persistance.anotation.Symbol;
 
-import java.sql.Date;
+import java.util.Date;
 
 @Entity(name = "Memory")
 public class Memory {

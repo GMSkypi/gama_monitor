@@ -7,11 +7,13 @@ import java.util.Date;
 @JsonIgnoreProperties({"lastCheckTime"})
 public class ActiveNotification {
     Date lastCheckTime;
+    Date lastNotificationTime;
     Notification notification;
 
     public ActiveNotification(Notification notification){
         this.notification = notification;
-        lastCheckTime = new Date();
+        lastCheckTime = new Date(0);
+        lastNotificationTime = new Date(0);
     }
 
     public Date getLastCheckTime() {
@@ -28,5 +30,13 @@ public class ActiveNotification {
 
     public void setNotification(Notification notification) {
         this.notification = notification;
+    }
+
+    public Date getLastNotificationTime() {
+        return lastNotificationTime;
+    }
+
+    public void setLastNotificationTime(Date lastNotificationTime) {
+        this.lastNotificationTime = lastNotificationTime;
     }
 }
