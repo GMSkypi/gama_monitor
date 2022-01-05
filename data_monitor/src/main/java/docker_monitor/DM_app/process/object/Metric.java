@@ -1,12 +1,13 @@
 package docker_monitor.DM_app.process.object;
 
+import java.time.Instant;
 import java.util.Date;
 
 public class Metric {
     long value;
-    Date dateTime;
+    Instant dateTime;
 
-    public Metric(long value, Date dateTime) {
+    public Metric(long value, Instant dateTime) {
         this.value = value;
         this.dateTime = dateTime;
     }
@@ -19,11 +20,11 @@ public class Metric {
         this.value = value;
     }
 
-    public Date getDateTime() {
+    public Instant getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(Date dateTime) {
+    public void setDateTime(Instant dateTime) {
         this.dateTime = dateTime;
     }
 }

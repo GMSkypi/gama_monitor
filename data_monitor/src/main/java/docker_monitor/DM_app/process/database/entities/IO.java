@@ -4,6 +4,7 @@ import docker_monitor.DM_app.process.database.persistance.anotation.Column;
 import docker_monitor.DM_app.process.database.persistance.anotation.Entity;
 import docker_monitor.DM_app.process.database.persistance.anotation.Symbol;
 
+import java.time.Instant;
 import java.util.Date;
 
 @Entity(name = "IO")
@@ -16,7 +17,7 @@ public class IO {
     @Column(name = "write")
     long byteWrite;
     @Column(name = "date_time")
-    Date date;
+    Instant date;
 
     public String getContainerId() {
         return containerId;
@@ -42,11 +43,11 @@ public class IO {
         this.byteWrite = byteWrite;
     }
 
-    public Date getDate() {
+    public Instant getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Instant date) {
         this.date = date;
     }
 }

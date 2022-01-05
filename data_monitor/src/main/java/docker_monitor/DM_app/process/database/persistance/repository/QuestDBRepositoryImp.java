@@ -4,6 +4,7 @@ package docker_monitor.DM_app.process.database.persistance.repository;
 import docker_monitor.DM_app.process.database.db_source.DataSource;
 import docker_monitor.DM_app.process.database.db_mapper.QuestDBDataMapper;
 import docker_monitor.DM_app.process.database.persistance.anotation.Entity;
+import docker_monitor.DM_app.process.sql.CustomResultSet;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.ResultSet;
@@ -29,7 +30,7 @@ public abstract class QuestDBRepositoryImp <C> implements QuestDBRepository<C> {
     public List<C> executeQuery(String query) {
         try{
             ResultSet resultset = datasource.executeQuery(query);
-            List<C> cc = dataMapper.mapResultSet(resultset,clazz);
+            List<C> cc = dataMapper.mapResultSet(new CustomResultSet(resultset),clazz);
             resultset.close();
             return cc;
         }

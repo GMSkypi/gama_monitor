@@ -2,25 +2,26 @@ package docker_monitor.DM_app.process.object;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.time.Instant;
 import java.util.Date;
 
 @JsonIgnoreProperties({"lastCheckTime"})
 public class ActiveNotification {
-    Date lastCheckTime;
-    Date lastNotificationTime;
+    Instant lastCheckTime;
+    Instant lastNotificationTime;
     Notification notification;
 
     public ActiveNotification(Notification notification){
         this.notification = notification;
-        lastCheckTime = new Date(0);
-        lastNotificationTime = new Date(0);
+        lastCheckTime = Instant.ofEpochMilli(0);
+        lastNotificationTime  = Instant.ofEpochMilli(0);
     }
 
-    public Date getLastCheckTime() {
+    public Instant getLastCheckTime() {
         return lastCheckTime;
     }
 
-    public void setLastCheckTime(Date lastCheckTime) {
+    public void setLastCheckTime(Instant lastCheckTime) {
         this.lastCheckTime = lastCheckTime;
     }
 
@@ -32,11 +33,11 @@ public class ActiveNotification {
         this.notification = notification;
     }
 
-    public Date getLastNotificationTime() {
+    public Instant getLastNotificationTime() {
         return lastNotificationTime;
     }
 
-    public void setLastNotificationTime(Date lastNotificationTime) {
+    public void setLastNotificationTime(Instant lastNotificationTime) {
         this.lastNotificationTime = lastNotificationTime;
     }
 }

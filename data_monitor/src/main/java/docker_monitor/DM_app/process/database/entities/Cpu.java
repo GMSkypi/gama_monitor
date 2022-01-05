@@ -4,6 +4,7 @@ import docker_monitor.DM_app.process.database.persistance.anotation.Column;
 import docker_monitor.DM_app.process.database.persistance.anotation.Entity;
 import docker_monitor.DM_app.process.database.persistance.anotation.Symbol;
 
+import java.time.Instant;
 import java.util.Date;
 
 @Entity(name = "CPU")
@@ -28,7 +29,7 @@ public class Cpu {
     @Column(name = "total_pr")
     long totalPercents;
     @Column(name = "date_time")
-    Date DateTime;
+    Instant DateTime;
 
     public String getContainerId() {
         return containerId;
@@ -102,11 +103,11 @@ public class Cpu {
         this.totalPercents = totalPercents;
     }
 
-    public Date getDateTime() {
+    public Instant getDateTime() {
         return DateTime;
     }
 
-    public void setDateTime(Date dateTime) {
+    public void setDateTime(Instant dateTime) {
         DateTime = dateTime;
     }
 }

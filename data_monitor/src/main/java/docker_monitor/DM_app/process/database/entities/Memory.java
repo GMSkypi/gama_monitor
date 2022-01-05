@@ -4,6 +4,7 @@ import docker_monitor.DM_app.process.database.persistance.anotation.Column;
 import docker_monitor.DM_app.process.database.persistance.anotation.Entity;
 import docker_monitor.DM_app.process.database.persistance.anotation.Symbol;
 
+import java.time.Instant;
 import java.util.Date;
 
 @Entity(name = "Memory")
@@ -30,7 +31,7 @@ public class Memory {
     @Column(name = "mem_swap_hit_cnt")
     long memoryAndSwapLimitHitCount;
     @Column(name = "date_time")
-    Date date;
+    Instant date;
 
     public String getContainerId() {
         return containerId;
@@ -112,11 +113,11 @@ public class Memory {
         this.memoryAndSwapLimitHitCount = memoryAndSwapLimitHitCount;
     }
 
-    public Date getDate() {
+    public Instant getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Instant date) {
         this.date = date;
     }
 }

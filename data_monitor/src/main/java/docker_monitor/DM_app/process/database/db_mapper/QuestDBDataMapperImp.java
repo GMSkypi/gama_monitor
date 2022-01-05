@@ -3,9 +3,11 @@ package docker_monitor.DM_app.process.database.db_mapper;
 
 import docker_monitor.DM_app.process.database.entities.Container;
 import docker_monitor.DM_app.process.database.persistance.anotation.Column;
+import docker_monitor.DM_app.process.sql.CustomResultSet;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.*;
+import java.time.Instant;
 import java.util.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,7 +27,7 @@ public class QuestDBDataMapperImp implements QuestDBDataMapper {
         public Field filed;
     }
     @Override
-    public <C> List<C> mapResultSet(ResultSet resultSet, Class<C> clazz) throws SQLException {
+    public <C> List<C> mapResultSet(CustomResultSet resultSet, Class<C> clazz) throws SQLException {
         ArrayList<FieldIndex> fieldIndices = new ArrayList<>();
         for (Field f: clazz.getDeclaredFields()) {
             Column column = f.getAnnotation(Column.class);
@@ -71,14 +73,14 @@ public class QuestDBDataMapperImp implements QuestDBDataMapper {
     }
     Method resultSetMethodResolver(Class<?> fieldType) throws NoSuchMethodException {
         if (String.class.equals(fieldType)) {
-            return ResultSet.class.getMethod("getString", int.class);
+            return CustomResultSet.class.getMethod("getString", int.class);
         } else if (int.class.equals(fieldType)) {
-            return ResultSet.class.getMethod("getInt", int.class);
-        } else if (Date.class.equals(fieldType)){
-            return ResultSet.class.getMethod("getTimestamp", int.class);
+            return CustomResultSet.class.getMethod("getInt", int.class);
+        } else if (Instant.class.equals(fieldType)){
+            return CustomResultSet.class.getMethod("getDateTime", int.class);
         } else if ( long.class.equals(fieldType)){
-            return ResultSet.class.getMethod("getLong", int.class);
+            return CustomResultSet.class.getMethod("getLong", int.class);
         }
-        return ResultSet.class.getMethod("getString",int.class);
+        return CustomResultSet.class.getMethod("getString",int.class);
     }
 }

@@ -15,9 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -47,13 +52,14 @@ public class MetricsMonitorImp implements MetricsMonitor {
 
     @Scheduled(fixedRate = 1000)
     public void checkMetrics(){
-        Date dateTimeNow = new Date();
+        Instant dateTimeNow = Instant.now();
+
         List<ActiveNotification> notificationList = cache.getNotifications();
         LinkedList<ActiveNotification> notificationQueue = new LinkedList<>();
         Map<Group, Long> metricGroupLatestRecordTime = new HashMap<>();
 
         for(ActiveNotification notification : notificationList){
-            if(dateTimeNow.after(notification.getLastCheckTime()) && dateTimeNow.after( notification.getLastNotificationTime())){
+            if(dateTimeNow.isAfter(notification.getLastCheckTime()) && dateTimeNow.isAfter( notification.getLastNotificationTime())){
                 if(!notificationQueue.isEmpty() && !Objects.equals(notificationQueue.peek().getNotification().getContainerId(), notification.getNotification().getContainerId())){
                     handleChecking(metricGroupLatestRecordTime,notificationQueue,dateTimeNow);
                     notificationQueue = new LinkedList<>();
@@ -65,17 +71,17 @@ public class MetricsMonitorImp implements MetricsMonitor {
         }
         handleChecking(metricGroupLatestRecordTime,notificationQueue,dateTimeNow);
     }
-    public void checkThresholdNotification(ActiveNotification activeNotification, List<Metric> metrics, Date dateTimeNow){
-        // TODO INJECTION OF DATE INSTEAD OF TIMESTAMP
-        Stream<Metric> filteredMetrics = metrics.stream().filter(a -> a.getDateTime().getTime() > (dateTimeNow.getTime() - activeNotification.getNotification().getOverTime()));
+    public void checkThresholdNotification(ActiveNotification activeNotification, List<Metric> metrics, Instant dateTimeNow){
+        Supplier<Stream<Metric>> streamSupplier = () ->
+                metrics.stream().filter(a -> a.getDateTime().toEpochMilli() > (dateTimeNow.toEpochMilli() - activeNotification.getNotification().getOverTime()));
         long value;
-        if(!metrics.isEmpty()) {
+        if(streamSupplier.get().iterator().hasNext()) {
             value = switch (activeNotification.getNotification().getThresholdNotify().getThrashold()) {
-                case MAX -> filteredMetrics.max(Comparator.comparing(Metric::getValue)).get().getValue();
-                case MIN -> filteredMetrics.min(Comparator.comparing(Metric::getValue)).get().getValue();
-                case AVERAGE -> Math.round(filteredMetrics.mapToDouble(Metric::getValue).average().orElse(Double.NaN));
+                case MAX -> streamSupplier.get().max(Comparator.comparing(Metric::getValue)).get().getValue();
+                case MIN -> streamSupplier.get().min(Comparator.comparing(Metric::getValue)).get().getValue();
+                case AVERAGE -> Math.round(streamSupplier.get().mapToDouble(Metric::getValue).average().orElse(Double.NaN));
                 case MEDIAN -> {
-                    List<Metric> sortedM = filteredMetrics.sorted().toList();
+                    List<Metric> sortedM = streamSupplier.get().sorted().toList();
                     yield sortedM.size() != 0 ? sortedM.get(sortedM.size() / 2).getValue() : 0;
                 }
             };
@@ -85,17 +91,17 @@ public class MetricsMonitorImp implements MetricsMonitor {
             case ABOVE -> value > activeNotification.getNotification().getValue();
             case BELOW -> value < activeNotification.getNotification().getValue();
         };
-        activeNotification.setLastCheckTime(new Date(dateTimeNow.getTime() + activeNotification.getNotification().getOverTime()));
+        activeNotification.setLastCheckTime(Instant.ofEpochMilli(dateTimeNow.toEpochMilli() + activeNotification.getNotification().getOverTime()));
         if(notify){
             System.out.println("NOTIFICATION: CONT_ID:" + activeNotification.getNotification().getContainerId() +
                     " METRIC: " + activeNotification.getNotification().getMetricToMonitor() +
                     activeNotification.getNotification().getThresholdNotify().getThrashold() +  " VALUE: " + value +
                     " IS " + activeNotification.getNotification().getThresholdNotify().getTrigger() +
                     " DECLARED: " + activeNotification.getNotification().getValue());
-            activeNotification.setLastNotificationTime(new Date(dateTimeNow.getTime() + activeNotification.getNotification().getNotificationDelay()));
+            activeNotification.setLastNotificationTime(Instant.ofEpochMilli(dateTimeNow.toEpochMilli() + activeNotification.getNotification().getNotificationDelay()));
         }
     }
-    public void checkChangeNotification(ActiveNotification activeNotification, List<Metric> metrics, Date dateTimeNow){
+    public void checkChangeNotification(ActiveNotification activeNotification, List<Metric> metrics, Instant dateTimeNow){
 
     }
     public void calculateLatestRecord(ActiveNotification activeNotification,  Map<Group, Long> metricGroupLatestRecordTime){
@@ -108,10 +114,10 @@ public class MetricsMonitorImp implements MetricsMonitor {
         if(!metricGroupLatestRecordTime.containsKey(key)) metricGroupLatestRecordTime.put(key,time);
         else if(metricGroupLatestRecordTime.get(key) < time) metricGroupLatestRecordTime.put(key,time);
     }
-    public void handleChecking( Map<Group, Long> metricGroupLatestRecordTime, LinkedList<ActiveNotification> notificationQueue, Date dateTimeNow){
+    public void handleChecking( Map<Group, Long> metricGroupLatestRecordTime, LinkedList<ActiveNotification> notificationQueue, Instant dateTimeNow){
         if (notificationQueue.peek() == null) return;
         String containerId = notificationQueue.peek().getNotification().getContainerId();
-        long dateNow = dateTimeNow.getTime();
+        long dateNow = dateTimeNow.toEpochMilli();
         List<Cpu> cpuMetric = (metricGroupLatestRecordTime.get(Group.CPU) != null ?
                 cpuRepository.findByContainerAndTime(containerId, dateNow - metricGroupLatestRecordTime.get(Group.CPU)) : new ArrayList<>());
         List<IO> ioMetric = (metricGroupLatestRecordTime.get(Group.IO) != null ?
@@ -123,7 +129,7 @@ public class MetricsMonitorImp implements MetricsMonitor {
 
         while(!notificationQueue.isEmpty()){
             ActiveNotification activeNotification = notificationQueue.poll();
-            TriConsumer<ActiveNotification,List<Metric>,Date> checkHandler = switch (activeNotification.getNotification().getType()){
+            TriConsumer<ActiveNotification,List<Metric>,Instant> checkHandler = switch (activeNotification.getNotification().getType()){
                 case CHANGE ->  this::checkChangeNotification;
                 case THRESHOLD -> this::checkThresholdNotification;
             };

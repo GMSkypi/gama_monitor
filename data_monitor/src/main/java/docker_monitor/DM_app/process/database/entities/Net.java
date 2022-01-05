@@ -4,6 +4,7 @@ import docker_monitor.DM_app.process.database.persistance.anotation.Column;
 import docker_monitor.DM_app.process.database.persistance.anotation.Entity;
 import docker_monitor.DM_app.process.database.persistance.anotation.Symbol;
 
+import java.time.Instant;
 import java.util.Date;
 
 @Entity(name = "NET")
@@ -24,7 +25,7 @@ public class Net {
     @Column(name = "transmit_error_total")
     long transmitErrorCountTotal;
     @Column(name = "date_time")
-    Date date;
+    Instant date;
 
     public String getContainerId() {
         return containerId;
@@ -82,11 +83,11 @@ public class Net {
         this.transmitErrorCountTotal = transmitErrorCountTotal;
     }
 
-    public Date getDate() {
+    public Instant getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Instant date) {
         this.date = date;
     }
 }
