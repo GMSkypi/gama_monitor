@@ -1,6 +1,7 @@
 package docker_monitor.DM_app.process.service;
 
 import docker_monitor.DM_app.constants.Group;
+import docker_monitor.DM_app.constants.Metrics;
 import docker_monitor.DM_app.process.database.entities.Cpu;
 import docker_monitor.DM_app.process.database.entities.IO;
 import docker_monitor.DM_app.process.database.entities.Memory;
@@ -26,7 +27,6 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static docker_monitor.DM_app.process.object.Threshold.MAX;
 
 
 @Service
@@ -74,7 +74,7 @@ public class MetricsMonitorImp implements MetricsMonitor {
     public void checkThresholdNotification(ActiveNotification activeNotification, List<Metric> metrics, Instant dateTimeNow){
         Supplier<Stream<Metric>> streamSupplier = () ->
                 metrics.stream().filter(a -> a.getDateTime().toEpochMilli() > (dateTimeNow.toEpochMilli() - activeNotification.getNotification().getOverTime()));
-        long value;
+        long value = 0;
         if(streamSupplier.get().iterator().hasNext()) {
             value = switch (activeNotification.getNotification().getThresholdNotify().getThrashold()) {
                 case MAX -> streamSupplier.get().max(Comparator.comparing(Metric::getValue)).get().getValue();
@@ -86,14 +86,13 @@ public class MetricsMonitorImp implements MetricsMonitor {
                 }
             };
         }
-        else value = 0;
         boolean notify = switch (activeNotification.getNotification().getThresholdNotify().getTrigger()){
             case ABOVE -> value > activeNotification.getNotification().getValue();
             case BELOW -> value < activeNotification.getNotification().getValue();
         };
         activeNotification.setLastCheckTime(Instant.ofEpochMilli(dateTimeNow.toEpochMilli() + activeNotification.getNotification().getOverTime()));
         if(notify){
-            System.out.println("NOTIFICATION: CONT_ID:" + activeNotification.getNotification().getContainerId() +
+            System.out.println("NOTIFICATION THRESHOLD: CONT_ID:" + activeNotification.getNotification().getContainerId() +
                     " METRIC: " + activeNotification.getNotification().getMetricToMonitor() +
                     activeNotification.getNotification().getThresholdNotify().getThrashold() +  " VALUE: " + value +
                     " IS " + activeNotification.getNotification().getThresholdNotify().getTrigger() +
@@ -102,6 +101,29 @@ public class MetricsMonitorImp implements MetricsMonitor {
         }
     }
     public void checkChangeNotification(ActiveNotification activeNotification, List<Metric> metrics, Instant dateTimeNow){
+        Supplier<Stream<Metric>> comparingStreamSupplier = () ->
+                metrics.stream().filter(a -> a.getDateTime().toEpochMilli() > (dateTimeNow.toEpochMilli() - activeNotification.getNotification().getOverTime()));
+        Supplier<Stream<Metric>> beforeStreamSupplier = () ->
+                metrics.stream().filter(a -> a.getDateTime().toEpochMilli() > (dateTimeNow.toEpochMilli() - activeNotification.getNotification().getOverTime() - activeNotification.getNotification().getChangeNotify().getComparedToBefore()))
+                        .filter((a -> dateTimeNow.toEpochMilli() - activeNotification.getNotification().getOverTime() < a.getDateTime().toEpochMilli()));
+        long value = 0;
+        if(comparingStreamSupplier.get().iterator().hasNext() && beforeStreamSupplier.get().iterator().hasNext() ) {
+            value = Math.round(comparingStreamSupplier.get().mapToDouble(Metric::getValue).average().orElse(Double.NaN)) -
+                    Math.round(beforeStreamSupplier.get().mapToDouble(Metric::getValue).average().orElse(Double.NaN));
+        }
+        boolean notify = switch (activeNotification.getNotification().getChangeNotify().getTrigger()){
+            case BELOW -> value > activeNotification.getNotification().getValue();
+            case ABOVE -> value > -1 * activeNotification.getNotification().getValue();
+        };
+        activeNotification.setLastCheckTime(Instant.ofEpochMilli(dateTimeNow.toEpochMilli() + activeNotification.getNotification().getOverTime()));
+        if(notify){
+            System.out.println("NOTIFICATION CHANGE: CONT_ID:" + activeNotification.getNotification().getContainerId() +
+                    " METRIC: " + activeNotification.getNotification().getMetricToMonitor() +
+                     " VALUE: " + value +
+                    " IS " + activeNotification.getNotification().getChangeNotify().getTrigger() +
+                    " DECLARED: " + activeNotification.getNotification().getValue());
+            activeNotification.setLastNotificationTime(Instant.ofEpochMilli(dateTimeNow.toEpochMilli() + activeNotification.getNotification().getNotificationDelay()));
+        }
 
     }
     public void calculateLatestRecord(ActiveNotification activeNotification,  Map<Group, Long> metricGroupLatestRecordTime){
@@ -144,16 +166,40 @@ public class MetricsMonitorImp implements MetricsMonitor {
                         case THROTTLE_CNT -> checkHandler.accept(activeNotification,cpuMetric.stream().map(a -> new Metric(a.getThrottleCount(),a.getDateTime())).collect(Collectors.toList()),dateTimeNow);
                         case TOTAL_NS -> checkHandler.accept(activeNotification,cpuMetric.stream().map(a -> new Metric(a.getTotalMs(),a.getDateTime())).collect(Collectors.toList()),dateTimeNow);
                         case TOTAL_PR -> checkHandler.accept(activeNotification,cpuMetric.stream().map(a -> new Metric(a.getTotalPercents(),a.getDateTime())).collect(Collectors.toList()),dateTimeNow);
+                        default -> System.out.println("Notification metric mismatch: CPU");
                     }
                 }
                 case IO -> {
-
+                    switch (activeNotification.getNotification().getMetricToMonitor()){
+                        case READ -> checkHandler.accept(activeNotification,ioMetric.stream().map(a -> new Metric(a.getByteRead(),a.getDateTime())).collect(Collectors.toList()),dateTimeNow);
+                        case WRITE -> checkHandler.accept(activeNotification,ioMetric.stream().map(a -> new Metric(a.getByteWrite(),a.getDateTime())).collect(Collectors.toList()),dateTimeNow);
+                        default -> System.out.println("Notification metric mismatch: IO");
+                    }
                 }
                 case MEMORY -> {
-
+                    switch (activeNotification.getNotification().getMetricToMonitor()){
+                        case MEM_USED -> checkHandler.accept(activeNotification,memoryMetric.stream().map(a -> new Metric(a.getMemoryUsed(),a.getDateTime())).collect(Collectors.toList()),dateTimeNow);
+                        case MEM_SWAP_USED -> checkHandler.accept(activeNotification,memoryMetric.stream().map(a -> new Metric(a.getMemoryAndSwapUsed(),a.getDateTime())).collect(Collectors.toList()),dateTimeNow);
+                        case RSS -> checkHandler.accept(activeNotification,memoryMetric.stream().map(a -> new Metric(a.getRss(),a.getDateTime())).collect(Collectors.toList()),dateTimeNow);
+                        case CACHE_C -> checkHandler.accept(activeNotification,memoryMetric.stream().map(a -> new Metric(a.getCache(),a.getDateTime())).collect(Collectors.toList()),dateTimeNow);
+                        case SWAP -> checkHandler.accept(activeNotification,memoryMetric.stream().map(a -> new Metric(a.getSwap(),a.getDateTime())).collect(Collectors.toList()),dateTimeNow);
+                        case MEM_LIMIT -> checkHandler.accept(activeNotification,memoryMetric.stream().map(a -> new Metric(a.getMemoryLimit(),a.getDateTime())).collect(Collectors.toList()),dateTimeNow);
+                        case MEM_SWAP_LIMIT -> checkHandler.accept(activeNotification,memoryMetric.stream().map(a -> new Metric(a.getMemoryAndSwapLimit(),a.getDateTime())).collect(Collectors.toList()),dateTimeNow);
+                        case MEM_HIT_CNT -> checkHandler.accept(activeNotification,memoryMetric.stream().map(a -> new Metric(a.getMemoryLimitHitCount(),a.getDateTime())).collect(Collectors.toList()),dateTimeNow);
+                        case MEM_SWAP_HIT_CNT -> checkHandler.accept(activeNotification,memoryMetric.stream().map(a -> new Metric(a.getMemoryAndSwapLimitHitCount(),a.getDateTime())).collect(Collectors.toList()),dateTimeNow);
+                        default -> System.out.println("Notification metric mismatch: MEMORY");
+                    }
                 }
                 case NET -> {
-
+                    switch (activeNotification.getNotification().getMetricToMonitor()){
+                        case RECEIVE -> checkHandler.accept(activeNotification,netMetric.stream().map(a -> new Metric(a.getReceive(),a.getDateTime())).collect(Collectors.toList()),dateTimeNow);
+                        case RECEIVE_ERROR -> checkHandler.accept(activeNotification,netMetric.stream().map(a -> new Metric(a.getReceiveErrorCountPeriod(),a.getDateTime())).collect(Collectors.toList()),dateTimeNow);
+                        case RECEIVE_ERROR_TOTAL -> checkHandler.accept(activeNotification,netMetric.stream().map(a -> new Metric(a.getReceiveErrorCountTotal(),a.getDateTime())).collect(Collectors.toList()),dateTimeNow);
+                        case TRANSMIT -> checkHandler.accept(activeNotification,netMetric.stream().map(a -> new Metric(a.getTransmit(),a.getDateTime())).collect(Collectors.toList()),dateTimeNow);
+                        case TRANSMIT_ERROR -> checkHandler.accept(activeNotification,netMetric.stream().map(a -> new Metric(a.getTransmitErrorCountPeriod(),a.getDateTime())).collect(Collectors.toList()),dateTimeNow);
+                        case TRANSMIT_ERROR_TOTAL -> checkHandler.accept(activeNotification,netMetric.stream().map(a -> new Metric(a.getTransmitErrorCountTotal(),a.getDateTime())).collect(Collectors.toList()),dateTimeNow);
+                        default -> System.out.println("Notification metric mismatch: NET");
+                    }
                 }
             }
         }

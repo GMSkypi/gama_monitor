@@ -25,7 +25,7 @@ public class Net {
     @Column(name = "transmit_error_total")
     long transmitErrorCountTotal;
     @Column(name = "date_time")
-    Instant date;
+    Instant dateTime;
 
     public String getContainerId() {
         return containerId;
@@ -83,11 +83,11 @@ public class Net {
         this.transmitErrorCountTotal = transmitErrorCountTotal;
     }
 
-    public Instant getDate() {
-        return date;
+    public Instant getDateTime() {
+        return dateTime;
     }
 
-    public void setDate(Instant date) {
-        this.date = date;
+    public void setDateTime(Instant dateTime) {
+        this.dateTime = dateTime;
     }
 }

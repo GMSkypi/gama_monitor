@@ -31,7 +31,7 @@ public class Memory {
     @Column(name = "mem_swap_hit_cnt")
     long memoryAndSwapLimitHitCount;
     @Column(name = "date_time")
-    Instant date;
+    Instant dateTime;
 
     public String getContainerId() {
         return containerId;
@@ -113,12 +113,12 @@ public class Memory {
         this.memoryAndSwapLimitHitCount = memoryAndSwapLimitHitCount;
     }
 
-    public Instant getDate() {
-        return date;
+    public Instant getDateTime() {
+        return dateTime;
     }
 
-    public void setDate(Instant date) {
-        this.date = date;
+    public void setDateTime(Instant dateTime) {
+        this.dateTime = dateTime;
     }
 }
 

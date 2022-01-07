@@ -17,7 +17,7 @@ public class IO {
     @Column(name = "write")
     long byteWrite;
     @Column(name = "date_time")
-    Instant date;
+    Instant dateTime;
 
     public String getContainerId() {
         return containerId;
@@ -43,11 +43,11 @@ public class IO {
         this.byteWrite = byteWrite;
     }
 
-    public Instant getDate() {
-        return date;
+    public Instant getDateTime() {
+        return dateTime;
     }
 
-    public void setDate(Instant date) {
-        this.date = date;
+    public void setDateTime(Instant dateTime) {
+        this.dateTime = dateTime;
     }
 }
