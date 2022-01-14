@@ -5,12 +5,14 @@ import docker_monitor.DM_app.constants.Group;
 import docker_monitor.DM_app.constants.Metrics;
 import docker_monitor.DM_app.process.database.entities.Cpu;
 import docker_monitor.DM_app.process.database.repository.CpuRepository;
+import docker_monitor.DM_app.process.service.MessageNotification;
 import docker_monitor.DM_app.process.service.cache.NotificationCache;
 import docker_monitor.DM_app.process.database.entities.Container;
 import docker_monitor.DM_app.process.database.repository.ContainerRepository;
 import docker_monitor.DM_app.process.object.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.MessageCodeFormatter;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +31,9 @@ public class TestController {
 
     @Autowired
     CpuRepository cpuRepository;
+
+    @Autowired
+    MessageNotification notification;
 
     //@Autowired
     //JSONNotifSerialization serialization;
@@ -71,6 +76,10 @@ public class TestController {
     List<Notification> insert(){
         notificationCache.addNotification((new Notification("questdb/questdb:latest", Metrics.TOTAL_PR, Group.CPU," ...",100,10000,new ThresholdNotify(Trigger.ABOVE, Threshold.MAX), 50)));
         return notificationCache.getNotifications().stream().map(ActiveNotification::getNotification).collect(Collectors.toList());
+    }
+    @GetMapping(value = "public/slack")
+    void slack(){
+        notification.notifyObservers(null, 1);
     }
 
 }

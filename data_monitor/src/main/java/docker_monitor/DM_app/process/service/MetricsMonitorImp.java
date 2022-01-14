@@ -49,6 +49,9 @@ public class MetricsMonitorImp implements MetricsMonitor {
     @Autowired
     NetRepository netRepository;
 
+    @Autowired
+    MessageNotification notification;
+
 
     @Scheduled(fixedRate = 1000)
     public void checkMetrics(){
@@ -72,20 +75,18 @@ public class MetricsMonitorImp implements MetricsMonitor {
         handleChecking(metricGroupLatestRecordTime,notificationQueue,dateTimeNow);
     }
     public void checkThresholdNotification(ActiveNotification activeNotification, List<Metric> metrics, Instant dateTimeNow){
-        Supplier<Stream<Metric>> streamSupplier = () ->
+        Stream<Metric> stream =
                 metrics.stream().filter(a -> a.getDateTime().toEpochMilli() > (dateTimeNow.toEpochMilli() - activeNotification.getNotification().getOverTime()));
-        long value = 0;
-        if(streamSupplier.get().iterator().hasNext()) {
-            value = switch (activeNotification.getNotification().getThresholdNotify().getThrashold()) {
-                case MAX -> streamSupplier.get().max(Comparator.comparing(Metric::getValue)).get().getValue();
-                case MIN -> streamSupplier.get().min(Comparator.comparing(Metric::getValue)).get().getValue();
-                case AVERAGE -> Math.round(streamSupplier.get().mapToDouble(Metric::getValue).average().orElse(Double.NaN));
+
+        long value = switch (activeNotification.getNotification().getThresholdNotify().getThrashold()) {
+                case MAX -> stream.map(Metric::getValue).reduce(Math::max).orElse(0L);
+                case MIN -> stream.map(Metric::getValue).reduce(Math::min).orElse(0L);
+                case AVERAGE -> Math.round(stream.mapToDouble(Metric::getValue).average().orElse(0L));
                 case MEDIAN -> {
-                    List<Metric> sortedM = streamSupplier.get().sorted().toList();
+                    List<Metric> sortedM = stream.sorted().toList();
                     yield sortedM.size() != 0 ? sortedM.get(sortedM.size() / 2).getValue() : 0;
                 }
-            };
-        }
+        };
         boolean notify = switch (activeNotification.getNotification().getThresholdNotify().getTrigger()){
             case ABOVE -> value > activeNotification.getNotification().getValue();
             case BELOW -> value < activeNotification.getNotification().getValue();
@@ -98,22 +99,21 @@ public class MetricsMonitorImp implements MetricsMonitor {
                     " IS " + activeNotification.getNotification().getThresholdNotify().getTrigger() +
                     " DECLARED: " + activeNotification.getNotification().getValue());
             activeNotification.setLastNotificationTime(Instant.ofEpochMilli(dateTimeNow.toEpochMilli() + activeNotification.getNotification().getNotificationDelay()));
+            notification.notifyObservers(activeNotification.getNotification(),value);
         }
     }
     public void checkChangeNotification(ActiveNotification activeNotification, List<Metric> metrics, Instant dateTimeNow){
-        Supplier<Stream<Metric>> comparingStreamSupplier = () ->
+        Stream<Metric> comparingStream =
                 metrics.stream().filter(a -> a.getDateTime().toEpochMilli() > (dateTimeNow.toEpochMilli() - activeNotification.getNotification().getOverTime()));
-        Supplier<Stream<Metric>> beforeStreamSupplier = () ->
+        Stream<Metric> beforeStream =
                 metrics.stream().filter(a -> a.getDateTime().toEpochMilli() > (dateTimeNow.toEpochMilli() - activeNotification.getNotification().getOverTime() - activeNotification.getNotification().getChangeNotify().getComparedToBefore()))
-                        .filter((a -> dateTimeNow.toEpochMilli() - activeNotification.getNotification().getOverTime() < a.getDateTime().toEpochMilli()));
-        long value = 0;
-        if(comparingStreamSupplier.get().iterator().hasNext() && beforeStreamSupplier.get().iterator().hasNext() ) {
-            value = Math.round(comparingStreamSupplier.get().mapToDouble(Metric::getValue).average().orElse(Double.NaN)) -
-                    Math.round(beforeStreamSupplier.get().mapToDouble(Metric::getValue).average().orElse(Double.NaN));
-        }
+                        .filter((a -> dateTimeNow.toEpochMilli() - activeNotification.getNotification().getOverTime() > a.getDateTime().toEpochMilli()));
+
+        long value = Math.round(comparingStream.mapToDouble(Metric::getValue).average().orElse(0)) -
+                    Math.round(beforeStream.mapToDouble(Metric::getValue).average().orElse(0));
         boolean notify = switch (activeNotification.getNotification().getChangeNotify().getTrigger()){
-            case BELOW -> value > activeNotification.getNotification().getValue();
-            case ABOVE -> value > -1 * activeNotification.getNotification().getValue();
+            case BELOW -> value < activeNotification.getNotification().getValue();
+            case ABOVE -> value < -1 * activeNotification.getNotification().getValue();
         };
         activeNotification.setLastCheckTime(Instant.ofEpochMilli(dateTimeNow.toEpochMilli() + activeNotification.getNotification().getOverTime()));
         if(notify){
@@ -123,6 +123,7 @@ public class MetricsMonitorImp implements MetricsMonitor {
                     " IS " + activeNotification.getNotification().getChangeNotify().getTrigger() +
                     " DECLARED: " + activeNotification.getNotification().getValue());
             activeNotification.setLastNotificationTime(Instant.ofEpochMilli(dateTimeNow.toEpochMilli() + activeNotification.getNotification().getNotificationDelay()));
+            notification.notifyObservers(activeNotification.getNotification(),value);
         }
 
     }

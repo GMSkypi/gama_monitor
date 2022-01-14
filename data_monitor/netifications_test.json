@@ -1,0 +1,16 @@
+ {
+    "id": 1,
+    "containerId": "questdb/questdb:latest",
+    "metricToMonitor": "TOTAL_PR",
+    "metricGroup": "CPU",
+    "message": " ...",
+    "value": 100,
+    "overTime": 60000,
+    "notificationDelay": 5000,
+    "type": "THRESHOLD",
+    "changeNotify": null,
+    "thresholdNotify": {
+      "trigger": "ABOVE",
+      "thrashold": "MAX"
+    }
+  },

@@ -70,6 +70,13 @@
             <version>2.13.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.github.seratch</groupId>
+            <artifactId>jslack</artifactId>
+            <version>3.4.2</version>
+        </dependency>
+
+
     </dependencies>
 
     <properties>
