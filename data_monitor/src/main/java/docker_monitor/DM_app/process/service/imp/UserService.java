@@ -1,4 +1,4 @@
-package docker_monitor.DM_app.process.service;
+package docker_monitor.DM_app.process.service.imp;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

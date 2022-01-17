@@ -1,4 +1,4 @@
-package docker_monitor.DM_app.process.service;
+package docker_monitor.DM_app.process.service.imp;
 
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import docker_monitor.DM_app.process.database.db_source.NotificationDataSource;
 import docker_monitor.DM_app.process.object.Notification;
+import docker_monitor.DM_app.process.service.NotificationSerialization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class JSONNotifSerialization implements NotificationSerialization{
+public class JSONNotifSerialization implements NotificationSerialization {
     @Autowired
     private NotificationDataSource dataSource;
 

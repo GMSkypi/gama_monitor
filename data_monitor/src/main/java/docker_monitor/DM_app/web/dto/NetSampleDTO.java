@@ -1,46 +1,14 @@
-package docker_monitor.DM_app.process.database.entities;
-
-import docker_monitor.DM_app.process.database.persistance.anotation.Aggregable;
-import docker_monitor.DM_app.process.database.persistance.anotation.Column;
-import docker_monitor.DM_app.process.database.persistance.anotation.Entity;
-import docker_monitor.DM_app.process.database.persistance.anotation.Symbol;
-
+package docker_monitor.DM_app.web.dto;
 import java.time.Instant;
-import java.util.Date;
 
-@Entity(name = "NET")
-public class Net {
-    @Symbol
-    @Column(name = "ContainerId")
-    String containerId;
-    @Aggregable
-    @Column(name = "receive")
-    long receive;
-    @Aggregable
-    @Column(name = "receive_error")
-    long receiveErrorCountPeriod;
-    @Aggregable
-    @Column(name = "receive_error_total")
-    long receiveErrorCountTotal;
-    @Aggregable
-    @Column(name = "transmit")
-    long transmit;
-    @Aggregable
-    @Column(name = "transmit_error")
-    long transmitErrorCountPeriod;
-    @Aggregable
-    @Column(name = "transmit_error_total")
-    long transmitErrorCountTotal;
-    @Column(name = "date_time")
-    Instant dateTime;
-
-    public String getContainerId() {
-        return containerId;
-    }
-
-    public void setContainerId(String containerId) {
-        this.containerId = containerId;
-    }
+public class NetSampleDTO {
+    private long receive;
+    private long receiveErrorCountPeriod;
+    private long receiveErrorCountTotal;
+    private long transmit;
+    private long transmitErrorCountPeriod;
+    private long transmitErrorCountTotal;
+    private Instant dateTime;
 
     public long getReceive() {
         return receive;

@@ -1,51 +1,17 @@
-package docker_monitor.DM_app.process.database.entities;
-
-import docker_monitor.DM_app.process.database.persistance.anotation.Aggregable;
-import docker_monitor.DM_app.process.database.persistance.anotation.Column;
-import docker_monitor.DM_app.process.database.persistance.anotation.Entity;
-import docker_monitor.DM_app.process.database.persistance.anotation.Symbol;
+package docker_monitor.DM_app.web.dto;
 
 import java.time.Instant;
 
-@Entity(name = "CPU")
-public class Cpu {
-    @Symbol
-    @Column(name = "Container_id")
-    String containerId;
-    @Aggregable
-    @Column(name = "u_space_pr")
-    long userSpacePercents;
-    @Aggregable
-    @Column(name = "k_space_pr")
-    long kernelSpacePercents;
-    @Aggregable
-    @Column(name = "u_space_ms")
-    long userSpaceMs;
-    @Aggregable
-    @Column(name = "k_space_ms")
-    long kernelSpaceMs;
-    @Aggregable
-    @Column(name = "throttle_ns")
-    long throttleMs;
-    @Aggregable
-    @Column(name = "throttle_cnt")
-    long throttleCount;
-    @Aggregable
-    @Column(name = "total_ns")
-    long totalMs;
-    @Aggregable
-    @Column(name = "total_pr")
-    long totalPercents;
-    @Column(name = "date_time")
-    Instant dateTime;
-
-    public String getContainerId() {
-        return containerId;
-    }
-
-    public void setContainerId(String containerId) {
-        this.containerId = containerId;
-    }
+public class CpuSampleDTO {
+    private long userSpacePercents;
+    private long kernelSpacePercents;
+    private long userSpaceMs;
+    private long kernelSpaceMs;
+    private long throttleMs;
+    private long throttleCount;
+    private long totalMs;
+    private long totalPercents;
+    private Instant dateTime;
 
     public long getUserSpacePercents() {
         return userSpacePercents;

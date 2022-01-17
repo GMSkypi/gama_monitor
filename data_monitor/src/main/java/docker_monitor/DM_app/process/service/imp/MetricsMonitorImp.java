@@ -1,4 +1,4 @@
-package docker_monitor.DM_app.process.service;
+package docker_monitor.DM_app.process.service.imp;
 
 import docker_monitor.DM_app.constants.Group;
 import docker_monitor.DM_app.constants.Metrics;
@@ -10,6 +10,8 @@ import docker_monitor.DM_app.process.database.repository.*;
 import docker_monitor.DM_app.process.object.ActiveNotification;
 import docker_monitor.DM_app.process.object.Metric;
 import docker_monitor.DM_app.process.object.Notification;
+import docker_monitor.DM_app.process.service.MessageNotification;
+import docker_monitor.DM_app.process.service.MetricsMonitor;
 import docker_monitor.DM_app.process.service.cache.NotificationCache;
 import org.apache.logging.log4j.util.TriConsumer;
 import org.springframework.beans.factory.annotation.Autowired;

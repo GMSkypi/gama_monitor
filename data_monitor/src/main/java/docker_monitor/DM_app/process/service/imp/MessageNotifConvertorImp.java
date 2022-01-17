@@ -1,10 +1,11 @@
-package docker_monitor.DM_app.process.service;
+package docker_monitor.DM_app.process.service.imp;
 
 import docker_monitor.DM_app.process.object.Notification;
+import docker_monitor.DM_app.process.service.MessageNotifConvertor;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MessageNotifConvertorImp implements MessageNotifConvertor{
+public class MessageNotifConvertorImp implements MessageNotifConvertor {
     @Override
     public String convertNotificationToMessage(Notification notification, long value){
         String calculation = switch (notification.getType()){

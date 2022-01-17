@@ -1,5 +1,6 @@
 package docker_monitor.DM_app.process.database.entities;
 
+import docker_monitor.DM_app.process.database.persistance.anotation.Aggregable;
 import docker_monitor.DM_app.process.database.persistance.anotation.Column;
 import docker_monitor.DM_app.process.database.persistance.anotation.Entity;
 import docker_monitor.DM_app.process.database.persistance.anotation.Symbol;
@@ -12,8 +13,10 @@ public class IO {
     @Symbol
     @Column(name = "Container_id")
     String containerId;
+    @Aggregable
     @Column(name = "read")
     long byteRead;
+    @Aggregable
     @Column(name = "write")
     long byteWrite;
     @Column(name = "date_time")
