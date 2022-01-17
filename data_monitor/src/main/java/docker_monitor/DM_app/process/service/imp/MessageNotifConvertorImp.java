@@ -1,6 +1,6 @@
 package docker_monitor.DM_app.process.service.imp;
 
-import docker_monitor.DM_app.process.object.Notification;
+import docker_monitor.DM_app.process.object.notification.Notification;
 import docker_monitor.DM_app.process.service.MessageNotifConvertor;
 import org.springframework.stereotype.Service;
 

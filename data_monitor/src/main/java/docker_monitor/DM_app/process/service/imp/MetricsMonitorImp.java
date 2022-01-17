@@ -1,15 +1,14 @@
 package docker_monitor.DM_app.process.service.imp;
 
 import docker_monitor.DM_app.constants.Group;
-import docker_monitor.DM_app.constants.Metrics;
 import docker_monitor.DM_app.process.database.entities.Cpu;
 import docker_monitor.DM_app.process.database.entities.IO;
 import docker_monitor.DM_app.process.database.entities.Memory;
 import docker_monitor.DM_app.process.database.entities.Net;
 import docker_monitor.DM_app.process.database.repository.*;
-import docker_monitor.DM_app.process.object.ActiveNotification;
-import docker_monitor.DM_app.process.object.Metric;
-import docker_monitor.DM_app.process.object.Notification;
+import docker_monitor.DM_app.process.object.notification.ActiveNotification;
+import docker_monitor.DM_app.process.object.notification.Metric;
+import docker_monitor.DM_app.process.object.notification.Notification;
 import docker_monitor.DM_app.process.service.MessageNotification;
 import docker_monitor.DM_app.process.service.MetricsMonitor;
 import docker_monitor.DM_app.process.service.cache.NotificationCache;
@@ -18,14 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.*;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

@@ -8,7 +8,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import docker_monitor.DM_app.process.database.db_source.NotificationDataSource;
-import docker_monitor.DM_app.process.object.Notification;
+import docker_monitor.DM_app.process.object.notification.Notification;
 import docker_monitor.DM_app.process.service.NotificationSerialization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

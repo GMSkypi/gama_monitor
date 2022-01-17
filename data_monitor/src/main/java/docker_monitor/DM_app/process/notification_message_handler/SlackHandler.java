@@ -14,6 +14,9 @@ public class SlackHandler implements NotificationObservers{
     @Value("${slack.webhook}")
     private String urlSlackWebHook;
 
+    @Value("${notification.enabled}")
+    private boolean notify;
+
     @Override
     public void update(String message) {
         StringBuilder messageBuilder = new StringBuilder();
@@ -21,7 +24,8 @@ public class SlackHandler implements NotificationObservers{
         messageBuilder.append("-- DOCKER MONITORING --" + "\n");
         messageBuilder.append(message);
         messageBuilder.append("-------------------------" + "\n");
-        process(messageBuilder.toString());
+        if(notify)
+            process(messageBuilder.toString());
     }
     private void process(String message) {
         Payload payload = Payload.builder()

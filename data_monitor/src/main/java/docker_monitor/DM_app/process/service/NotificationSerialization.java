@@ -1,8 +1,7 @@
 package docker_monitor.DM_app.process.service;
 
-import docker_monitor.DM_app.process.object.Notification;
+import docker_monitor.DM_app.process.object.notification.Notification;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface NotificationSerialization {
