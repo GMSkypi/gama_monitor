@@ -4,6 +4,12 @@ public class SampledBy {
     private int value;
     private SampleUnit unit;
 
+    public SampledBy(String data){
+        if(data.length() > 0){
+            unit = SampleUnit.fromLetter(data.charAt(data.length() - 1) + "");
+            value = Integer.parseInt(data.substring(0, data.length() - 1));
+        }
+    }
     public SampledBy(int value, SampleUnit unit){
         this.value = value;
         this.unit = unit;
@@ -27,6 +33,6 @@ public class SampledBy {
 
     @Override
     public String toString() {
-        return unit.toString() + value;
+        return  value + unit.toString();
     }
 }

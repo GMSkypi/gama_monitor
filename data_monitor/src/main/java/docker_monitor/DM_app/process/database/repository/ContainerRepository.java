@@ -15,8 +15,7 @@ public class ContainerRepository extends QuestDBRepositoryImp<Container> {
     }
     public Optional<Container> findBy(String containerName){
         return executeQuery("SELECT * from " + Container.class.getAnnotation(Entity.class).name() +
-                "WHERE id = " + containerName).stream().findFirst();
+                " WHERE id = '" + containerName + "'").stream().findFirst();
     }
-
 }
 

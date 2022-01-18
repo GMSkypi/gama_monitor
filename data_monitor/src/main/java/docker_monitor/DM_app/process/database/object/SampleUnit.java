@@ -13,6 +13,13 @@ public enum SampleUnit {
     SampleUnit(String val) {
         this.val = val;
     }
+
+    public static SampleUnit fromLetter(String letter) {
+        for (SampleUnit s : values() ){
+            if (s.val.equals(letter)) return s;
+        }
+        return null;
+    }
     @Override
     public String toString() {
         return val;
