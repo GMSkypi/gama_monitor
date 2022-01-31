@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/net")
 @Validated
@@ -26,42 +27,42 @@ public class NetController {
     @Autowired
     NetDataService netService;
 
-    @GetMapping(value = "/{containerId}")
+    @GetMapping(value = "/", params = {"containerId"})
     @ResponseStatus(HttpStatus.OK)
-    public NetDTO getNetMet(@PathVariable String containerId){
+    public NetDTO getNetMet(@RequestParam("containerId") String containerId){
         return null;
     }
-    @GetMapping(value = "/{containerId}", params = {"dateFrom", "dateTo"})
+    @GetMapping(value = "/", params = {"containerId", "dateFrom", "dateTo"})
     @ResponseStatus(HttpStatus.OK)
     public NetDTO getNetMetWFDate(
-            @PathVariable String containerId,
+            @RequestParam("containerId") String containerId,
             @RequestParam("dateFrom") Instant dateFrom,
             @RequestParam("dateTo") Instant dateTo){
         MetricPair<Container, Net> pair = netService.getNetMetrics(containerId,dateFrom,dateTo);
         return conversion.convertToNetDTO(pair.getMetrics(),pair.getContainer());
     }
-    @GetMapping(value = "/{containerId}", params = {"dateFrom", "dateTo", "sampleRate"})
+    @GetMapping(value = "/", params = {"containerId", "dateFrom", "dateTo", "sampleRate"})
     @ResponseStatus(HttpStatus.OK)
     public NetDTO getNetMetWFDateWSample(
-            @PathVariable String containerId,
+            @RequestParam("containerId") String containerId,
             @RequestParam("dateFrom") Instant dateFrom,
             @RequestParam("dateTo") Instant dateTo,
             @RequestParam("sampleRate") SampledBy sampleRate){
         MetricPair<Container, Net> pair = netService.getNetMetrics(containerId,dateFrom,dateTo,sampleRate);
         return conversion.convertToNetDTO(pair.getMetrics(),pair.getContainer());
     }
-    @GetMapping(value = "/{containerId}", params = {"dateFrom"})
+    @GetMapping(value = "/", params = {"containerId", "dateFrom"})
     @ResponseStatus(HttpStatus.OK)
     public NetDTO getNetMetWDate(
-            @PathVariable String containerId,
+            @RequestParam("containerId") String containerId,
             @RequestParam("dateFrom") Instant dateFrom){
         MetricPair<Container, Net> pair = netService.getNetMetrics(containerId,dateFrom);
         return conversion.convertToNetDTO(pair.getMetrics(),pair.getContainer());
     }
-    @GetMapping(value = "/{containerId}", params = {"dateFrom", "sampleRate"})
+    @GetMapping(value = "/", params = {"containerId", "dateFrom", "sampleRate"})
     @ResponseStatus(HttpStatus.OK)
     public NetDTO getNetMetWDateWSample(
-            @PathVariable String containerId,
+            @RequestParam("containerId") String containerId,
             @RequestParam("dateFrom") Instant dateFrom,
             @RequestParam("sampleRate") SampledBy sampleRate){
         MetricPair<Container, Net> pair = netService.getNetMetrics(containerId,dateFrom,sampleRate);

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/cpu")
 @Validated
@@ -25,43 +26,43 @@ public class CpuController {
     @Autowired
     CpuDataService cpuService;
 
-    @GetMapping(value = "/{containerId}")
+    @GetMapping(value = "/",  params = {"containerId"})
     @ResponseStatus(HttpStatus.OK)
-    public CpuDTO getCpuMet(@PathVariable String containerId){
+    public CpuDTO getCpuMet(@RequestParam("containerId") String containerId){
 
         return null;
     }
-    @GetMapping(value = "/{containerId}", params = {"dateFrom", "dateTo"})
+    @GetMapping(value = "/", params = {"containerId", "dateFrom", "dateTo"})
     @ResponseStatus(HttpStatus.OK)
     public CpuDTO getCpuMetWFDate(
-            @PathVariable String containerId,
+            @RequestParam("containerId") String containerId,
             @RequestParam("dateFrom") Instant dateFrom,
             @RequestParam("dateTo") Instant dateTo){
         MetricPair<Container, Cpu> pair = cpuService.getCpuMetrics(containerId,dateFrom,dateTo);
         return conversion.convertToCpuDTO(pair.getMetrics(),pair.getContainer());
     }
-    @GetMapping(value = "/{containerId}", params = {"dateFrom", "dateTo", "sampleRate"})
+    @GetMapping(value = "/", params = {"containerId", "dateFrom", "dateTo", "sampleRate"})
     @ResponseStatus(HttpStatus.OK)
     public CpuDTO getCpuMetWFDateWSample(
-            @PathVariable String containerId,
+            @RequestParam("containerId") String containerId,
             @RequestParam("dateFrom") Instant dateFrom,
             @RequestParam("dateTo") Instant dateTo,
             @RequestParam("sampleRate") SampledBy sampleRate){
         MetricPair<Container, Cpu> pair = cpuService.getCpuMetrics(containerId,dateFrom,dateTo,sampleRate);
         return conversion.convertToCpuDTO(pair.getMetrics(),pair.getContainer());
     }
-    @GetMapping(value = "/{containerId}", params = {"dateFrom"})
+    @GetMapping(value = "/", params = {"containerId", "dateFrom"})
     @ResponseStatus(HttpStatus.OK)
     public CpuDTO getCpuMetWDate(
-            @PathVariable String containerId,
+            @RequestParam("containerId") String containerId,
             @RequestParam("dateFrom") Instant dateFrom){
         MetricPair<Container, Cpu> pair = cpuService.getCpuMetrics(containerId,dateFrom);
         return conversion.convertToCpuDTO(pair.getMetrics(),pair.getContainer());
     }
-    @GetMapping(value = "/{containerId}", params = {"dateFrom", "sampleRate"})
+    @GetMapping(value = "/", params = {"containerId", "dateFrom", "sampleRate"})
     @ResponseStatus(HttpStatus.OK)
     public CpuDTO getCpuMetWDateWSample(
-            @PathVariable String containerId,
+            @RequestParam("containerId") String containerId,
             @RequestParam("dateFrom") Instant dateFrom,
             @RequestParam("sampleRate") SampledBy sampleRate){
         MetricPair<Container, Cpu> pair = cpuService.getCpuMetrics(containerId,dateFrom,sampleRate);

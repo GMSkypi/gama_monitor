@@ -4,6 +4,8 @@ import docker_monitor.DM_app.process.database.persistance.anotation.Column;
 import docker_monitor.DM_app.process.database.persistance.anotation.Entity;
 import docker_monitor.DM_app.process.database.persistance.anotation.Symbol;
 
+import java.time.Instant;
+
 @Entity(name = "Container")
 public class Container {
     @Symbol
@@ -18,6 +20,9 @@ public class Container {
 
     @Column(name = "image")
     String image;
+
+    @Column(name = "date_time")
+    Instant lastRecord;
 
     public String getId() {
         return id;
@@ -49,5 +54,13 @@ public class Container {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public Instant getLastRecord() {
+        return lastRecord;
+    }
+
+    public void setLastRecord(Instant lastRecord) {
+        this.lastRecord = lastRecord;
     }
 }

@@ -1,10 +1,13 @@
 package docker_monitor.DM_app.web.dto;
 
+import java.time.Instant;
+
 public class ContainerDTO {
     private String id;
     private String dockerID;
     private String name;
     private String image;
+    private Instant lastRecord;
 
     public String getId() {
         return id;
@@ -36,5 +39,13 @@ public class ContainerDTO {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public Instant getLastRecord() {
+        return lastRecord;
+    }
+
+    public void setLastRecord(Instant lastRecord) {
+        this.lastRecord = lastRecord;
     }
 }

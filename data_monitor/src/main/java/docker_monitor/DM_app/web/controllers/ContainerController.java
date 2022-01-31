@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/container")
 @Validated
@@ -23,9 +24,9 @@ public class ContainerController {
     @Autowired
     ContainerDataService containerService;
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/", params = {"id"})
     @ResponseStatus(HttpStatus.OK)
-    public ContainerDTO getContainer(@PathVariable String id){
+    public ContainerDTO getContainer(@RequestParam("id") String id){
         Container container = containerService.getContainerById(id);
         return conversion.convertToContainerDTO(container);
     }

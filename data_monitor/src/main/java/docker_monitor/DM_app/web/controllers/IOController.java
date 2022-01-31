@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/io")
 @Validated
@@ -26,42 +27,42 @@ public class IOController {
     @Autowired
     IODataService ioService;
 
-    @GetMapping(value = "/{containerId}")
+    @GetMapping(value = "/", params = {"containerId"})
     @ResponseStatus(HttpStatus.OK)
-    public IODTO getIOMet(@PathVariable String containerId){
+    public IODTO getIOMet(@RequestParam("containerId") String containerId){
         return null;
     }
-    @GetMapping(value = "/{containerId}", params = {"dateFrom", "dateTo"})
+    @GetMapping(value = "/", params = {"containerId", "dateFrom", "dateTo"})
     @ResponseStatus(HttpStatus.OK)
     public IODTO getIOMetWFDate(
-            @PathVariable String containerId,
+            @RequestParam("containerId") String containerId,
             @RequestParam("dateFrom") Instant dateFrom,
             @RequestParam("dateTo") Instant dateTo){
         MetricPair<Container, IO> pair = ioService.getIOMetrics(containerId,dateFrom,dateTo);
         return conversion.convertToIODTO(pair.getMetrics(),pair.getContainer());
     }
-    @GetMapping(value = "/{containerId}", params = {"dateFrom", "dateTo", "sampleRate"})
+    @GetMapping(value = "/", params = {"containerId", "dateFrom", "dateTo", "sampleRate"})
     @ResponseStatus(HttpStatus.OK)
     public IODTO getIOMetWFDateWSample(
-            @PathVariable String containerId,
+            @RequestParam("containerId") String containerId,
             @RequestParam("dateFrom") Instant dateFrom,
             @RequestParam("dateTo") Instant dateTo,
             @RequestParam("sampleRate") SampledBy sampleRate){
         MetricPair<Container, IO> pair = ioService.getIOMetrics(containerId,dateFrom,dateTo,sampleRate);
         return conversion.convertToIODTO(pair.getMetrics(),pair.getContainer());
     }
-    @GetMapping(value = "/{containerId}", params = {"dateFrom"})
+    @GetMapping(value = "/", params = {"containerId", "dateFrom"})
     @ResponseStatus(HttpStatus.OK)
     public IODTO getIDMetWDate(
-            @PathVariable String containerId,
+            @RequestParam("containerId") String containerId,
             @RequestParam("dateFrom") Instant dateFrom){
         MetricPair<Container, IO> pair = ioService.getIOMetrics(containerId,dateFrom);
         return conversion.convertToIODTO(pair.getMetrics(),pair.getContainer());
     }
-    @GetMapping(value = "/{containerId}", params = {"dateFrom", "sampleRate"})
+    @GetMapping(value = "/", params = {"containerId", "dateFrom", "sampleRate"})
     @ResponseStatus(HttpStatus.OK)
     public IODTO getIOMetWDateWSample(
-            @PathVariable String containerId,
+            @RequestParam("containerId") String containerId,
             @RequestParam("dateFrom") Instant dateFrom,
             @RequestParam("sampleRate") SampledBy sampleRate){
         MetricPair<Container, IO> pair = ioService.getIOMetrics(containerId,dateFrom,sampleRate);
