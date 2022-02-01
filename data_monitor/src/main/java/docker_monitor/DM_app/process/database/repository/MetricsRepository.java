@@ -32,8 +32,11 @@ public class MetricsRepository<C> extends QuestDBRepositoryImp<C> {
         while (fieldIterator.hasNext()) {
             Field f = fieldIterator.next();
             if (f.getAnnotation(Aggregable.class) != null) {
-                result.append(",");
-                result.append("avg(").append(f.getAnnotation(Column.class).name()).append(")");
+                result.append(",")
+                        .append("avg(")
+                        .append(f.getAnnotation(Column.class).name())
+                        .append(") ")
+                        .append(f.getAnnotation(Column.class).name());
             }
         }
         return result.toString();
