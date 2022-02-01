@@ -1,0 +1,165 @@
+@page "/ContainerDetail/{*ContainerId}"
+<RadzenCard Class="w-100">
+    <div class="row pb-1">
+        <div class="col-2 d-flex flex-column">
+            <RadzenDatePicker TValue="DateTime?" ShowTime="true" ShowSeconds="true" HoursStep="1.5" MinutesStep="5" SecondsStep="10" Change=@(args => OnDateTimeChange(args, "DatePicker with time", "MM/dd/yyyy HH:mm")) DateFormat="MM/dd/yyyy HH:mm" Class="w-100"/>
+        </div>
+        <div class="col-5 d-flex flex-column">
+            <RadzenSelectBar @bind-Value=@value TValue="int" Multiple="false" Change=@(args => OnSampleRateChange(args, "SelectBar with multiple selection"))>
+                <Items>
+                    <RadzenSelectBarItem Text="Live" Value="0"/>
+                    <RadzenSelectBarItem Text="Hour" Value="1"/>
+                    <RadzenSelectBarItem Text="Day" Value="2"/>
+                    <RadzenSelectBarItem Text="Month" Value="3"/>
+                    <RadzenSelectBarItem Text="Year" Value="4"/>
+                    <RadzenSelectBarItem Text="All" Value="5"/>
+                </Items>
+            </RadzenSelectBar>
+        </div>
+        <div class="col-3 d-flex flex-column">
+            <h2>@ContainerId</h2>
+        </div>
+        <div class="col-2 d-flex flex-column">
+            <RadzenButton Click=@(args => OnClick("Primary button with text and icon")) Text="Add notification" Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" />
+        </div>
+    </div>
+</RadzenCard>
+<RadzenFieldset Text="CPU Usage" class="mb-4">
+    <div class="row pb-1">
+        <div class="col-7 d-flex flex-column">
+            <RadzenChart>
+                <RadzenAreaSeries Data="@cpuData" CategoryProperty="dateTime" Title="Total" LineType="LineType.Dotted" ValueProperty="totalPercents">
+                </RadzenAreaSeries>
+                <RadzenAreaSeries Data="@cpuData" CategoryProperty="dateTime" Title="User space" ValueProperty="userSpacePercents">
+                </RadzenAreaSeries>
+                <RadzenAreaSeries Data="@cpuData" CategoryProperty="dateTime" Title="Kernel space" LineType="LineType.Dashed" ValueProperty="kernelSpacePercents">
+                </RadzenAreaSeries>
+
+                <RadzenCategoryAxis FormatString="{0:d:HH:mm}"/>
+                <RadzenValueAxis>
+                    <RadzenGridLines Visible="true"/>
+                    <RadzenAxisTitle Text="CPU load in % / 1000"/>
+                </RadzenValueAxis>
+                <RadzenLegend Position="LegendPosition.Right"/>
+            </RadzenChart>
+        </div>
+        <div class="col-3 d-flex flex-column">
+            <RadzenChart>
+                <RadzenAreaSeries Data="@cpuData" CategoryProperty="dateTime" Title="Throttle ms" LineType="LineType.Solid" ValueProperty="throttleMs">
+                </RadzenAreaSeries>
+
+                <RadzenCategoryAxis FormatString="{0:d:HH:mm}"/>
+                <RadzenValueAxis>
+                    <RadzenGridLines Visible="true"/>
+                    <RadzenAxisTitle Text="Throttle ms"/>
+                </RadzenValueAxis>
+                <RadzenLegend Visible="false"/>
+            </RadzenChart>
+
+
+        </div>
+        <div class="col-2 d-flex flex-column">
+            <RadzenCard Class="w-100">
+                <label>Throttle total count: @lastCpuSample.throttleCount</label>
+            </RadzenCard>
+        </div>
+    </div>
+</RadzenFieldset>
+<RadzenFieldset Text="Memory" class="mb-2">
+    <div class="row pb-1">
+        <div class="col-6 d-flex flex-column">
+            <RadzenChart>
+                <RadzenAreaSeries Data="@memoryData" CategoryProperty="dateTime" Title="Memory" LineType="LineType.Solid" ValueProperty="memoryUsed">
+                </RadzenAreaSeries>
+                <RadzenAreaSeries Data="@memoryData" CategoryProperty="dateTime" Title="Swap" LineType="LineType.Dashed" ValueProperty="swap">
+                </RadzenAreaSeries>
+                <RadzenAreaSeries Data="@memoryData" CategoryProperty="dateTime" Title="Total" LineType="LineType.Dotted" ValueProperty="memoryAndSwapUsed">
+                </RadzenAreaSeries>
+                <RadzenCategoryAxis FormatString="{0:d:HH:mm}"/>
+                <RadzenValueAxis>
+                    <RadzenGridLines Visible="true"/>
+                    <RadzenAxisTitle Text="Memory Usage in bytes"/>
+                </RadzenValueAxis>
+            </RadzenChart>
+
+        </div>
+        <div class="col-4 d-flex flex-column">
+            <RadzenChart>
+                <RadzenAreaSeries Data="@memoryData" CategoryProperty="dateTime" Title="RSS" LineType="LineType.Solid" ValueProperty="rss">
+                </RadzenAreaSeries>
+
+                <RadzenCategoryAxis FormatString="{0:d:HH:mm}"/>
+                <RadzenValueAxis>
+                    <RadzenGridLines Visible="true"/>
+                    <RadzenAxisTitle Text="RSS usage in bytes"/>
+                </RadzenValueAxis>
+                <RadzenLegend Visible="false"/>
+            </RadzenChart>
+
+        </div>
+        <div class="col-2 d-flex flex-column">
+            <RadzenCard Class="w-100">
+                <label>Memory limit: @lastMemorySample.memoryLimit b</label>
+                <label>Memory + swap limit: @lastMemorySample.memoryAndSwapLimit b</label>
+                <label>Memory limit hit count: @lastMemorySample.memoryLimitHitCount</label>
+                <label>Memory + swap limit hit count: @lastMemorySample.memoryAndSwapLimitHitCount</label>
+            </RadzenCard>
+        </div>
+    </div>
+</RadzenFieldset>
+<div class="row pb-1">
+    <div class="col-7 d-flex flex-column">
+        <RadzenFieldset Text="Net" class="mb-2">
+            <div class="row pb-1">
+                <div class="col-8 d-flex flex-column">
+                    <RadzenChart>
+                        <RadzenAreaSeries Data="@netData" CategoryProperty="dateTime" Title="Receive" LineType="LineType.Solid" ValueProperty="receive">
+                        </RadzenAreaSeries>
+                        <RadzenAreaSeries Data="@netData" CategoryProperty="dateTime" Title="Transmit" LineType="LineType.Dashed" ValueProperty="transmit">
+
+                        </RadzenAreaSeries>
+                        <RadzenCategoryAxis FormatString="{0:d:HH:mm}"/>
+                        <RadzenValueAxis>
+                            <RadzenGridLines Visible="true"/>
+                            <RadzenAxisTitle Text=""/>
+                        </RadzenValueAxis>
+                        <RadzenLegend Visible="true"/>
+                    </RadzenChart>
+                </div>
+                <div class="col-4 d-flex flex-column">
+                    <RadzenChart>
+                        <RadzenAreaSeries Data="@netData" CategoryProperty="dateTime" Title="Receive Err." LineType="LineType.Solid" ValueProperty="receiveErrorCountPeriod">
+                        </RadzenAreaSeries>
+                        <RadzenAreaSeries Data="@netData" CategoryProperty="dateTime" Title="Transmit Err." LineType="LineType.Dashed" ValueProperty="transmitErrorCountPeriod">
+
+                        </RadzenAreaSeries>
+                        <RadzenCategoryAxis FormatString="{0:d:HH:mm}"/>
+                        <RadzenValueAxis>
+                            <RadzenGridLines Visible="true"/>
+                            <RadzenAxisTitle Text=""/>
+                        </RadzenValueAxis>
+                        <RadzenLegend Visible="true"/>
+                    </RadzenChart>
+
+                </div>
+            </div>
+        </RadzenFieldset>
+    </div>
+    <div class="col-5 d-flex flex-column">
+        <RadzenFieldset Text="IO" class="mb-2">
+            <RadzenChart>
+                <RadzenAreaSeries Data="@ioData" CategoryProperty="dateTime" Title="byteRead" LineType="LineType.Solid" ValueProperty="byteRead">
+                </RadzenAreaSeries>
+                <RadzenAreaSeries Data="@ioData" CategoryProperty="dateTime" Title="byteWrite" LineType="LineType.Solid" ValueProperty="byteWrite">
+                </RadzenAreaSeries>
+
+                <RadzenCategoryAxis FormatString="{0:d:HH:mm}"/>
+                <RadzenValueAxis>
+                    <RadzenGridLines Visible="true"/>
+                    <RadzenAxisTitle Text=""/>
+                </RadzenValueAxis>
+                <RadzenLegend Visible="true"/>
+            </RadzenChart>
+        </RadzenFieldset>
+    </div>
+</div>

@@ -1,6 +1,31 @@
-@page "/ContainerList"
-<h3>ContainerList</h3>
+@page "/list"
+@using data_viewer.Model
+@using System.Text.Json
+<h1>List of containers</h1>
 
-@code {
+
+<RadzenDataGrid @ref="_dataGrid" 
+                AllowFiltering="true"
+                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                FilterMode="FilterMode.Advanced"
+                AllowPaging="true"
+                PageSize="5"
+                PagerHorizontalAlign="HorizontalAlign.Center"
+                AllowSorting="true"
+                Data="@data"
+                TItem="Container"
+                IsLoading="@isLoading"
+                Count="@count"
+                RowClick="(item) => OnItemClick(item)"
+                SelectionMode="Radzen.DataGridSelectionMode.Single"
+                @bind-Value="SelectedContainer"
+                LoadData="@LoadData">
     
-}
+    <Columns>
+        <RadzenDataGridColumn TItem="Container" Property="Container.id" Title="ID"/>
+        <RadzenDataGridColumn TItem="Container" Property="Container.dockerID" Title="DockerID"/>
+        <RadzenDataGridColumn TItem="Container" Property="Container.name" Title="Name"/>
+        <RadzenDataGridColumn TItem="Container" Property="Container.image" Title="Image"/>
+        <RadzenDataGridColumn TItem="Container" Property="Container.lastRecord" Title="Last record"/>
+    </Columns>
+</RadzenDataGrid>

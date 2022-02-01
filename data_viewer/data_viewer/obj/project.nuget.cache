@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "1LrUOtPIcoO3R9oz9NVk+9dV2k6pqA/FS3/jkzXDh5r/htoyzrmN6TGZSIiWDOQ9eO8dcQuZB3nSqNvFeRjQcw==",
+  "dgSpecHash": "U/+6LMcJmxHFnfEyDxQHNnKHrxMmXjaIX4rV4UUV5TQA4Pwu3AH2mZcvJzlyxOuGorZQEjhDnJmTxJYFkTgMAA==",
   "success": true,
   "projectFilePath": "/home/gama/gama_monitor/data_viewer/data_viewer/data_viewer.csproj",
   "expectedPackageFiles": [
+    "/home/gama/.nuget/packages/libsassbuilder/2.0.1/libsassbuilder.2.0.1.nupkg.sha512",
     "/home/gama/.nuget/packages/microsoft.aspnetcore.authorization/5.0.13/microsoft.aspnetcore.authorization.5.0.13.nupkg.sha512",
     "/home/gama/.nuget/packages/microsoft.aspnetcore.components/5.0.13/microsoft.aspnetcore.components.5.0.13.nupkg.sha512",
     "/home/gama/.nuget/packages/microsoft.aspnetcore.components.analyzers/5.0.13/microsoft.aspnetcore.components.analyzers.5.0.13.nupkg.sha512",
@@ -12,6 +13,7 @@
     "/home/gama/.nuget/packages/microsoft.aspnetcore.components.webassembly/5.0.13/microsoft.aspnetcore.components.webassembly.5.0.13.nupkg.sha512",
     "/home/gama/.nuget/packages/microsoft.aspnetcore.components.webassembly.devserver/5.0.13/microsoft.aspnetcore.components.webassembly.devserver.5.0.13.nupkg.sha512",
     "/home/gama/.nuget/packages/microsoft.aspnetcore.metadata/5.0.13/microsoft.aspnetcore.metadata.5.0.13.nupkg.sha512",
+    "/home/gama/.nuget/packages/microsoft.csharp/4.7.0/microsoft.csharp.4.7.0.nupkg.sha512",
     "/home/gama/.nuget/packages/microsoft.extensions.configuration/5.0.0/microsoft.extensions.configuration.5.0.0.nupkg.sha512",
     "/home/gama/.nuget/packages/microsoft.extensions.configuration.abstractions/5.0.0/microsoft.extensions.configuration.abstractions.5.0.0.nupkg.sha512",
     "/home/gama/.nuget/packages/microsoft.extensions.configuration.binder/5.0.0/microsoft.extensions.configuration.binder.5.0.0.nupkg.sha512",
@@ -28,7 +30,9 @@
     "/home/gama/.nuget/packages/microsoft.extensions.primitives/5.0.0/microsoft.extensions.primitives.5.0.0.nupkg.sha512",
     "/home/gama/.nuget/packages/microsoft.jsinterop/5.0.13/microsoft.jsinterop.5.0.13.nupkg.sha512",
     "/home/gama/.nuget/packages/microsoft.jsinterop.webassembly/5.0.13/microsoft.jsinterop.webassembly.5.0.13.nupkg.sha512",
+    "/home/gama/.nuget/packages/radzen.blazor/3.14.7/radzen.blazor.3.14.7.nupkg.sha512",
     "/home/gama/.nuget/packages/system.io.pipelines/5.0.1/system.io.pipelines.5.0.1.nupkg.sha512",
+    "/home/gama/.nuget/packages/system.linq.dynamic.core/1.2.12/system.linq.dynamic.core.1.2.12.nupkg.sha512",
     "/home/gama/.nuget/packages/system.net.http.json/5.0.0/system.net.http.json.5.0.0.nupkg.sha512",
     "/home/gama/.nuget/packages/microsoft.netcore.app.runtime.browser-wasm/5.0.13/microsoft.netcore.app.runtime.browser-wasm.5.0.13.nupkg.sha512"
   ],

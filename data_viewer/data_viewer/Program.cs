@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Text;
+using data_viewer.services;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,7 +20,15 @@ namespace data_viewer
 
             builder.Services.AddScoped(
                 sp => new HttpClient {BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)});
-
+            
+            var hostname = builder.Configuration["HostName"];
+            builder.Services.AddScoped( cf => new ConfigurationService(hostname));
+            builder.Services.AddScoped<ContainerComService>();
+            builder.Services.AddScoped<CPUComService>();
+            builder.Services.AddScoped<MemoryComService>();
+            builder.Services.AddScoped<NetComService>();
+            builder.Services.AddScoped<IOComService>();
+            
             await builder.Build().RunAsync();
         }
     }

@@ -404,9 +404,6 @@
 /home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/data_viewer.MvcApplicationPartsAssemblyInfo.cache
 /home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/data_viewer.RazorComponent.input.cache
 /home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/RazorDeclaration/App.razor.g.cs
-/home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/RazorDeclaration/Pages/Counter.razor.g.cs
-/home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/RazorDeclaration/Pages/FetchData.razor.g.cs
-/home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/RazorDeclaration/Pages/Index.razor.g.cs
 /home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/RazorDeclaration/Shared/SurveyPrompt.razor.g.cs
 /home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/RazorDeclaration/_Imports.razor.g.cs
 /home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/RazorDeclaration/Shared/MainLayout.razor.g.cs
@@ -417,9 +414,6 @@
 /home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/data_viewer.TagHelpers.output.cache
 /home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/data_viewer.RazorCoreGenerate.cache
 /home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/Razor/App.razor.g.cs
-/home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/Razor/Pages/Counter.razor.g.cs
-/home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/Razor/Pages/FetchData.razor.g.cs
-/home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/Razor/Pages/Index.razor.g.cs
 /home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/Razor/Shared/SurveyPrompt.razor.g.cs
 /home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/Razor/_Imports.razor.g.cs
 /home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/Razor/Shared/MainLayout.razor.g.cs
@@ -630,3 +624,17 @@
 /home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/data_viewer.dll
 /home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/ref/data_viewer.dll
 /home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/data_viewer.pdb
+/home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/RazorDeclaration/Pages/ContainerList.razor.g.cs
+/home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/RazorDeclaration/Pages/Dashboard.razor.g.cs
+/home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/RazorDeclaration/Pages/NotificationMessage.razor.g.cs
+/home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/Razor/Pages/ContainerList.razor.g.cs
+/home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/Razor/Pages/Dashboard.razor.g.cs
+/home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/Razor/Pages/NotificationMessage.razor.g.cs
+/home/gama/gama_monitor/data_viewer/data_viewer/bin/Debug/net5.0/wwwroot/_framework/Radzen.Blazor.dll.gz
+/home/gama/gama_monitor/data_viewer/data_viewer/bin/Debug/net5.0/wwwroot/_framework/System.Linq.Dynamic.Core.dll.gz
+/home/gama/gama_monitor/data_viewer/data_viewer/bin/Debug/net5.0/wwwroot/_framework/Radzen.Blazor.dll
+/home/gama/gama_monitor/data_viewer/data_viewer/bin/Debug/net5.0/wwwroot/_framework/System.Linq.Dynamic.Core.dll
+/home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/build-gz/ETBHvBhN.gz
+/home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/build-gz/EhDfqj8U.gz
+/home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/RazorDeclaration/Pages/ContainerDetail.razor.g.cs
+/home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/Razor/Pages/ContainerDetail.razor.g.cs
