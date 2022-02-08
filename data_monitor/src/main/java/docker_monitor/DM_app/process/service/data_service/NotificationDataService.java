@@ -8,8 +8,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 public interface NotificationDataService {
-    void deleteNotification(String id);
-    Notification getNotification(String id);
+    void deleteNotification(long id);
+    Notification getNotification(long id);
     List<Notification> getNotifications();
     Notification createNotification(Notification notification);
     Notification updateNotification(Notification newNotification);

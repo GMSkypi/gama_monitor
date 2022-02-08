@@ -73,7 +73,7 @@ public class MetricsMonitorImp implements MetricsMonitor {
         Stream<Metric> stream =
                 metrics.stream().filter(a -> a.getDateTime().toEpochMilli() > (dateTimeNow.toEpochMilli() - activeNotification.getNotification().getOverTime()));
 
-        long value = switch (activeNotification.getNotification().getThresholdNotify().getThrashold()) {
+        long value = switch (activeNotification.getNotification().getThresholdNotify().getThreshold()) {
                 case MAX -> stream.map(Metric::getValue).reduce(Math::max).orElse(0L);
                 case MIN -> stream.map(Metric::getValue).reduce(Math::min).orElse(0L);
                 case AVERAGE -> Math.round(stream.mapToDouble(Metric::getValue).average().orElse(0L));
@@ -90,7 +90,7 @@ public class MetricsMonitorImp implements MetricsMonitor {
         if(notify){
             System.out.println("NOTIFICATION THRESHOLD: CONT_ID:" + activeNotification.getNotification().getContainerId() +
                     " METRIC: " + activeNotification.getNotification().getMetricToMonitor() +
-                    activeNotification.getNotification().getThresholdNotify().getThrashold() +  " VALUE: " + value +
+                    activeNotification.getNotification().getThresholdNotify().getThreshold() +  " VALUE: " + value +
                     " IS " + activeNotification.getNotification().getThresholdNotify().getTrigger() +
                     " DECLARED: " + activeNotification.getNotification().getValue());
             activeNotification.setLastNotificationTime(Instant.ofEpochMilli(dateTimeNow.toEpochMilli() + activeNotification.getNotification().getNotificationDelay()));

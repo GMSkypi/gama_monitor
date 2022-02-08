@@ -30,12 +30,12 @@ public class MessageNotificationController {
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteNotification(@PathVariable String id){
+    public void deleteNotification(@PathVariable long id){
         notificationService.deleteNotification(id);
     }
     @GetMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Notification getNotification(@PathVariable String id){
+    public Notification getNotification(@PathVariable long id){
         return notificationService.getNotification(id);
     }
     @GetMapping(value = "/notifications")

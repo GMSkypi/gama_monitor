@@ -15,15 +15,15 @@ public class NotificationDataServiceImp implements NotificationDataService{
     @Autowired
     NotificationCache cache;
 
-    public void deleteNotification(String id){
+    public void deleteNotification(long id){
         List<ActiveNotification> active = cache.getNotifications();
-        Optional<ActiveNotification> notif = active.stream().filter(a -> Objects.equals(a.getNotification().getContainerId(), id)).findFirst();
+        Optional<ActiveNotification> notif = active.stream().filter(a -> Objects.equals(a.getNotification().getId(), id)).findFirst();
         notif.ifPresent(activeNotification -> cache.removeNotification(activeNotification));
     }
-    public Notification getNotification(String id){
+    public Notification getNotification(long id){
         return cache.getNotifications()
                 .stream()
-                .filter(a -> Objects.equals(a.getNotification().getContainerId(), id))
+                .filter(a -> Objects.equals(a.getNotification().getId(), id))
                 .findFirst()
                 .map(ActiveNotification::getNotification)
                 .orElse(null);
