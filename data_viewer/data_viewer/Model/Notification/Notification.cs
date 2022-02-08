@@ -17,5 +17,23 @@ namespace data_viewer.Model.Notification
         public NotificationType type { get; set; }
         public ChangeNotify changeNotify { get; set; }
         public ThresholdNotify thresholdNotify { get; set; }
+
+        public Notification Clone()
+        {
+            return new Notification
+            {
+                id = id,
+                containerId = containerId,
+                metricToMonitor = metricToMonitor,
+                metricGroup = metricGroup,
+                message = message,
+                value = value,
+                overTime = overTime,
+                notificationDelay = notificationDelay,
+                type = type,
+                changeNotify = type == NotificationType.CHANGE ? changeNotify : null,
+                thresholdNotify = type == NotificationType.THRESHOLD ? thresholdNotify : null,
+            };
+        }
     }
 }

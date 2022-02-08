@@ -638,3 +638,12 @@
 /home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/build-gz/EhDfqj8U.gz
 /home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/RazorDeclaration/Pages/ContainerDetail.razor.g.cs
 /home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/Razor/Pages/ContainerDetail.razor.g.cs
+/home/gama/gama_monitor/data_viewer/data_viewer/bin/Debug/net5.0/wwwroot/_framework/Newtonsoft.Json.dll.gz
+/home/gama/gama_monitor/data_viewer/data_viewer/bin/Debug/net5.0/wwwroot/_framework/Newtonsoft.Json.dll
+/home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/build-gz/ri0OQeWx.gz
+/home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/RazorDeclaration/Component/EditNotificationDialog.razor.g.cs
+/home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/Razor/Component/EditNotificationDialog.razor.g.cs
+/home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/RazorDeclaration/Component/ContainerView.razor.g.cs
+/home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/Razor/Component/ContainerView.razor.g.cs
+/home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/RazorDeclaration/Component/ComfirmationDialog.razor.g.cs
+/home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/Razor/Component/ComfirmationDialog.razor.g.cs

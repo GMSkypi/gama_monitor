@@ -1,10 +1,16 @@
 using System;
+using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace data_viewer.Model.Notification
 {
+    [JsonConverter(typeof(StringEnumConverter))] 
     public enum Metrics
     {
+        [Display(Name = "User space %")]
         U_SPACE_PR,
+        [Display(Name = "Kernel space %")]
         K_SPACE_PR,
         U_SPACE_MS,
         K_SPACE_MS,
@@ -31,6 +37,6 @@ namespace data_viewer.Model.Notification
         RECEIVE_ERROR_TOTAL,
         TRANSMIT,
         TRANSMIT_ERROR,
-        TRANSMIT_ERROR_TOTAL;
+        TRANSMIT_ERROR_TOTAL
     }
 }

@@ -1,0 +1,8 @@
+<EditForm Model="@message" OnValidSubmit="ValidSubmit">
+    <ValidationSummary/>
+    <h3>"@message"</h3>
+    <div class="d-flex flex-row justify-content-between">
+        <RadzenButton Text="OK" ButtonStyle="ButtonStyle.Secondary" type="submit"/>
+        <RadzenButton Click="@((args) => DialogService.Close(false))" ButtonStyle="ButtonStyle.Light" Text="Cancel"/>
+    </div>
+</EditForm>

@@ -1,0 +1,25 @@
+<RadzenCard Class="w-100">
+    <div class="center">
+        <h4>"@container.id"</h4>
+    </div>
+    <div class="row pb-1">
+        <div class="col-6 d-flex flex-column">
+            <RadzenChart>
+                <RadzenAreaSeries Data="@cpuData" CategoryProperty="dateTime" Title="Total" LineType="LineType.Dotted" ValueProperty="totalPercents">
+                </RadzenAreaSeries>
+                <RadzenCategoryAxis Padding="0" FormatString="{0:MMM}"/>
+                <RadzenGridLines Visible="true"/>
+            </RadzenChart>
+        </div>
+        <div class="col-5 d-flex flex-column">
+            <RadzenChart>
+                <RadzenAreaSeries Data="@memoryData" CategoryProperty="dateTime" Title="Memory" LineType="LineType.Solid" ValueProperty="memoryUsed">
+                </RadzenAreaSeries>
+                <RadzenAreaSeries Data="@memoryData" CategoryProperty="dateTime" Title="Swap" LineType="LineType.Dashed" ValueProperty="swap">
+                </RadzenAreaSeries>
+                <RadzenCategoryAxis Padding="0" FormatString="{0:MMM}"/>
+                <RadzenGridLines Visible="true"/>
+            </RadzenChart>
+        </div>
+    </div>
+</RadzenCard>

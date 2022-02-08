@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using data_viewer.Constants;
@@ -15,7 +16,7 @@ namespace data_viewer.services
         public async Task<IEnumerable<Container>> getContainers()
         {
             var uri = new Uri(config.hostName + EndpointConstants.containersURL);
-            return await executeRequestMultiple<Container>(uri);
+            return await executeRequestMultiple<Container>(uri, HttpMethod.Get);
         }
         public async Task<Container> getContainer(String id)
         {
@@ -24,7 +25,7 @@ namespace data_viewer.services
             query["id"] = id;
             builder.Query = query.ToString();
             var url = builder.Uri;
-            return await executeRequestSingle<Container>(url);
+            return await executeRequestSingle<Container>(url, HttpMethod.Get);
         }
     }
 }

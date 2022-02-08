@@ -1,6 +1,9 @@
 @page "/dashboard"
+@using data_viewer.Model.Notification
+@using data_viewer.Component
 <h3>Dashboard</h3>
 
-@code {
-    
+@foreach (var container in data)
+{
+    <ContainerView container = "@container"/>
 }

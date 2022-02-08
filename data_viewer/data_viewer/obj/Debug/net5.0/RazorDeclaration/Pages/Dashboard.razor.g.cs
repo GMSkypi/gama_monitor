@@ -96,6 +96,20 @@ using Radzen.Blazor;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 2 "/home/gama/gama_monitor/data_viewer/data_viewer/Pages/Dashboard.razor"
+using data_viewer.Model.Notification;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 3 "/home/gama/gama_monitor/data_viewer/data_viewer/Pages/Dashboard.razor"
+using data_viewer.Component;
+
+#line default
+#line hidden
+#nullable disable
     [Microsoft.AspNetCore.Components.RouteAttribute("/dashboard")]
     public partial class Dashboard : Microsoft.AspNetCore.Components.ComponentBase
     {

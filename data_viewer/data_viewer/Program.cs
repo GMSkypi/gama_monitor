@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Radzen;
 
 namespace data_viewer
 {
@@ -28,6 +29,9 @@ namespace data_viewer
             builder.Services.AddScoped<MemoryComService>();
             builder.Services.AddScoped<NetComService>();
             builder.Services.AddScoped<IOComService>();
+            builder.Services.AddScoped<NotificationComService>();
+            builder.Services.AddScoped<DialogService>();
+            builder.Services.AddScoped<NotificationService>();
             
             await builder.Build().RunAsync();
         }

@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using data_viewer.Component;
 using data_viewer.Constants;
 using data_viewer.Model;
+using data_viewer.Model.Notification;
 using data_viewer.services;
 using Microsoft.AspNetCore.Components;
 using Radzen;
@@ -14,6 +16,8 @@ namespace data_viewer.Pages
     {
         [Parameter]
         public String ContainerId { get; set; }
+        [Inject]
+        public DialogService DialogService { get; set; }
 
         [Inject] 
         public CPUComService cpuComService { get; set; }
@@ -26,6 +30,8 @@ namespace data_viewer.Pages
         
         [Inject]
         public IOComService ioComService { get; set; }
+        
+        [Inject] private NotificationComService notificationComService { get; set; }
         
         IEnumerable<CpuSample> cpuData;
         int value = 0;
@@ -73,9 +79,17 @@ namespace data_viewer.Pages
         {
             Console.WriteLine($"{name} value changed to {string.Join(", ", value)}");
         }
-        void OnClick(string buttonName)
+        async void AddNotificationOnClick()
         {
-            Console.WriteLine($"{buttonName} clicked");
+            Notification newNotification = new Notification();
+            newNotification.containerId = ContainerId;
+            bool edited = await DialogService.OpenAsync<EditNotificationDialog>($"Add notification",
+                new Dictionary<string, Object>() { { "Notification", newNotification } },
+                new DialogOptions() { Width = "600px", Height = "fit-content", CloseDialogOnOverlayClick = false });
+            if (edited)
+            {
+                await notificationComService.createNotification(newNotification);
+            }
         }
     }
 }

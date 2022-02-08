@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using data_viewer.Constants;
@@ -25,7 +26,7 @@ namespace data_viewer.services
             query["dateTo"] = to.ToUniversalTime().ToString(dateTimeFormat);
             builder.Query = query.ToString();
             var url = builder.Uri;
-            var result =  await executeRequestSingle<CpuRecord>(url);
+            var result =  await executeRequestSingle<CpuRecord>(url, HttpMethod.Get);
             return (result != null) ? result.values : new List<CpuSample>();
         }
 
@@ -39,7 +40,7 @@ namespace data_viewer.services
             query["sampleRate"] = sampledBy.toString();
             builder.Query = query.ToString();
             var url = builder.Uri;
-            var result =  await executeRequestSingle<CpuRecord>(url);
+            var result =  await executeRequestSingle<CpuRecord>(url, HttpMethod.Get);
             return (result != null) ? result.values : new List<CpuSample>();
         }
 
@@ -51,7 +52,7 @@ namespace data_viewer.services
             query["dateFrom"] = from.ToUniversalTime().ToString(dateTimeFormat);
             builder.Query = query.ToString();
             var url = builder.Uri;
-            var result =  await executeRequestSingle<CpuRecord>(url);
+            var result =  await executeRequestSingle<CpuRecord>(url, HttpMethod.Get);
             return (result != null) ? result.values : new List<CpuSample>();
         }
 
@@ -64,7 +65,7 @@ namespace data_viewer.services
             query["sampleRate"] = sampledBy.toString();
             builder.Query = query.ToString();
             var url = builder.Uri;
-            var result =  await executeRequestSingle<CpuRecord>(url);
+            var result =  await executeRequestSingle<CpuRecord>(url, HttpMethod.Get);
             return (result != null) ? result.values : new List<CpuSample>();
         }
     }

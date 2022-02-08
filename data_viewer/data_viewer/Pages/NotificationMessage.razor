@@ -1,5 +1,45 @@
 @page "/notifications"
+@using data_viewer.Model.Notification
+@using data_viewer.Extension
+<h1>List of notifications</h1>
 
-@code {
+<RadzenDataGrid @ref="_dataGrid"
+                AllowFiltering="true"
+                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                FilterMode="FilterMode.Advanced"
+                AllowPaging="true"
+                PageSize="5"
+                PagerHorizontalAlign="HorizontalAlign.Center"
+                AllowSorting="true"
+                Data="@data"
+                TItem="data_viewer.Model.Notification.Notification"
+                IsLoading="@isLoading"
+                Count="@count"
+                LoadData="@LoadData">
 
-}
+    <Columns>
+        <RadzenDataGridColumn TItem="data_viewer.Model.Notification.Notification" Property="Notification.id" Title="ID" Frozen="true" Width="50px" TextAlign="TextAlign.Center" Filterable="false"/>
+        <RadzenDataGridColumn TItem="data_viewer.Model.Notification.Notification" Property="Notification.containerId" Title="Docker ID"/>
+        <RadzenDataGridColumn TItem="data_viewer.Model.Notification.Notification" Property="Notification.metricToMonitor" Title="Metric" Width="120px"/>
+        <RadzenDataGridColumn TItem="data_viewer.Model.Notification.Notification" Property="Notification.value" Title="Value" Frozen="true" Width="100px" TextAlign="TextAlign.Center"/>
+        <RadzenDataGridColumn TItem="data_viewer.Model.Notification.Notification" Property="Notification.type" Title="Type" Width="120px"/>
+        <RadzenDataGridColumn TItem="data_viewer.Model.Notification.Notification" Title="Action">
+            <Template Context="notification">
+                <div  class="row pb-1">
+                    <div class="col-6 d-flex flex-column">
+                        <RadzenButton ButtonStyle="ButtonStyle.Danger"
+                                      Text="Remove"
+                                      Click="() => removeNotification(notification)"
+                                     />
+                    </div>
+                    <div class="col-6 d-flex flex-column">
+                        <RadzenButton ButtonStyle="ButtonStyle.Success"
+                                      Text="Modify"
+                                      Click="() => EditNotificationOnItemClick(notification)"
+                                     />
+                    </div>
+                </div>
+            </Template>
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>
