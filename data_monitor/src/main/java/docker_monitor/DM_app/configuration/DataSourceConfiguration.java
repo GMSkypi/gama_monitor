@@ -31,4 +31,6 @@ public class DataSourceConfiguration {
     public NotificationDataSource getNotificationDatasource(){
         return new NotificationDataSourceImp(env.getProperty("spring.notification-datasource.path"));
     }
+    @Bean
+    public String getConfigurationPath(){return "configuration.properties";}
 }

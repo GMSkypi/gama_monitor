@@ -13,12 +13,15 @@ using Radzen.Blazor;
 
 namespace data_viewer.Pages
 {
-    public partial class NotificationMessage : ComponentBase, IDisposable
+    public partial class NotificationsList : ComponentBase, IDisposable
     {
         [Inject] private NotificationComService notificationComService { get; set; }
         
         [Inject]
         public DialogService DialogService { get; set; }
+        
+        [Inject]
+        public NotificationService NotificationService { get; set; }
         
         IEnumerable<Notification> data;
         protected IList<Notification> SelectedNotification { get; set; }
@@ -57,6 +60,12 @@ namespace data_viewer.Pages
                 if (deleted)
                 {
                     data = data.Where(unupdatedNotif => unupdatedNotif.id != notification.id);
+                    NotificationsList message = new NotificationsList()
+                    {
+                        Severity = NotificationSeverity.Success, Summary = "Success Summary", Detail = "Success Detail",
+                        Duration = 4000
+                    };
+                    NotificationService.Notify(message);
                 }
             }
         }

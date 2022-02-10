@@ -2,6 +2,7 @@ package docker_monitor.DM_app.web.controllers;
 
 import docker_monitor.DM_app.process.object.notification.Notification;
 import docker_monitor.DM_app.process.service.DTOConversion;
+import docker_monitor.DM_app.process.service.cache.ConfigurationCache;
 import docker_monitor.DM_app.process.service.cache.NotificationCache;
 import docker_monitor.DM_app.process.service.data_service.NotificationDataService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class MessageNotificationController {
 
     @Autowired
     private Environment env;
+
+    @Autowired
+    private ConfigurationCache configurationCache;
 
 
     @DeleteMapping(value = "/{id}")
@@ -60,11 +64,24 @@ public class MessageNotificationController {
     @ResponseStatus(HttpStatus.OK)
     public void setSlackServerURl(
             @RequestParam("url") String url){
-        // TODO not implemented
+        boolean notError = configurationCache.setUrlSlackWebHook(url);
+        if(!notError){throw new RuntimeException();}
     }
     @GetMapping(value = "/slack_server")
     @ResponseStatus(HttpStatus.OK)
     public String getSlackServerURl(){
-        return env.getProperty("slack.webhook");
+        return configurationCache.getUrlSlackWebHook();
     }
+    @PostMapping(value = "/slack_server/active" , params = {"active"})
+    @ResponseStatus(HttpStatus.OK)
+    public void setSlackServerActivation(@RequestParam("active") boolean active){
+        boolean notError = configurationCache.setNotify(active);
+        if(!notError){throw new RuntimeException();}
+    }
+    @GetMapping(value = "/slack_server/active")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean getSlackServerActivation(){
+        return configurationCache.isNotify();
+    }
+
 }
