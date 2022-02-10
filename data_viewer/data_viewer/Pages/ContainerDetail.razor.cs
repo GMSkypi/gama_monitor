@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using data_viewer.Component;
@@ -30,6 +31,8 @@ namespace data_viewer.Pages
         
         [Inject]
         public IOComService ioComService { get; set; }
+        [Inject]
+        public NotificationService NotificationService { get; set; }
         
         [Inject] private NotificationComService notificationComService { get; set; }
         
@@ -52,11 +55,15 @@ namespace data_viewer.Pages
         async Task LoadData()
         {
             Console.WriteLine("loading");
-            cpuData = await cpuComService.getCpuSamples(ContainerId, new DateTime(2022, 1, 14, 12,41,00),DataSamplingRates.hour);
+            cpuData = await cpuComService.getCpuSamples(ContainerId, new DateTime(2022, 1, 14, 12,41,00),
+                new DateTime(2022, 1, 14, 13 ,41,00),DataSamplingRates.hour);
             memoryData = await memoryComService.getMemorySample(ContainerId, new DateTime(2022, 1, 14, 12, 41, 00),
+                new DateTime(2022, 1, 14, 13 ,41,00),
                 DataSamplingRates.hour);
-            ioData = await ioComService.getIOSamples(ContainerId, new DateTime(2022, 1, 14, 12,41,00),DataSamplingRates.hour);
-            netData = await netComService.getNetSample(ContainerId, new DateTime(2022, 1, 14, 12,41,00),DataSamplingRates.hour);
+            ioData = await ioComService.getIOSamples(ContainerId, new DateTime(2022, 1, 14, 12,41,00),
+                new DateTime(2022, 1, 14, 13 ,41,00),DataSamplingRates.hour);
+            netData = await netComService.getNetSample(ContainerId, new DateTime(2022, 1, 14, 12,41,00),
+                new DateTime(2022, 1, 14, 13 ,41,00),DataSamplingRates.hour);
             
             lastCpuSample = cpuData.Last();
             lastMemorySample = memoryData.Last();
@@ -71,13 +78,27 @@ namespace data_viewer.Pages
             LoadData();
             Console.WriteLine(ContainerId);
         }
-        void OnDateTimeChange(DateTime? value, string name, string format)
+        void OnDateTimeChange(DateTime? value, string format)
         {
-            Console.WriteLine($"{name} value changed to {value?.ToString(format)}");
+           
         }
-        void OnSampleRateChange(int value, string name)
+        void OnSampleRateChange(int value)
         {
-            Console.WriteLine($"{name} value changed to {string.Join(", ", value)}");
+            switch (value)
+            {
+                case 0:
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    break;
+            }
         }
         async void AddNotificationOnClick()
         {
@@ -88,7 +109,25 @@ namespace data_viewer.Pages
                 new DialogOptions() { Width = "600px", Height = "fit-content", CloseDialogOnOverlayClick = false });
             if (edited)
             {
-                await notificationComService.createNotification(newNotification);
+                Notification updatedNotification = await notificationComService.createNotification(newNotification);
+                if (updatedNotification != null)
+                {
+                    NotificationMessage message = new NotificationMessage()
+                    {
+                        Severity = NotificationSeverity.Success, Summary = "Notification added", Detail = "Notification with id:" + updatedNotification.id + " is added",
+                        Duration = 5000,
+                    };
+                    NotificationService.Notify(message);
+                }
+                else
+                {
+                    NotificationMessage message = new NotificationMessage()
+                    {
+                        Severity = NotificationSeverity.Error, Summary = "Notification adding failed",
+                        Duration = 5000,
+                    };
+                    NotificationService.Notify(message);
+                }
             }
         }
     }

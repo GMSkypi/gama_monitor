@@ -104,7 +104,7 @@ using Radzen.Blazor;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 28 "/home/gama/gama_monitor/data_viewer/data_viewer/Shared/NavMenu.razor"
+#line 33 "/home/gama/gama_monitor/data_viewer/data_viewer/Shared/NavMenu.razor"
        
     private bool collapseNavMenu = true;
 

@@ -18,6 +18,9 @@ namespace data_viewer.Component
         [Inject]
         public MemoryComService memoryComService { get; set; }
         
+        [Inject]
+        public NavigationManager NavigationManager { get; set; }
+        
         public IEnumerable<CpuSample> cpuData { get; set; }
         
         public IEnumerable<MemorySample> memoryData { get; set; }
@@ -38,6 +41,11 @@ namespace data_viewer.Component
         }
         public void Dispose()
         {
+        }
+
+        protected void DetailClick()
+        {
+            NavigationManager.NavigateTo($"/ContainerDetail/{container.id}");
         }
     }
 }

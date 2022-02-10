@@ -47,6 +47,24 @@ namespace data_viewer.Pages
             if (edited)
             {
                 Notification updateNotification = await notificationComService.updateNotification(notif);
+                if (updateNotification != null)
+                {
+                    NotificationMessage message = new NotificationMessage()
+                    {
+                        Severity = NotificationSeverity.Success, Summary = "Notification edited successfully", Detail = "Notification with id:" + updateNotification.id + " is updated",
+                        Duration = 5000,
+                    };
+                    NotificationService.Notify(message);
+                }
+                else
+                {
+                    NotificationMessage message = new NotificationMessage()
+                    {
+                        Severity = NotificationSeverity.Error, Summary = "Notification edited failed",
+                        Duration = 5000,
+                    };
+                    NotificationService.Notify(message);
+                }
             }
         }
         protected async Task removeNotification(Notification notification)
@@ -60,10 +78,19 @@ namespace data_viewer.Pages
                 if (deleted)
                 {
                     data = data.Where(unupdatedNotif => unupdatedNotif.id != notification.id);
-                    NotificationsList message = new NotificationsList()
+                    NotificationMessage message = new NotificationMessage()
                     {
                         Severity = NotificationSeverity.Success, Summary = "Success Summary", Detail = "Success Detail",
                         Duration = 4000
+                    };
+                    NotificationService.Notify(message);
+                }
+                else
+                {
+                    NotificationMessage message = new NotificationMessage()
+                    {
+                        Severity = NotificationSeverity.Error, Summary = "Notification removing failed",
+                        Duration = 5000,
                     };
                     NotificationService.Notify(message);
                 }

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "9UJrX0QxDtmR9DPTN5cQbhRoeYS9JZMHJHakmRAnsDGUWy4MmKkpkUr/P1gqij4crKPohDNj05NIQksP3VFWcA==",
+  "dgSpecHash": "sBoTATXk/HepBhuBWLY9vgl1SkfXgWYXQ1gMJU9RWMI4fj1YYofp9/NRRi+1Ys5Swn1E4bD7hXVdolbNpcNdZg==",
   "success": true,
   "projectFilePath": "/home/gama/gama_monitor/data_viewer/data_viewer/data_viewer.csproj",
   "expectedPackageFiles": [
@@ -35,7 +35,7 @@
     "/home/gama/.nuget/packages/system.io.pipelines/5.0.1/system.io.pipelines.5.0.1.nupkg.sha512",
     "/home/gama/.nuget/packages/system.linq.dynamic.core/1.2.12/system.linq.dynamic.core.1.2.12.nupkg.sha512",
     "/home/gama/.nuget/packages/system.net.http.json/5.0.0/system.net.http.json.5.0.0.nupkg.sha512",
-    "/home/gama/.nuget/packages/microsoft.netcore.app.runtime.browser-wasm/5.0.13/microsoft.netcore.app.runtime.browser-wasm.5.0.13.nupkg.sha512"
+    "/home/gama/.nuget/packages/microsoft.netcore.app.runtime.browser-wasm/5.0.14/microsoft.netcore.app.runtime.browser-wasm.5.0.14.nupkg.sha512"
   ],
   "logs": []
 }

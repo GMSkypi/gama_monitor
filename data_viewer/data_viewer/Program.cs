@@ -32,6 +32,7 @@ namespace data_viewer
             builder.Services.AddScoped<NotificationComService>();
             builder.Services.AddScoped<DialogService>();
             builder.Services.AddScoped<NotificationService>();
+            builder.Services.AddScoped<SlackConfigComService>();
             
             await builder.Build().RunAsync();
         }

@@ -1,3 +1,5 @@
+using System;
+
 namespace data_viewer.Constants
 {
     public static class EndpointConstants
@@ -13,5 +15,8 @@ namespace data_viewer.Constants
         
         public const string notificationURL = "/notification/";
         public const string notificationsURL = "/notification/notifications";
+
+        public const String slackURL = "/notification/slack_server";
+        public const String slackActiveURL = "/notification/slack_server/active";
     }
 }

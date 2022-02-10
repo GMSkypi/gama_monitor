@@ -19,7 +19,8 @@
                 RowClick="(item) => OnItemClick(item)"
                 SelectionMode="Radzen.DataGridSelectionMode.Single"
                 @bind-Value="SelectedContainer"
-                LoadData="@LoadData">
+                LoadData="@LoadData"
+                Style="cursor: pointer;">
     
     <Columns>
         <RadzenDataGridColumn TItem="Container" Property="Container.id" Title="ID"/>
