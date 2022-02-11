@@ -1,2 +1,16 @@
 @page "/configuration"
 <h1>Slack configuration</h1>
+<RadzenFieldset Text="slack" class="mb-4">
+    <div class="col-12 d-flex flex-column mb-2">
+        <label>
+            slack.webhook
+        </label>
+        <RadzenTextBox @bind-Value="SlackWebhook" Disabled="false" Change="@WebhookChanged"/>
+    </div>
+    <div class="col-12 d-flex flex-column mb-2">
+        <label>
+            Notification ative
+        </label>
+        <RadzenSwitch @bind-Value=@ActioveNotification Disabled="false" Change="@SlackActivation"/>
+    </div>
+</RadzenFieldset>

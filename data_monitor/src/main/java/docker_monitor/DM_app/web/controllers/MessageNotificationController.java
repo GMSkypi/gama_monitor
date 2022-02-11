@@ -5,6 +5,7 @@ import docker_monitor.DM_app.process.service.DTOConversion;
 import docker_monitor.DM_app.process.service.cache.ConfigurationCache;
 import docker_monitor.DM_app.process.service.cache.NotificationCache;
 import docker_monitor.DM_app.process.service.data_service.NotificationDataService;
+import docker_monitor.DM_app.web.dto.SlackConfDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -69,19 +70,14 @@ public class MessageNotificationController {
     }
     @GetMapping(value = "/slack_server")
     @ResponseStatus(HttpStatus.OK)
-    public String getSlackServerURl(){
-        return configurationCache.getUrlSlackWebHook();
+    public SlackConfDTO getSlackServerConfig(){
+        return new SlackConfDTO(configurationCache.getUrlSlackWebHook(),configurationCache.isNotify());
     }
     @PostMapping(value = "/slack_server/active" , params = {"active"})
     @ResponseStatus(HttpStatus.OK)
     public void setSlackServerActivation(@RequestParam("active") boolean active){
         boolean notError = configurationCache.setNotify(active);
         if(!notError){throw new RuntimeException();}
-    }
-    @GetMapping(value = "/slack_server/active")
-    @ResponseStatus(HttpStatus.OK)
-    public boolean getSlackServerActivation(){
-        return configurationCache.isNotify();
     }
 
 }

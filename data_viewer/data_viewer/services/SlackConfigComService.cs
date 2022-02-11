@@ -13,10 +13,10 @@ namespace data_viewer.services
         {
         }
 
-        public async Task<String> getSlackServerURl()
+        public async Task<SlackConf> getSlackServerConf()
         {
             var uri = new Uri(config.hostName + EndpointConstants.slackURL);
-            return await executeRequestSingle<String>(uri, HttpMethod.Get);
+            return await executeRequestSingle<SlackConf>(uri, HttpMethod.Get);
         }
 
         public async Task<bool> setSlackServerUrl(String newSlackUrl)
@@ -28,20 +28,14 @@ namespace data_viewer.services
             var url = builder.Uri;
             return await executeNoresponse(url, HttpMethod.Post);
         }
-
-        public async Task<bool> getSlackServerActiveFlag()
-        {
-            var uri = new Uri(config.hostName + EndpointConstants.slackActiveURL);
-            return await executeRequestSingle<bool>(uri, HttpMethod.Get);
-        }
         public async Task<bool> setSlackServerActiveFlag(bool activeFlag)
         {
-            var builder = new UriBuilder(config.hostName + EndpointConstants.slackURL);
+            var builder = new UriBuilder(config.hostName + EndpointConstants.slackActiveURL);
             var query = HttpUtility.ParseQueryString(builder.Query);
             query["active"] = activeFlag.ToString();
             builder.Query = query.ToString();
             var url = builder.Uri;
-            return await executeRequestSingle<bool>(url, HttpMethod.Post);
+            return await executeNoresponse(url, HttpMethod.Post);
         }
         
     }
