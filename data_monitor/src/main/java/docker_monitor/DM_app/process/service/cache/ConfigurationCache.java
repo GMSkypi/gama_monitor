@@ -1,36 +1,32 @@
 package docker_monitor.DM_app.process.service.cache;
 
+import docker_monitor.DM_app.process.service.ConfigurationLoader;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.*;
-import java.util.Properties;
+import javax.annotation.PostConstruct;
+import java.util.Arrays;
+import java.util.HashMap;
+
 
 import static java.lang.Boolean.parseBoolean;
 import static java.lang.String.valueOf;
 
 @Component
 public class ConfigurationCache {
+
+    @Autowired
+    ConfigurationLoader configurationLoader;
+
     private String urlSlackWebHook = "";
     private boolean notify = false;
-    private final String filePath;
 
-    public ConfigurationCache(String configurationFilePath){
-        this.filePath = configurationFilePath;
-        File configFile = new File(filePath);
-
-        try {
-            FileReader reader = new FileReader(configFile);
-            Properties props = new Properties();
-            props.load(reader);
-
-            urlSlackWebHook = props.getProperty("slack.webhook");
-            notify = parseBoolean(props.getProperty("notification.enabled"));
-            reader.close();
-        } catch (FileNotFoundException ex) {
-            // file does not exist
-        } catch (IOException ex) {
-            // I/O error
-        }
+    @PostConstruct
+    public void initialize() {
+        HashMap<String,String> values =
+                configurationLoader.loadProps(Arrays.asList("slack.webhook","notification.enabled"));
+        urlSlackWebHook = values.get("slack.webhook");
+        notify = parseBoolean(values.get("notification.enabled"));
     }
 
     public String getUrlSlackWebHook() {
@@ -52,21 +48,11 @@ public class ConfigurationCache {
 
     }
     private boolean updateConfig(){
-        File configFile = new File(filePath);
-        try {
-            Properties props = new Properties();
-            props.setProperty("slack.webhook", urlSlackWebHook);
-            props.setProperty("notification.enabled", valueOf(notify));
-            FileWriter writer = new FileWriter(configFile);
-            props.store(writer, "host settings");
-            writer.close();
-            return true;
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-            return false;
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return false;
-        }
+        HashMap<String,String> values = new HashMap<String, String>() {{
+            put("slack.webhook", urlSlackWebHook);
+            put("notification.enabled", valueOf(notify));
+        }};
+        return configurationLoader.saveProps(values,"host settings");
+
     }
 }

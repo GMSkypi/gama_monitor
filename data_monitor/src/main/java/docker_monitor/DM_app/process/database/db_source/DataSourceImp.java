@@ -52,6 +52,17 @@ public class DataSourceImp implements DataSource {
         return r;
 
     }
+
+    @Override
+    public boolean connectionAlive() {
+        try {
+            executeQuery("SHOW TABLES");
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
     @Override
     protected void finalize(){
         try {

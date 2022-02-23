@@ -5,6 +5,8 @@ using data_viewer.Constants;
 using data_viewer.Model;
 using data_viewer.services;
 using Microsoft.AspNetCore.Components;
+using System.Threading.Tasks;
+using data_viewer.Model.Rate;
 
 namespace data_viewer.Component
 {
@@ -25,6 +27,10 @@ namespace data_viewer.Component
         
         public IEnumerable<MemorySample> memoryData { get; set; }
         
+        private DateTime? dateTimeDatePicker;
+        private System.Threading.Timer timer;
+        
+        /*
         async Task LoadData()
         {
             Console.WriteLine("loading");
@@ -34,13 +40,28 @@ namespace data_viewer.Component
             StateHasChanged();
             Console.WriteLine("loaded");
         }
+        */
+        async Task LoadData(DateTime from, SampledBy sampled)
+        {
+            cpuData = await cpuComService.getCpuSamples(container.id, from, sampled);
+            memoryData = await memoryComService.getMemorySample(container.id, from, sampled);
+        }
+
+        protected void LiveInitialized()
+        {
+            timer = new System.Threading.Timer(async (object stateInfo) =>
+            {
+                LoadData(DateTime.Now.AddMinutes(-10), DataSamplingRates.minute);
+            }, new System.Threading.AutoResetEvent(false), 0, 20000);
+        }
         protected async override Task OnInitializedAsync()
         {
-            await LoadData();
-            Console.WriteLine(container.id);
+            dateTimeDatePicker = DateTime.Now.AddHours(-1);
+            LiveInitialized();
         }
         public void Dispose()
         {
+            timer.Dispose();
         }
 
         protected void DetailClick()

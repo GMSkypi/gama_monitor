@@ -1,0 +1,24 @@
+<RadzenTemplateForm TItem="Model" Data=@model Submit=@OnSubmit InvalidSubmit=@OnInvalidSubmit>
+    <RadzenFieldset Text="Username">
+        <div class="row mb-5">
+            <div class="col-md-4" style="align-self: center;">
+                <RadzenLabel Text="Username" />
+            </div>
+            <div class="col">
+                <RadzenTextBox style="display: block" Name="new username" @bind-Value=@model.Username Class="w-100" />
+                <RadzenRequiredValidator Component="Username" Text="Enter username" Popup="@popup" Style="position: absolute" />
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-4" style="align-self: center;">
+                <RadzenLabel Text="Repeat Username" />
+            </div>
+            <div class="col">
+                <RadzenTextBox style="display: block" Name="RepeatUsername" @bind-Value=@model.RepeatUsername  Class="w-100" />
+                <RadzenRequiredValidator Component="RepeatUsername" Text="Repeat your username" Popup=@popup Style="position: absolute" />
+                <RadzenCompareValidator Visible=@(!string.IsNullOrEmpty(model.RepeatUsername)) Value=@model.Username Component="RepeatUsername" Text="Username should be the same" Popup=@popup Style="position: absolute" />
+            </div>
+        </div>
+        <RadzenButton ButtonType="ButtonType.Submit" Text="Submit"></RadzenButton>
+    </RadzenFieldset>
+</RadzenTemplateForm>

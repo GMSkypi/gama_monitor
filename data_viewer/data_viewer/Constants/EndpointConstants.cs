@@ -17,6 +17,8 @@ namespace data_viewer.Constants
         public const string notificationsURL = "/notification/notifications";
 
         public const String slackURL = "/notification/slack_server";
-        public const String slackActiveURL = "/notification/slack_server/active";
+        public const String slackActiveURL = "/notification/slack_server";
+
+        public const String serverAlive = "/testConnection";
     }
 }

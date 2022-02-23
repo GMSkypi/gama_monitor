@@ -26,6 +26,9 @@ namespace data_viewer.Pages
         public ContainerComService ContainerComService { get; set; }
         
         
+        [Inject]
+        public NotificationService NotificationService { get; set; }
+        
         public void Dispose()
         {
         }

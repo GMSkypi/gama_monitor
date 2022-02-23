@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 using System.Web;
 using data_viewer.Constants;
 using data_viewer.Model;
+using Radzen;
 
 namespace data_viewer.services
 {
     public class ContainerComService : CommunicationService
     {
-        public ContainerComService(ConfigurationService config) : base(config)
+        public ContainerComService(ConfigurationService config, NotificationService notificationService, HttpClient httpClient) : base(config,notificationService,httpClient)
         {
         }
         public async Task<IEnumerable<Container>> getContainers()

@@ -12,7 +12,9 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 
 @Configuration
@@ -40,7 +42,7 @@ public class OAuthConfiguration extends AuthorizationServerConfigurerAdapter {
                 .scopes("read","write","trust")
                 .resourceIds("oauth2-resource")
                 .accessTokenValiditySeconds(5000)
-                .secret(passwordEncoder.encode("secret"));
+                .secret(passwordEncoder.encode("gama-monitor")); // $2a$12$8SUUkSRoxuczqb3nPfOYx.7mWjPis8kL2aAs5p.UawHYTrTFBCcjy
     }
 
     @Override

@@ -41,10 +41,10 @@ namespace data_viewer.Pages
         }
         protected async Task EditNotificationOnItemClick(Notification notif)
         {
-            bool edited = await DialogService.OpenAsync<EditNotificationDialog>($"Edit notification",
+            bool? edited = await DialogService.OpenAsync<EditNotificationDialog>($"Edit notification",
                 new Dictionary<string, Object>() { { "Notification", notif } },
                 new DialogOptions() { Width = "600px", Height = "fit-content", CloseDialogOnOverlayClick = false });
-            if (edited)
+            if (edited.HasValue && edited.Value)
             {
                 Notification updateNotification = await notificationComService.updateNotification(notif);
                 if (updateNotification != null)
@@ -69,10 +69,10 @@ namespace data_viewer.Pages
         }
         protected async Task removeNotification(Notification notification)
         {
-            bool result = await DialogService.OpenAsync<ComfirmationDialog>($"Remove notification",
+            bool? result = await DialogService.OpenAsync<ComfirmationDialog>($"Remove notification",
                 new Dictionary<string, Object>() { { "Message", "Remove Notification: " + notification.id } },
                 new DialogOptions() { Width = "600px", Height = "fit-content", CloseDialogOnOverlayClick = false });
-            if (result)
+            if (result.HasValue && result.Value)
             {
                 bool deleted = await notificationComService.deleteNotification(notification.id.ToString());
                 if (deleted)

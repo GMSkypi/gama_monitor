@@ -2,7 +2,7 @@
 <RadzenCard Class="w-100">
     <div class="row pb-1">
         <div class="col-2 d-flex flex-column">
-            <RadzenDatePicker TValue="DateTime?" ShowTime="true" ShowSeconds="true" HoursStep="1.5" MinutesStep="5" SecondsStep="10" Change=@(args => OnDateTimeChange(args,  "MM/dd/yyyy HH:mm")) DateFormat="MM/dd/yyyy HH:mm" Class="w-100"/>
+            <RadzenDatePicker @bind-Value=@dateTimeDatePicker ShowTime="true" ShowSeconds="true" HoursStep="1.5" MinutesStep="5" SecondsStep="10" Change=@(args => OnDateTimeChange(args,  "MM/dd/yyyy HH:mm")) DateFormat="MM/dd/yyyy HH:mm" Class="w-100"/>
         </div>
         <div class="col-5 d-flex flex-column">
             <RadzenSelectBar @bind-Value=@value TValue="int" Multiple="false" Change=@(args => OnSampleRateChange(args))>

@@ -1,0 +1,57 @@
+package docker_monitor.DM_app.process.service.imp;
+
+import docker_monitor.DM_app.process.service.ConfigurationLoader;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.io.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Properties;
+
+import static java.lang.Boolean.parseBoolean;
+import static java.lang.String.valueOf;
+
+@Service
+public class ConfigurationLoaderImp implements ConfigurationLoader {
+
+    @Autowired
+    private  String configurationFilePath;
+
+
+    public HashMap<String, String> loadProps(List<String> propertyNames){
+        File configFile = new File(configurationFilePath);
+        HashMap<String, String> result = new HashMap<>();
+        try {
+            FileReader reader = new FileReader(configFile);
+            Properties props = new Properties();
+            props.load(reader);
+            for(String prop : propertyNames)
+                result.put(prop,props.getProperty(prop));
+            reader.close();
+        } catch (FileNotFoundException ex) {
+            // file does not exist
+        } catch (IOException ex) {
+            // I/O error
+        }
+        return result;
+    }
+    public boolean saveProps(HashMap<String, String> propstoSave, String message){
+        File configFile = new File(configurationFilePath);
+        try {
+            Properties props = new Properties();
+            propstoSave.forEach(props::setProperty);
+            FileWriter writer = new FileWriter(configFile);
+            props.store(writer, message);
+            writer.close();
+            return true;
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+            return false;
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+}

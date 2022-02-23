@@ -6,12 +6,13 @@ using System.Web;
 using data_viewer.Constants;
 using data_viewer.Model;
 using data_viewer.Model.Rate;
+using Radzen;
 
 namespace data_viewer.services
 {
     public class IOComService : CommunicationService
     {
-        public IOComService(ConfigurationService config) : base(config)
+        public IOComService(ConfigurationService config, NotificationService notificationService, HttpClient httpClient) : base(config,notificationService,httpClient)
         {
         }
         public async Task<IEnumerable<IOSample>> getIOSamples(String containerId, DateTime from, DateTime to)

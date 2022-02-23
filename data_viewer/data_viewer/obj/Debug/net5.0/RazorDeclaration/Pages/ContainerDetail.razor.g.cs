@@ -96,6 +96,13 @@ using Radzen.Blazor;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 13 "/home/gama/gama_monitor/data_viewer/data_viewer/_Imports.razor"
+using Microsoft.AspNetCore.Components.Authorization;
+
+#line default
+#line hidden
+#nullable disable
     [Microsoft.AspNetCore.Components.RouteAttribute("/ContainerDetail/{*ContainerId}")]
     public partial class ContainerDetail : Microsoft.AspNetCore.Components.ComponentBase
     {

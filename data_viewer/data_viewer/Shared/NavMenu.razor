@@ -1,8 +1,12 @@
 ﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">Docker monitor</a>
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+    <div class="row pb-1">
+        <div class="col-4 d-flex flex-column">
+            <a class="navbar-brand" href="">Monitor</a>
+        </div>
+        <div class="col-8 d-flex flex-column">
+            <RadzenButton Text="LOGOUT" ButtonStyle="ButtonStyle.Secondary" Click="@logout" />
+        </div>
+    </div>
 </div>
 
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
@@ -27,17 +31,10 @@
                 <span class="oi oi-plus" aria-hidden="true"></span> Configuration
             </NavLink>
         </li>
+         <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="profile">
+                        <span class="oi oi-plus" aria-hidden="true"></span> User profile
+                    </NavLink>
+                </li>
     </ul>
 </div>
-
-@code {
-    private bool collapseNavMenu = true;
-
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-
-}

@@ -97,6 +97,13 @@ using Radzen.Blazor;
 #line hidden
 #nullable disable
 #nullable restore
+#line 13 "/home/gama/gama_monitor/data_viewer/data_viewer/_Imports.razor"
+using Microsoft.AspNetCore.Components.Authorization;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
 #line 2 "/home/gama/gama_monitor/data_viewer/data_viewer/Pages/NotificationsList.razor"
 using data_viewer.Model.Notification;
 

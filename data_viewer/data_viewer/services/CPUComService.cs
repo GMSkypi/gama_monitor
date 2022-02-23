@@ -8,12 +8,13 @@ using System.Web;
 using data_viewer.Constants;
 using data_viewer.Model;
 using data_viewer.Model.Rate;
+using Radzen;
 
 namespace data_viewer.services
 {
     public class CPUComService : CommunicationService
     {
-        public CPUComService(ConfigurationService config) : base(config)
+        public CPUComService(ConfigurationService config, NotificationService notificationService, HttpClient httpClient) : base(config,notificationService,httpClient)
         {
         }
 

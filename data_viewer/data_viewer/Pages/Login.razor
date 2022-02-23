@@ -1,0 +1,13 @@
+@page "/Login"
+@layout EmptyLayout
+
+<div class="row d-flex px-3">
+    <div class="col-xl-4 d-flex p-3">
+        <RadzenCard Style="width: 100%;">
+            <h2 class="mb-4">Simple login</h2>
+
+                <RadzenLogin AllowRegister="false" AllowResetPassword="false"  Login=@(args => OnLogin(args))/>
+
+        </RadzenCard>
+    </div>
+</div>

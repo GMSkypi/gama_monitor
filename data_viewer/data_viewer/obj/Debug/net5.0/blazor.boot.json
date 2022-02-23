@@ -9,12 +9,14 @@
   "linkerEnabled": false,
   "resources": {
     "assembly": {
-      "Microsoft.AspNetCore.Authorization.dll": "sha256-v2n7Q6PfIiAvv9anCBl0llzwtdxr0iCZZar3ne8Bxds=",
-      "Microsoft.AspNetCore.Components.dll": "sha256-jAjgCR5HlevP6ZX6aOgY1nmSw3my7LJ2d\/2r+K38zn4=",
+      "Blazored.LocalStorage.dll": "sha256-mfUPOnPJdVlqx5sfEyjLXvZojwvosT7IdwftBM2ekfA=",
+      "Microsoft.AspNetCore.Authorization.dll": "sha256-MtirMvHgYcj4ndQd7pET\/O5NNYtgGBSZjagQtMoCqkM=",
+      "Microsoft.AspNetCore.Components.dll": "sha256-GAaJclD+6g1DqVk0QYR\/AwnPRfqna8jIick0Qzgxgmk=",
+      "Microsoft.AspNetCore.Components.Authorization.dll": "sha256-Rj0dJsRQF1m+V5tOgM9mfJfWnS5z8Fyum5qPtMiWaRQ=",
       "Microsoft.AspNetCore.Components.Forms.dll": "sha256-YWF2OnontxkaiFcJmOM7wWFQhyWAPkjF+dSyH0okqQE=",
       "Microsoft.AspNetCore.Components.Web.dll": "sha256-wlznzoSBsthuKCVsTw7oKRamVbfJHFwP2yiYvSE6Ms4=",
       "Microsoft.AspNetCore.Components.WebAssembly.dll": "sha256-QsNziIE1fqEkctuuGPf+3m0MbOtwlF2DwxTJZ4daFFc=",
-      "Microsoft.AspNetCore.Metadata.dll": "sha256-aNxhP+jeasQLwzuvRzMwQ4DqOtk2QaSs0lY4h\/WtLeM=",
+      "Microsoft.AspNetCore.Metadata.dll": "sha256-y3hsTprYAdXGJjaoWXHbt61zqU0LYWYJmYEnrATjnbQ=",
       "Microsoft.Extensions.Configuration.dll": "sha256-x9zYR1t1is\/fStNpBiQnXyPdMpLLcQcra3w4RXGSg4o=",
       "Microsoft.Extensions.Configuration.Abstractions.dll": "sha256-NYecKM0ZpUvzj4spvgi6xUu80rkx8PX7fiRok\/BNaHw=",
       "Microsoft.Extensions.Configuration.Binder.dll": "sha256-JFLIykah3r5WjvztBuVIaMM9wfVswDM+On6k\/QVgeeg=",
@@ -200,11 +202,11 @@
       "mscorlib.dll": "sha256-pOPJrGSp+RVyYmvcT+PTaEq9fVhEFzvMs\/3Ue3S2j+A=",
       "netstandard.dll": "sha256-bY3Q1RCB\/lmUAo5AG5YDHBu5uD8OxCGAiJ+wukrs1pw=",
       "System.Private.CoreLib.dll": "sha256-25IZl0xgoqOBdkTlEjUBLmiiRGYCYI1BaFevKzE+EHk=",
-      "data_viewer.dll": "sha256-1QXX7AXaoGtdMGjlLjBFdtnrk0+x0P3Ts+RoUg0A3Mc="
+      "data_viewer.dll": "sha256-n3wknj12JSfADNsbsHzmHyWFDlLnyIXXTA9aLoBwJRY="
     },
     "lazyAssembly": null,
     "pdb": {
-      "data_viewer.pdb": "sha256-qBL1Xg3cI1H9cWVNfl9dL9buKWsYzdxv4gPUjmfpJpw="
+      "data_viewer.pdb": "sha256-RtYrmqBDy5AvEEre\/oGXvzVeNbQlJu8BzjNmDp8x0HQ="
     },
     "runtime": {
       "dotnet.timezones.blat": "sha256-Ek+C0V\/4GBnUGH1\/X20UjHhjyp7se2MX+2RHWSpKSDE=",

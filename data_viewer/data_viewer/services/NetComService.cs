@@ -6,12 +6,13 @@ using System.Web;
 using data_viewer.Constants;
 using data_viewer.Model;
 using data_viewer.Model.Rate;
+using Radzen;
 
 namespace data_viewer.services
 {
     public class NetComService : CommunicationService
     {
-        public NetComService(ConfigurationService config) : base(config)
+        public NetComService(ConfigurationService config, NotificationService notificationService, HttpClient httpClient) : base(config,notificationService,httpClient)
         {
         }
         public async Task<IEnumerable<NetSample>> getNetSample(String containerId, DateTime from, DateTime to)

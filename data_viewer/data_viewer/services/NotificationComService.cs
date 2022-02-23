@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 using data_viewer.Constants;
 using data_viewer.Model;
 using data_viewer.Model.Notification;
+using Radzen;
 
 namespace data_viewer.services
 {
     public class NotificationComService : CommunicationService
     {
-        public NotificationComService(ConfigurationService config) : base(config)
+        public NotificationComService(ConfigurationService config, NotificationService notificationService, HttpClient httpClient) : base(config,notificationService,httpClient)
         {
         }
 

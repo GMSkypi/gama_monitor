@@ -73,7 +73,7 @@ public class MessageNotificationController {
     public SlackConfDTO getSlackServerConfig(){
         return new SlackConfDTO(configurationCache.getUrlSlackWebHook(),configurationCache.isNotify());
     }
-    @PostMapping(value = "/slack_server/active" , params = {"active"})
+    @PostMapping(value = "/slack_server", params = {"active"})
     @ResponseStatus(HttpStatus.OK)
     public void setSlackServerActivation(@RequestParam("active") boolean active){
         boolean notError = configurationCache.setNotify(active);
