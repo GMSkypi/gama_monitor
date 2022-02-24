@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using data_viewer.Constants;
 using data_viewer.Model;
@@ -22,6 +23,8 @@ namespace data_viewer.Component
         
         [Inject]
         public NavigationManager NavigationManager { get; set; }
+        [Inject]
+        public ContainerComService containerComService { get; set; }
         
         public IEnumerable<CpuSample> cpuData { get; set; }
         
@@ -29,6 +32,7 @@ namespace data_viewer.Component
         
         private DateTime? dateTimeDatePicker;
         private System.Threading.Timer timer;
+        private bool notRunning = false;
         
         /*
         async Task LoadData()
@@ -51,7 +55,19 @@ namespace data_viewer.Component
         {
             timer = new System.Threading.Timer(async (object stateInfo) =>
             {
-                LoadData(DateTime.Now.AddMinutes(-10), DataSamplingRates.minute);
+                if (notRunning)
+                {
+                    container = await containerComService.getContainer(container.id);
+                    if (container != null && container.lastRecord > DateTime.Now.AddHours(-1)) notRunning = false;
+                    return;
+                }
+                await LoadData(DateTime.Now.AddMinutes(-10), DataSamplingRates.minute);
+                if (!cpuData.Any())
+                {
+                    notRunning = true;
+                    StateHasChanged();
+                }
+
             }, new System.Threading.AutoResetEvent(false), 0, 20000);
         }
         protected async override Task OnInitializedAsync()

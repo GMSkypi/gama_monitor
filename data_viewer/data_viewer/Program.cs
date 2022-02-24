@@ -35,6 +35,7 @@ namespace data_viewer
             builder.Services.AddScoped<DialogService>();
             builder.Services.AddScoped<NotificationService>();
             builder.Services.AddScoped<SlackConfigComService>();
+            builder.Services.AddScoped<UserService>();
 
             builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddAuthorizationCore();

@@ -1,11 +1,17 @@
 using System;
 using System.Text.Json;
+using data_viewer.services;
+using Microsoft.AspNetCore.Components;
 using Radzen;
 
 namespace data_viewer.Component.User
 {
     public partial class PasswordView
     {
+        [Inject] private UserService UserService { get; set; }
+        
+        [Inject]
+        public NotificationService NotificationService { get; set; }
         class Model
         {
             public string Password { get; set; }
@@ -15,9 +21,29 @@ namespace data_viewer.Component.User
         Model model = new Model();
         bool popup;
         
-        void OnSubmit(Model model)
+        async void OnSubmit(Model model)
         {
-            Console.WriteLine("Submit", JsonSerializer.Serialize(model, new JsonSerializerOptions() { WriteIndented = true }));
+            bool success = await UserService.changePassword(model.Password);
+            if (success)
+            {
+                model.Password = "";
+                model.RepeatPassword = "";
+                NotificationMessage message = new NotificationMessage()
+                {
+                    Severity = NotificationSeverity.Success, Summary = "Password", Detail = "New password is set" ,
+                    Duration = 5000,
+                };
+                NotificationService.Notify(message);
+            }
+            else
+            {
+                NotificationMessage message = new NotificationMessage()
+                {
+                    Severity = NotificationSeverity.Error, Summary = "Password change error", Detail = "Password is not changed" ,
+                    Duration = 5000,
+                };
+                NotificationService.Notify(message);
+            }
         }
 
         void OnInvalidSubmit(FormInvalidSubmitEventArgs args)

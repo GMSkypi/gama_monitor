@@ -39,7 +39,9 @@ public class ConfigurationLoaderImp implements ConfigurationLoader {
     public boolean saveProps(HashMap<String, String> propstoSave, String message){
         File configFile = new File(configurationFilePath);
         try {
+            FileReader reader = new FileReader(configFile);
             Properties props = new Properties();
+            props.load(reader);
             propstoSave.forEach(props::setProperty);
             FileWriter writer = new FileWriter(configFile);
             props.store(writer, message);

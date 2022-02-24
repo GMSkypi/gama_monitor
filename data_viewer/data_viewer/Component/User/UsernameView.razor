@@ -1,11 +1,11 @@
 <RadzenTemplateForm TItem="Model" Data=@model Submit=@OnSubmit InvalidSubmit=@OnInvalidSubmit>
-    <RadzenFieldset Text="Username">
+    <RadzenFieldset Text="Username"  Style="width: 500px; height: 250px">
         <div class="row mb-5">
             <div class="col-md-4" style="align-self: center;">
-                <RadzenLabel Text="Username" />
+                <RadzenLabel Text="New Username" />
             </div>
             <div class="col">
-                <RadzenTextBox style="display: block" Name="new username" @bind-Value=@model.Username Class="w-100" />
+                <RadzenTextBox style="display: block" Name="Username" @bind-Value=@model.Username Class="w-100" />
                 <RadzenRequiredValidator Component="Username" Text="Enter username" Popup="@popup" Style="position: absolute" />
             </div>
         </div>

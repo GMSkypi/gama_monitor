@@ -57,7 +57,7 @@ public class MetricsRepository<C> extends QuestDBRepositoryImp<C> {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.z");
         return executeQuery("SELECT Container_id, date_time "+ averageOfAll() +" FROM " + clazz.getAnnotation(Entity.class).name() +
                 " WHERE Container_id=" + "'" + containerId + "'" +" and date_time >=" + "to_timestamp('" + dateFormat.format(dateTime) + "','yyyy-MM-dd HH:mm:ss.z') " +
-                " SAMPLE BY " + sampled + " FILL(NONE)");
+                " SAMPLE BY " + sampled + " FILL(0)");
     }
     public List<C> findByContainerAndRange(String containerId, long dateTimeFrom, long dateTomeTo){
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.z");
@@ -70,6 +70,6 @@ public class MetricsRepository<C> extends QuestDBRepositoryImp<C> {
         return executeQuery("SELECT Container_id, date_time "+ averageOfAll() +" FROM " + clazz.getAnnotation(Entity.class).name() +
                 " WHERE Container_id=" + "'" + containerId + "'" +" and date_time >= " + "to_timestamp('" + dateFormat.format(dateTimeFrom) + "','yyyy-MM-dd HH:mm:ss.z')" +
                 " and date_time <= " + "to_timestamp('" + dateFormat.format(dateTomeTo) + "','yyyy-MM-dd HH:mm:ss.z')" +
-                " SAMPLE BY " + sampled + " FILL(NONE)");
+                " SAMPLE BY " + sampled + " FILL(0)");
     }
 }

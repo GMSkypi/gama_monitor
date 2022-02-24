@@ -25,9 +25,13 @@ namespace data_viewer.Pages
         protected async override void OnInitialized()
         {
             _conf = await SlackConfigComService.getSlackServerConf();
-            SlackWebhook = _conf.slackWebhook;
-            ActioveNotification = _conf.active;
-            StateHasChanged();
+            if (_conf != null)
+            {
+                SlackWebhook = _conf.slackWebhook;
+                ActioveNotification = _conf.active;
+                StateHasChanged();
+            }
+            
         }
 
         public async void WebhookChanged()

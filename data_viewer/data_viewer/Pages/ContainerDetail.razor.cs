@@ -11,6 +11,7 @@ using data_viewer.Model.Rate;
 using data_viewer.services;
 using Microsoft.AspNetCore.Components;
 using Radzen;
+using Container = data_viewer.Model.Container;
 
 namespace data_viewer.Pages
 {
@@ -18,6 +19,9 @@ namespace data_viewer.Pages
     {
         [Parameter]
         public String ContainerId { get; set; }
+
+        private Container _container;
+        
         [Inject]
         public DialogService DialogService { get; set; }
 
@@ -35,9 +39,12 @@ namespace data_viewer.Pages
         [Inject]
         public NotificationService NotificationService { get; set; }
         
+        [Inject]
+        public ContainerComService containerComService { get; set; }
+        
         [Inject] private NotificationComService notificationComService { get; set; }
         
-        IEnumerable<CpuSample> cpuData;
+        private IEnumerable<CpuSample> cpuData;
         int value = 0;
         private CpuSample lastCpuSample = new CpuSample();
 
@@ -52,8 +59,8 @@ namespace data_viewer.Pages
 
         private DateTime? dateTimeDatePicker;
         private System.Threading.Timer timer;
-        
-        
+
+        private bool notRunning = false;
         public void Dispose()
         {
             timer.Dispose();
@@ -75,8 +82,7 @@ namespace data_viewer.Pages
                 ioData = await ioComService.getIOSamples(ContainerId, from,sampled);
                 netData = await netComService.getNetSample(ContainerId, from,sampled);
             }
-            
-            if (cpuData != null || cpuData.Any())
+            if (cpuData != null && cpuData.Any())
             {
                 lastCpuSample = cpuData.Last();
                 lastMemorySample = memoryData.Last();
@@ -95,9 +101,8 @@ namespace data_viewer.Pages
             Console.WriteLine("loaded");
         }
 
-        protected override void OnInitialized()
+        protected override async void OnInitialized()
         {
-            dateTimeDatePicker = DateTime.Now.AddHours(-1);
             LiveInitialized();
             /*
             LoadData(new DateTime(2022, 1, 14, 12,41,00),
@@ -112,7 +117,21 @@ namespace data_viewer.Pages
         {
             timer = new System.Threading.Timer(async (object stateInfo) =>
             {
-                LoadData(DateTime.Now.AddMinutes(-10), DataSamplingRates.minute);
+                if (notRunning)
+                {
+                    _container = await containerComService.getContainer(ContainerId);
+                    if (_container != null && _container.lastRecord > DateTime.Now.AddHours(-1)) notRunning = false;
+                    return;
+                }
+                await LoadData(DateTime.Now.AddMinutes(-10), DataSamplingRates.minute);
+                if (!cpuData.Any())
+                {
+                    notRunning = true;
+                    _container = await containerComService.getContainer(ContainerId);
+                    StateHasChanged();
+                }
+                
+
             }, new System.Threading.AutoResetEvent(false), 0, 20000);
         }
 
@@ -129,7 +148,7 @@ namespace data_viewer.Pages
         {
             OnSampleRateChange(this.value);
         }
-        void OnSampleRateChange(int value)
+        async void OnSampleRateChange(int value)
         {
             if (value != 0)
             {
