@@ -6,22 +6,22 @@ namespace data_viewer.Shared
 {
     public partial class NavMenu
     {
-        [Inject] private NavigationManager NavigationManager { get; set; }
-        [Inject] private CustomAuthenticationService CustomAuthenticationService { get; set; }
+        [Inject] private NavigationManager navigationManager { get; set; }
+        [Inject] private CustomAuthenticationService customAuthenticationService { get; set; }
         
-        private bool collapseNavMenu = true;
+        private bool _collapseNavMenu = true;
 
-        private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+        private string navMenuCssClass => _collapseNavMenu ? "collapse" : null;
 
         private void ToggleNavMenu()
         {
-            collapseNavMenu = !collapseNavMenu;
+            _collapseNavMenu = !_collapseNavMenu;
         }
 
-        private void logout()
+        private void Logout()
         {
-            CustomAuthenticationService.Logout();
-            NavigationManager.NavigateTo($"/login");
+            customAuthenticationService.Logout();
+            navigationManager.NavigateTo($"/login");
         }
     }
 }

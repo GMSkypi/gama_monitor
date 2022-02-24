@@ -14,19 +14,19 @@ namespace data_viewer.services
         public ContainerComService(ConfigurationService config, NotificationService notificationService, HttpClient httpClient) : base(config,notificationService,httpClient)
         {
         }
-        public async Task<IEnumerable<Container>> getContainers()
+        public async Task<IEnumerable<Container>> GetContainers()
         {
-            var uri = new Uri(config.hostName + EndpointConstants.containersURL);
-            return await executeRequestMultiple<Container>(uri, HttpMethod.Get);
+            var uri = new Uri(config.hostName + EndpointConstants.ContainersUrl);
+            return await ExecuteRequestMultiple<Container>(uri, HttpMethod.Get);
         }
-        public async Task<Container> getContainer(String id)
+        public async Task<Container> GetContainer(string id)
         {
-            var builder = new UriBuilder(config.hostName + EndpointConstants.containerURL);
+            var builder = new UriBuilder(config.hostName + EndpointConstants.ContainerUrl);
             var query = HttpUtility.ParseQueryString(builder.Query);
-            query["id"] = id;
+            query[EpAttributeConstants.Container] = id;
             builder.Query = query.ToString();
             var url = builder.Uri;
-            return await executeRequestSingle<Container>(url, HttpMethod.Get);
+            return await ExecuteRequestSingle<Container>(url, HttpMethod.Get);
         }
     }
 }

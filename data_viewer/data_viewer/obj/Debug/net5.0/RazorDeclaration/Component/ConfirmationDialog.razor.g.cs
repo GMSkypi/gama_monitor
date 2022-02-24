@@ -103,7 +103,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 #line default
 #line hidden
 #nullable disable
-    public partial class ComfirmationDialog : Microsoft.AspNetCore.Components.ComponentBase
+    public partial class ConfirmationDialog : Microsoft.AspNetCore.Components.ComponentBase
     {
         #pragma warning disable 1998
         protected override void BuildRenderTree(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder __builder)

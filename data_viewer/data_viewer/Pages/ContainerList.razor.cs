@@ -1,6 +1,4 @@
-
 using Microsoft.AspNetCore.Components;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,39 +15,33 @@ namespace data_viewer.Pages
 {
     public partial class ContainerList : ComponentBase, IDisposable
     {
-        protected RadzenDataGrid<Container> grid;
-        
-        [Inject]
-        public NavigationManager NavigationManager { get; set; }
-        
-        [Inject]
-        public ContainerComService ContainerComService { get; set; }
-        
-        
-        [Inject]
-        public NotificationService NotificationService { get; set; }
-        
-        public void Dispose()
-        {
-        }
-        
-        IEnumerable<Container> data;
-        protected IList<Container> SelectedContainer { get; set; }
-        RadzenDataGrid<Container> _dataGrid;
-        int count;
-        bool isLoading;
+        [Inject] public NavigationManager navigationManager { get; set; }
+
+        [Inject] public ContainerComService containerComService { get; set; }
+
+        [Inject] public NotificationService notificationService { get; set; }
+
+        private IEnumerable<Container> _data;
+        private IList<Container> selectedContainer { get; set; }
+        private RadzenDataGrid<Container> _dataGrid;
+        private int _count;
+        private bool _isLoading;
 
         async Task LoadData(LoadDataArgs args)
         {
-            isLoading = true;
-            data = await ContainerComService.getContainers();
-            count = data.Count();
-            isLoading = false;
+            _isLoading = true;
+            _data = await containerComService.GetContainers();
+            _count = _data.Count();
+            _isLoading = false;
         }
-        protected void OnItemClick(DataGridRowMouseEventArgs<Container> e)
+
+        private void OnItemClick(DataGridRowMouseEventArgs<Container> e)
         {
-            NavigationManager.NavigateTo($"/ContainerDetail/{e.Data.id}");
+            navigationManager.NavigateTo($"/ContainerDetail/{e.Data.id}");
         }
-        
+
+        public void Dispose()
+        {
+        }
     }
 }

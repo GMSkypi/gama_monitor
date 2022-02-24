@@ -15,33 +15,33 @@ namespace data_viewer.services
         {
         }
 
-        public async Task<IEnumerable<Notification>> getNotifications()
+        public async Task<IEnumerable<Notification>> GetNotifications()
         {
-            var uri = new Uri(config.hostName + EndpointConstants.notificationsURL);
-            return await executeRequestMultiple<Notification>(uri, HttpMethod.Get);
+            var uri = new Uri(config.hostName + EndpointConstants.NotificationsUrl);
+            return await ExecuteRequestMultiple<Notification>(uri, HttpMethod.Get);
         }
 
-        public async Task<Notification> getNotification(String id)
+        public async Task<Notification> GetNotification(string id)
         {
-            var uri = new Uri(config.hostName + EndpointConstants.notificationURL + id);
-            return await executeRequestSingle<Notification>(uri, HttpMethod.Get);
+            var uri = new Uri(config.hostName + EndpointConstants.NotificationUrl + id);
+            return await ExecuteRequestSingle<Notification>(uri, HttpMethod.Get);
         }
 
-        public async Task<bool> deleteNotification(String id)
+        public async Task<bool> DeleteNotification(string id)
         {
-            var uri = new Uri(config.hostName + EndpointConstants.notificationURL + id);
-            return await executeNoresponse(uri, HttpMethod.Delete);
+            var uri = new Uri(config.hostName + EndpointConstants.NotificationUrl + id);
+            return await ExecuteNoresponse(uri, HttpMethod.Delete);
         }
 
-        public async Task<Notification> createNotification(Notification notification)
+        public async Task<Notification> CreateNotification(Notification notification)
         {
-            var uri = new Uri(config.hostName + EndpointConstants.notificationURL);
-            return await executeRequestSingle<Notification>(uri, HttpMethod.Post, notification);
+            var uri = new Uri(config.hostName + EndpointConstants.NotificationUrl);
+            return await ExecuteRequestSingle<Notification>(uri, HttpMethod.Post, notification);
         }
-        public async Task<Notification> updateNotification(Notification notification)
+        public async Task<Notification> UpdateNotification(Notification notification)
         {
-            var uri = new Uri(config.hostName + EndpointConstants.notificationURL);
-            return await executeRequestSingle<Notification>(uri, HttpMethod.Patch, notification);
+            var uri = new Uri(config.hostName + EndpointConstants.NotificationUrl);
+            return await ExecuteRequestSingle<Notification>(uri, HttpMethod.Patch, notification);
         }
         
     }

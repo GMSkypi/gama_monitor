@@ -4,24 +4,24 @@ namespace data_viewer.Constants
 {
     public static class EndpointConstants
     {
-        public const String containerURL = "/container/";
-        public const String containersURL = "/container/containers";
-        public const String dashboardURL = "/container/dashboard";
+        public const string ContainerUrl = "/container/";
+        public const string ContainersUrl = "/container/containers";
+        public const string DashboardUrl = "/container/dashboard";
         
-        public const String cpuURL = "/cpu/";
-        public const String memoryURL = "/memory/";
-        public const String ioURL = "/io/";
-        public const String netURL = "/net/";
+        public const string CpuUrl = "/cpu/";
+        public const string MemoryUrl = "/memory/";
+        public const string IoUrl = "/io/";
+        public const string NetUrl = "/net/";
         
-        public const String notificationURL = "/notification/";
-        public const String notificationsURL = "/notification/notifications";
+        public const string NotificationUrl = "/notification/";
+        public const string NotificationsUrl = "/notification/notifications";
 
-        public const String slackURL = "/notification/slack_server";
-        public const String slackActiveURL = "/notification/slack_server";
+        public const string SlackUrl = "/notification/slack_server";
+        public const string SlackActiveUrl = "/notification/slack_server";
 
-        public const String serverAlive = "/testConnection";
+        public const string ServerAlive = "/testConnection";
 
-        public const String passwordChangeURL = "/user/password";
-        public const String usernameChangeURL = "/user/username";
+        public const string PasswordChangeUrl = "/user/password";
+        public const string UsernameChangeUrl = "/user/username";
     }
 }

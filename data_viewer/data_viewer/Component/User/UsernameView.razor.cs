@@ -23,7 +23,7 @@ namespace data_viewer.Component.User
         
         async void OnSubmit(Model model)
         {
-            bool success = await UserService.changeUsername(model.Username);
+            bool success = await UserService.ChangeUsername(model.Username);
             if (success)
             {
                 model.Username = "";

@@ -20,23 +20,23 @@ namespace data_viewer.services
 {
     public abstract class CommunicationService : ICommunicationService
     {
-        private NotificationService NotificationService;
+        private NotificationService _notificationService;
         
         private readonly HttpClient _httpClient;
         
         protected ConfigurationService config { get; set; }
-        protected const String dateTimeFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'";
+        protected const String DateTimeFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'";
         protected CommunicationService(ConfigurationService config, NotificationService notificationService, HttpClient httpClient)
         {
-            this.NotificationService = notificationService;
+            this._notificationService = notificationService;
             this.config = config;
             this._httpClient = httpClient;
         }
 
-        protected async Task<IEnumerable<T>> executeRequestMultiple<T>(Uri uri,HttpMethod method, Object optionalBody = null )
+        protected async Task<IEnumerable<T>> ExecuteRequestMultiple<T>(Uri uri,HttpMethod method, Object optionalBody = null )
         {
             Console.WriteLine("start loading");
-            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(method, uri);
+            var httpRequestMessage = new HttpRequestMessage(method, uri);
             if (optionalBody != null)
             {
                 var body = JsonSerializer.Serialize(optionalBody, new JsonSerializerOptions {Converters ={ new JsonStringEnumConverter()}});
@@ -56,7 +56,7 @@ namespace data_viewer.services
                         <IEnumerable<T>>(responseStream,  new JsonSerializerOptions {Converters ={ new JsonStringEnumConverter()},});
                     if (!result.Any())
                     {
-                        if(!await testConnection()) notifyServerFailed();
+                        if(!await TestConnection()) NotifyServerFailed();
                     }
                     return result;
                 }
@@ -70,12 +70,12 @@ namespace data_viewer.services
                 Console.WriteLine(e);
             }
             
-            notifyServerFailed();
+            NotifyServerFailed();
             return new List<T>();
         }
-        protected async Task<T> executeRequestSingle<T>(Uri uri, HttpMethod method, Object optionalBody = null)
+        protected async Task<T> ExecuteRequestSingle<T>(Uri uri, HttpMethod method, Object optionalBody = null)
         {
-            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(method, uri);
+            var httpRequestMessage = new HttpRequestMessage(method, uri);
             if (optionalBody != null)
             {
                 var body = JsonSerializer.Serialize(optionalBody, new JsonSerializerOptions {Converters ={ new JsonStringEnumConverter()}});
@@ -104,13 +104,13 @@ namespace data_viewer.services
             }
             
             
-            notifyServerFailed();
+            NotifyServerFailed();
             return default(T);
         }
 
-        protected async Task<bool> executeNoresponse(Uri uri, HttpMethod method, Object optionalBody = null)
+        protected async Task<bool> ExecuteNoresponse(Uri uri, HttpMethod method, Object optionalBody = null)
         {
-            HttpRequestMessage httpRequestMessage = new HttpRequestMessage(method, uri);
+            var httpRequestMessage = new HttpRequestMessage(method, uri);
             if (optionalBody != null)
             {
                 var body = JsonSerializer.Serialize(optionalBody, new JsonSerializerOptions {Converters ={ new JsonStringEnumConverter()}});
@@ -131,13 +131,13 @@ namespace data_viewer.services
             
         }
 
-        private async Task<bool> testConnection()
+        private async Task<bool> TestConnection()
         {
-            var uri = new Uri(config.hostName + EndpointConstants.serverAlive);
-            return await executeRequestSingle<bool>(uri, HttpMethod.Get);
+            var uri = new Uri(config.hostName + EndpointConstants.ServerAlive);
+            return await ExecuteRequestSingle<bool>(uri, HttpMethod.Get);
         }
 
-        private void notifyServerFailed()
+        private void NotifyServerFailed()
         {
             
             NotificationMessage message = new NotificationMessage()
@@ -145,7 +145,7 @@ namespace data_viewer.services
                 Severity = NotificationSeverity.Error, Summary = "Server failed to load data",
                 Duration = 10000,
             };
-            NotificationService.Notify(message);
+            _notificationService.Notify(message);
         }
     }
 }

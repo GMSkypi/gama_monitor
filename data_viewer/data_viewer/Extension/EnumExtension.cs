@@ -10,21 +10,21 @@ namespace data_viewer.Extension
 {
     public class EnumType
     {
-        public Group EnumValue { get; set; }
-        public string EnumName { get; set; }
+        public Group enumValue { get; set; }
+        public string enumName { get; set; }
     }
     public class EnumExtension<T> where T : Enum
     {
-        public T EnumValue { get; set; }
-        public string EnumName { get; set; }
+        public T enumValue { get; }
+        public string enumName { get; }
 
-        public EnumExtension(T value, String name)
+        private EnumExtension(T value, string name)
         {
-            this.EnumValue = value;
-            this.EnumName = name;
+            enumValue = value;
+            enumName = name;
         }
 
-        public static EnumExtension<T> getEnumExtension(T value)
+        public static EnumExtension<T> GetEnumExtension(T value)
         {
             var enumType = typeof(T);
             var memberInfo = enumType.GetMember(value.ToString()).First();
@@ -44,20 +44,14 @@ namespace data_viewer.Extension
             return displayAttribute.Name != null ? new EnumExtension<T>(value, displayAttribute.Name) : new EnumExtension<T>(value, value.ToString());
         }
 
-        public static List<EnumExtension<T>> getEnumExtension(IList<T> values)
+        public static List<EnumExtension<T>> GetEnumExtension(IList<T> values)
         {
-            List<EnumExtension<T>> enumExtendedList = new ();
-            foreach (T item in values)
-                enumExtendedList.Add(getEnumExtension(item));
-            return enumExtendedList;
+            return values.Select(GetEnumExtension).ToList();
         }
 
-        public static List<EnumExtension<T>> getAllEnumExtension()
+        public static List<EnumExtension<T>> GetAllEnumExtension()
         {
-            List<EnumExtension<T>> enumExtendedList = new ();
-            foreach (T item in Enum.GetValues(typeof(T)))
-                enumExtendedList.Add(getEnumExtension(item));
-            return enumExtendedList;
+            return (from T item in Enum.GetValues(typeof(T)) select GetEnumExtension(item)).ToList();
         }
     }
 }

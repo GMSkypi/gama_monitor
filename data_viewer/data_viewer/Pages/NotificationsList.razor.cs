@@ -16,83 +16,84 @@ namespace data_viewer.Pages
     public partial class NotificationsList : ComponentBase, IDisposable
     {
         [Inject] private NotificationComService notificationComService { get; set; }
-        
-        [Inject]
-        public DialogService DialogService { get; set; }
-        
-        [Inject]
-        public NotificationService NotificationService { get; set; }
-        
-        IEnumerable<Notification> data;
-        protected IList<Notification> SelectedNotification { get; set; }
-        RadzenDataGrid<Notification> _dataGrid;
-        int count;
-        bool isLoading;
-        
+
+        [Inject] public DialogService dialogService { get; set; }
+
+        [Inject] public NotificationService notificationService { get; set; }
+
+        private IEnumerable<Notification> _data;
+        private RadzenDataGrid<Notification> _dataGrid;
+        private int _count;
+        private bool _isLoading;
+
         public void Dispose()
         {
         }
-        async Task LoadData(LoadDataArgs args)
+
+        private async Task LoadData(LoadDataArgs args)
         {
-            isLoading = true;
-            data = await notificationComService.getNotifications();
-            count = data.Count();
-            isLoading = false;
+            _isLoading = true;
+            _data = await notificationComService.GetNotifications();
+            _count = _data.Count();
+            _isLoading = false;
         }
-        protected async Task EditNotificationOnItemClick(Notification notif)
+
+        private async Task EditNotificationOnItemClick(Notification notification)
         {
-            bool? edited = await DialogService.OpenAsync<EditNotificationDialog>($"Edit notification",
-                new Dictionary<string, Object>() { { "Notification", notif } },
-                new DialogOptions() { Width = "600px", Height = "fit-content", CloseDialogOnOverlayClick = false });
+            bool? edited = await dialogService.OpenAsync<EditNotificationDialog>($"Edit notification",
+                new Dictionary<string, Object>() {{"Notification", notification}},
+                new DialogOptions() {Width = "600px", Height = "fit-content", CloseDialogOnOverlayClick = false});
             if (edited.HasValue && edited.Value)
             {
-                Notification updateNotification = await notificationComService.updateNotification(notif);
+                var updateNotification = await notificationComService.UpdateNotification(notification);
                 if (updateNotification != null)
                 {
-                    NotificationMessage message = new NotificationMessage()
+                    var message = new NotificationMessage()
                     {
-                        Severity = NotificationSeverity.Success, Summary = "Notification edited successfully", Detail = "Notification with id:" + updateNotification.id + " is updated",
+                        Severity = NotificationSeverity.Success, Summary = "Notification edited successfully",
+                        Detail = "Notification with id:" + updateNotification.id + " is updated",
                         Duration = 5000,
                     };
-                    NotificationService.Notify(message);
+                    notificationService.Notify(message);
                 }
                 else
                 {
-                    NotificationMessage message = new NotificationMessage()
+                    var message = new NotificationMessage()
                     {
                         Severity = NotificationSeverity.Error, Summary = "Notification edited failed",
                         Duration = 5000,
                     };
-                    NotificationService.Notify(message);
+                    notificationService.Notify(message);
                 }
             }
         }
-        protected async Task removeNotification(Notification notification)
+
+        private async Task RemoveNotification(Notification notification)
         {
-            bool? result = await DialogService.OpenAsync<ComfirmationDialog>($"Remove notification",
-                new Dictionary<string, Object>() { { "Message", "Remove Notification: " + notification.id } },
-                new DialogOptions() { Width = "600px", Height = "fit-content", CloseDialogOnOverlayClick = false });
+            bool? result = await dialogService.OpenAsync<ConfirmationDialog>($"Remove notification",
+                new Dictionary<string, Object>() {{"Message", "Remove Notification: " + notification.id}},
+                new DialogOptions() {Width = "600px", Height = "fit-content", CloseDialogOnOverlayClick = false});
             if (result.HasValue && result.Value)
             {
-                bool deleted = await notificationComService.deleteNotification(notification.id.ToString());
+                bool deleted = await notificationComService.DeleteNotification(notification.id.ToString());
                 if (deleted)
                 {
-                    data = data.Where(unupdatedNotif => unupdatedNotif.id != notification.id);
-                    NotificationMessage message = new NotificationMessage()
+                    _data = _data.Where(unUpdated => unUpdated.id != notification.id);
+                    var message = new NotificationMessage()
                     {
                         Severity = NotificationSeverity.Success, Summary = "Success Summary", Detail = "Success Detail",
                         Duration = 4000
                     };
-                    NotificationService.Notify(message);
+                    notificationService.Notify(message);
                 }
                 else
                 {
-                    NotificationMessage message = new NotificationMessage()
+                    var message = new NotificationMessage()
                     {
                         Severity = NotificationSeverity.Error, Summary = "Notification removing failed",
                         Duration = 5000,
                     };
-                    NotificationService.Notify(message);
+                    notificationService.Notify(message);
                 }
             }
         }

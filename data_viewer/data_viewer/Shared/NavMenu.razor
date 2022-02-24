@@ -4,12 +4,12 @@
             <a class="navbar-brand" href="">Monitor</a>
         </div>
         <div class="col-8 d-flex flex-column">
-            <RadzenButton Text="LOGOUT" ButtonStyle="ButtonStyle.Secondary" Click="@logout" />
+            <RadzenButton Text="LOGOUT" ButtonStyle="ButtonStyle.Secondary" Click="@Logout" />
         </div>
     </div>
 </div>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+<div class="@navMenuCssClass" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="dashboard" Match="NavLinkMatch.All">

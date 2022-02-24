@@ -466,8 +466,6 @@
 /home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/Razor/Component/EditNotificationDialog.razor.g.cs
 /home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/RazorDeclaration/Component/ContainerView.razor.g.cs
 /home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/Razor/Component/ContainerView.razor.g.cs
-/home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/RazorDeclaration/Component/ComfirmationDialog.razor.g.cs
-/home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/Razor/Component/ComfirmationDialog.razor.g.cs
 /home/gama/gama_monitor/data_viewer/data_viewer/bin/Debug/net5.0/wwwroot/_framework/dotnet.5.0.14.js.gz
 /home/gama/gama_monitor/data_viewer/data_viewer/bin/Debug/net5.0/wwwroot/_framework/dotnet.5.0.14.js
 /home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/build-gz/ndPnP5Bx.gz
@@ -665,3 +663,5 @@
 /home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/Razor/Component/User/PasswordView.razor.g.cs
 /home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/RazorDeclaration/Component/User/UsernameView.razor.g.cs
 /home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/Razor/Component/User/UsernameView.razor.g.cs
+/home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/RazorDeclaration/Component/ConfirmationDialog.razor.g.cs
+/home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/Razor/Component/ConfirmationDialog.razor.g.cs

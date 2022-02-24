@@ -7,16 +7,16 @@ namespace data_viewer.Shared
 {
     public partial class MainLayout
     {
-        [Inject] private NavigationManager NavigationManager { get; set; }
-        [Inject] private AuthenticationStateProvider AuthenticationStateProvider { get; set; }
-        protected async override Task OnInitializedAsync()
+        [Inject] private NavigationManager navigationManager { get; set; }
+        [Inject] private AuthenticationStateProvider authenticationStateProvider { get; set; }
+        protected override async Task OnInitializedAsync()
         {
             base.OnInitialized();
             
-            var user = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
+            var user = (await authenticationStateProvider.GetAuthenticationStateAsync()).User;
             if(!user.Identity.IsAuthenticated)
             {
-                NavigationManager.NavigateTo($"/login");
+                navigationManager.NavigateTo($"/login");
             }
              
         }

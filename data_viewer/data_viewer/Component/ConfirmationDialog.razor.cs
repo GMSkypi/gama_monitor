@@ -4,18 +4,17 @@ using Radzen;
 
 namespace data_viewer.Component
 {
-    public partial class ComfirmationDialog: ComponentBase, IDisposable
+    public partial class ConfirmationDialog: ComponentBase, IDisposable
     {
         [Parameter] public String message { get; set; }
-        [Inject]
-        public DialogService DialogService { get; set; }
+        [Inject] public DialogService dialogService { get; set; }
  
         public void Dispose()
         {
         }
-        protected void ValidSubmit()
+        private void ValidSubmit()
         {
-            DialogService.Close(true);
+            dialogService.Close(true);
         }
     }
 }

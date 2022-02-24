@@ -11,10 +11,10 @@
                 PageSize="5"
                 PagerHorizontalAlign="HorizontalAlign.Center"
                 AllowSorting="true"
-                Data="@data"
+                Data="@_data"
                 TItem="data_viewer.Model.Notification.Notification"
-                IsLoading="@isLoading"
-                Count="@count"
+                IsLoading="@_isLoading"
+                Count="@_count"
                 LoadData="@LoadData">
 
     <Columns>
@@ -23,14 +23,14 @@
         <RadzenDataGridColumn TItem="data_viewer.Model.Notification.Notification" Title="Group" Width="100px">
             <Template Context="notification">
                 <div class="center">
-                    @(EnumExtension<data_viewer.Model.Notification.Group>.getEnumExtension(notification.metricGroup).EnumName)
+                    @(EnumExtension<data_viewer.Model.Notification.Group>.GetEnumExtension(notification.metricGroup).enumName)
                 </div>
             </Template>
         </RadzenDataGridColumn>
         <RadzenDataGridColumn TItem="data_viewer.Model.Notification.Notification" Title="Metric">
             <Template Context="notification">
                 <div class="center">
-                    @(EnumExtension<Metrics>.getEnumExtension(notification.metricToMonitor).EnumName)
+                    @(EnumExtension<Metrics>.GetEnumExtension(notification.metricToMonitor).enumName)
                 </div>
             </Template>
         </RadzenDataGridColumn>
@@ -40,11 +40,11 @@
                 <div class="center">
                     @if (notification.type == NotificationType.CHANGE)
                     {
-                        @(EnumExtension<Trigger>.getEnumExtension(notification.changeNotify.trigger).EnumName)
+                        @(EnumExtension<Trigger>.GetEnumExtension(notification.changeNotify.trigger).enumName)
                     }
                     else
                     {
-                        @(EnumExtension<Trigger>.getEnumExtension(notification.thresholdNotify.trigger).EnumName)
+                        @(EnumExtension<Trigger>.GetEnumExtension(notification.thresholdNotify.trigger).enumName)
                     }
                 </div>
             </Template>
@@ -53,7 +53,7 @@
         <RadzenDataGridColumn TItem="data_viewer.Model.Notification.Notification" Title="Type" Width="120px">
             <Template Context="notification">
                 <div class="center">
-                    @(EnumExtension<NotificationType>.getEnumExtension(notification.type).EnumName)
+                    @(EnumExtension<NotificationType>.GetEnumExtension(notification.type).enumName)
                 </div>
             </Template>
         </RadzenDataGridColumn>
@@ -63,7 +63,7 @@
                     <div class="col-6 d-flex flex-column">
                         <RadzenButton ButtonStyle="ButtonStyle.Danger"
                                       Text="Remove"
-                                      Click="() => removeNotification(notification)"/>
+                                      Click="() => RemoveNotification(notification)"/>
                     </div>
                     <div class="col-6 d-flex flex-column">
                         <RadzenButton ButtonStyle="ButtonStyle.Success"

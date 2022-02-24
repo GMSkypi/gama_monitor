@@ -6,81 +6,81 @@ using Radzen;
 
 namespace data_viewer.Pages
 {
-    public partial class Configuration  : ComponentBase, IDisposable
+    public partial class Configuration : ComponentBase, IDisposable
     {
-        [Inject]
-        public SlackConfigComService SlackConfigComService { get; set; }
-        [Inject]
-        public NotificationService NotificationService { get; set; }
-        public String SlackWebhook { get; set; }
-        public bool ActioveNotification { get; set; }
+        [Inject] public SlackConfigComService slackConfigComService { get; set; }
+        [Inject] public NotificationService notificationService { get; set; }
+        private string _slackWebhook { get; set; }
+        private bool _actioveNotification { get; set; }
 
         private SlackConf _conf;
-        
+
         public void Dispose()
         {
-            
         }
 
-        protected async override void OnInitialized()
+        protected override async void OnInitialized()
         {
-            _conf = await SlackConfigComService.getSlackServerConf();
+            _conf = await slackConfigComService.GetSlackServerConf();
             if (_conf != null)
             {
-                SlackWebhook = _conf.slackWebhook;
-                ActioveNotification = _conf.active;
+                _slackWebhook = _conf.slackWebhook;
+                _actioveNotification = _conf.active;
                 StateHasChanged();
             }
-            
         }
 
-        public async void WebhookChanged()
+        private async void WebhookChanged()
         {
-            bool success = await SlackConfigComService.setSlackServerUrl(SlackWebhook);
+            bool success = await slackConfigComService.SetSlackServerUrl(_slackWebhook);
             if (success)
             {
-                _conf.slackWebhook = SlackWebhook;
+                _conf.slackWebhook = _slackWebhook;
                 NotificationMessage message = new NotificationMessage()
                 {
-                    Severity = NotificationSeverity.Success, Summary = "Slack webhook edited", Detail = "webhook: " + SlackWebhook ,
+                    Severity = NotificationSeverity.Success, Summary = "Slack webhook edited",
+                    Detail = "webhook: " + _slackWebhook,
                     Duration = 5000,
                 };
-                NotificationService.Notify(message);
+                notificationService.Notify(message);
             }
             else
             {
-                SlackWebhook = _conf.slackWebhook;
+                _slackWebhook = _conf.slackWebhook;
                 NotificationMessage message = new NotificationMessage()
                 {
-                    Severity = NotificationSeverity.Error, Summary = "Slack webhook error", Detail = "webhook not edited" ,
+                    Severity = NotificationSeverity.Error, Summary = "Slack webhook error",
+                    Detail = "webhook not edited",
                     Duration = 5000,
                 };
-                NotificationService.Notify(message);
+                notificationService.Notify(message);
             }
         }
 
-        public async void SlackActivation()
+        private async void SlackActivation()
         {
-            bool success = await SlackConfigComService.setSlackServerActiveFlag(ActioveNotification);
+            bool success = await slackConfigComService.SetSlackServerActiveFlag(_actioveNotification);
             if (success)
             {
-                _conf.active = ActioveNotification;
+                _conf.active = _actioveNotification;
                 NotificationMessage message = new NotificationMessage()
                 {
-                    Severity = NotificationSeverity.Success, Summary = "Slack activation", Detail = "Activated: " + ActioveNotification ,
+                    Severity = NotificationSeverity.Success, Summary = "Slack activation",
+                    Detail = "Activated: " + _actioveNotification,
                     Duration = 5000,
                 };
-                NotificationService.Notify(message);
+                notificationService.Notify(message);
             }
             else
             {
-                ActioveNotification = _conf.active;
+                _actioveNotification = _conf.active;
                 NotificationMessage message = new NotificationMessage()
                 {
-                    Severity = NotificationSeverity.Error, Summary = "Slack activation error", Detail = "Activation failed" ,
+                    Severity = NotificationSeverity.Error, Summary = "Slack activation error",
+                    Detail = "Activation failed",
                     Duration = 5000,
                 };
-                NotificationService.Notify(message);
+                notificationService.Notify(message);
             }
         }
     }

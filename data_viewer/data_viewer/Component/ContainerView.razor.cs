@@ -11,78 +11,60 @@ using data_viewer.Model.Rate;
 
 namespace data_viewer.Component
 {
-    public partial class ContainerView: ComponentBase, IDisposable
+    public partial class ContainerView : ComponentBase, IDisposable
     {
-        [Parameter]
-        public Container container { get; set; }
-        [Inject] 
-        public CPUComService cpuComService { get; set; }
-        
-        [Inject]
-        public MemoryComService memoryComService { get; set; }
-        
-        [Inject]
-        public NavigationManager NavigationManager { get; set; }
-        [Inject]
-        public ContainerComService containerComService { get; set; }
-        
-        public IEnumerable<CpuSample> cpuData { get; set; }
-        
-        public IEnumerable<MemorySample> memoryData { get; set; }
-        
-        private DateTime? dateTimeDatePicker;
-        private System.Threading.Timer timer;
-        private bool notRunning = false;
-        
-        /*
-        async Task LoadData()
+        [Parameter] public Container container { get; set; }
+        [Inject] public CPUComService cpuComService { get; set; }
+        [Inject] public MemoryComService memoryComService { get; set; }
+        [Inject] public NavigationManager navigationManager { get; set; }
+        [Inject] public ContainerComService containerComService { get; set; }
+
+        private IEnumerable<CpuSample> _cpuData { get; set; }
+        private IEnumerable<MemorySample> _memoryData { get; set; }
+        private DateTime? _dateTimeDatePicker;
+        private System.Threading.Timer _timer;
+        private bool _notRunning = false;
+
+        private async Task LoadData(DateTime from, SampledBy sampled)
         {
-            Console.WriteLine("loading");
-            cpuData = await cpuComService.getCpuSamples(container.id, new DateTime(2022, 1, 14, 12,41,00),DataSamplingRates.hour);
-            memoryData = await memoryComService.getMemorySample(container.id, new DateTime(2022, 1, 14, 12, 41, 00),
-                DataSamplingRates.hour);
-            StateHasChanged();
-            Console.WriteLine("loaded");
-        }
-        */
-        async Task LoadData(DateTime from, SampledBy sampled)
-        {
-            cpuData = await cpuComService.getCpuSamples(container.id, from, sampled);
-            memoryData = await memoryComService.getMemorySample(container.id, from, sampled);
+            _cpuData = await cpuComService.GetCpuSamples(container.id, from, sampled);
+            _memoryData = await memoryComService.GetMemorySample(container.id, from, sampled);
         }
 
-        protected void LiveInitialized()
+        private void LiveInitialized()
         {
-            timer = new System.Threading.Timer(async (object stateInfo) =>
+            _timer = new System.Threading.Timer(async _ =>
             {
-                if (notRunning)
+                if (_notRunning)
                 {
-                    container = await containerComService.getContainer(container.id);
-                    if (container != null && container.lastRecord > DateTime.Now.AddHours(-1)) notRunning = false;
+                    container = await containerComService.GetContainer(container.id);
+                    if (container != null && container.lastRecord > DateTime.Now.AddHours(-1)) _notRunning = false;
                     return;
                 }
-                await LoadData(DateTime.Now.AddMinutes(-10), DataSamplingRates.minute);
-                if (!cpuData.Any())
+
+                await LoadData(DateTime.Now.AddMinutes(-10), DataSamplingRates.Minute);
+                if (!_cpuData.Any())
                 {
-                    notRunning = true;
+                    _notRunning = true;
                     StateHasChanged();
                 }
-
             }, new System.Threading.AutoResetEvent(false), 0, 20000);
         }
-        protected async override Task OnInitializedAsync()
+
+        protected override void OnInitialized()
         {
-            dateTimeDatePicker = DateTime.Now.AddHours(-1);
+            _dateTimeDatePicker = DateTime.Now.AddHours(-1);
             LiveInitialized();
         }
+
         public void Dispose()
         {
-            timer.Dispose();
+            _timer.Dispose();
         }
 
-        protected void DetailClick()
+        private void DetailClick()
         {
-            NavigationManager.NavigateTo($"/ContainerDetail/{container.id}");
+            navigationManager.NavigateTo($"/ContainerDetail/{container.id}");
         }
     }
 }

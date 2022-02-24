@@ -23,7 +23,7 @@ namespace data_viewer.Component.User
         
         async void OnSubmit(Model model)
         {
-            bool success = await UserService.changePassword(model.Password);
+            bool success = await UserService.ChangePassword(model.Password);
             if (success)
             {
                 model.Password = "";

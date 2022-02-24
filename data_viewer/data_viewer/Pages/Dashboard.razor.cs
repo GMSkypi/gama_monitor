@@ -10,28 +10,26 @@ using Radzen;
 
 namespace data_viewer.Pages
 {
-    public partial class Dashboard  : ComponentBase, IDisposable
+    public partial class Dashboard : ComponentBase, IDisposable
     {
-        [Inject]
-        public NavigationManager NavigationManager { get; set; }
-        
-        [Inject]
-        public ContainerComService ContainerComService { get; set; }
+        [Inject] public NavigationManager navigationManager { get; set; }
 
-        private IEnumerable<Container> data = new List<Container>();
-        
-        async Task LoadData()
+        [Inject] public ContainerComService containerComService { get; set; }
+
+        private IEnumerable<Container> _data = new List<Container>();
+
+        private async Task LoadData()
         {
-            data = await ContainerComService.getContainers();
-            Console.WriteLine("Dashboard container loaded: " + data.Count());
+            _data = await containerComService.GetContainers();
+            Console.WriteLine("Dashboard container loaded: " + _data.Count());
         }
-         protected  async override Task OnInitializedAsync()
-         {
-              await LoadData();
-              StateHasChanged();
-         }
 
-        
+        protected override async Task OnInitializedAsync()
+        {
+            await LoadData();
+            StateHasChanged();
+        }
+
         public void Dispose()
         {
         }

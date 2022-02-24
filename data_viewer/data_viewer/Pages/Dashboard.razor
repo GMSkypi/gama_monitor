@@ -3,11 +3,11 @@
 @using data_viewer.Component
 <h3>Dashboard</h3>
 <div class="row">
-    @if (!data.Any())
+    @if (!_data.Any())
     {
         <h6>No record to display</h6>
     }
-    @foreach (var container in data)
+    @foreach (var container in _data)
     {
         <div class="col-sm pb-2">
             <ContainerView container="@container"/>

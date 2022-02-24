@@ -13,29 +13,23 @@ namespace data_viewer.Component
 {
     public partial class EditNotificationDialog : ComponentBase, IDisposable
     {
-         [Parameter]
-         public Notification notification { get; set; }
-    
-        protected Notification notificationCopy { get; set; }
+        [Parameter] public Notification notification { get; set; }
+        [Inject] public DialogService dialogService { get; set; }
+        private Notification notificationCopy { get; set; }
         
-        [Inject]
-        public DialogService DialogService { get; set; }
-        
-        [Inject] private NotificationComService notificationComService { get; set; }
-        
-        List<EnumExtension<Group>> enumGroups = new ();
-        List<EnumExtension<Metrics>> enumMetrics = new ();
-        List<EnumExtension<NotificationType>> enumNotificationType = new ();
-        List<EnumExtension<Threshold>> enumThresholds = new ();
-        List<EnumExtension<Trigger>> enumTriggers = new ();
+        private List<EnumExtension<Group>> _enumGroups = new();
+        private List<EnumExtension<Metrics>> _enumMetrics = new();
+        private List<EnumExtension<NotificationType>> _enumNotificationType = new();
+        private List<EnumExtension<Threshold>> _enumThresholds = new();
+        private List<EnumExtension<Trigger>> _enumTriggers = new();
 
         protected override void OnInitialized()
         {
-            enumGroups = EnumExtension<Group>.getAllEnumExtension();
-            enumNotificationType = EnumExtension<NotificationType>.getAllEnumExtension();
-            enumThresholds = EnumExtension<Threshold>.getAllEnumExtension();
-            enumTriggers = EnumExtension<Trigger>.getAllEnumExtension();
-            loadMetrics(notification.metricGroup);
+            _enumGroups = EnumExtension<Group>.GetAllEnumExtension();
+            _enumNotificationType = EnumExtension<NotificationType>.GetAllEnumExtension();
+            _enumThresholds = EnumExtension<Threshold>.GetAllEnumExtension();
+            _enumTriggers = EnumExtension<Trigger>.GetAllEnumExtension();
+            LoadMetrics(notification.metricGroup);
             if (notification.type == NotificationType.CHANGE && notification.changeNotify == null)
                 notification.changeNotify = new ChangeNotify();
 
@@ -43,13 +37,13 @@ namespace data_viewer.Component
                 notification.thresholdNotify = new ThresholdNotify();
         }
 
-        protected void ReloadMetrics()
+        private void ReloadMetrics()
         {
-            loadMetrics(notificationCopy.metricGroup);
-            notificationCopy.metricToMonitor = enumMetrics.First().EnumValue;
+            LoadMetrics(notificationCopy.metricGroup);
+            notificationCopy.metricToMonitor = _enumMetrics.First().enumValue;
         }
 
-        protected void ReloadNotifType()
+        private void ReloadNotificationType()
         {
             if (notificationCopy.type == NotificationType.CHANGE)
             {
@@ -63,34 +57,29 @@ namespace data_viewer.Component
             }
         }
 
-        public void loadMetrics(Group group)
+        private void LoadMetrics(Group group)
         {
-            switch (group)
+            _enumMetrics = @group switch
             {
-                case Group.CPU :
-                    enumMetrics = EnumExtension<Metrics>.getEnumExtension(EnumMetricGroups.CpuMetricsList);
-                    break;
-                case Group.MEMORY :
-                    enumMetrics = EnumExtension<Metrics>.getEnumExtension(EnumMetricGroups.MemoryMetricsList);
-                    break;
-                case Group.NET :
-                    enumMetrics = EnumExtension<Metrics>.getEnumExtension(EnumMetricGroups.NetMetricsList);
-                    break;
-                case Group.IO :
-                    enumMetrics = EnumExtension<Metrics>.getEnumExtension(EnumMetricGroups.IoMetricsList);
-                    break;
-            }
+                Group.CPU => EnumExtension<Metrics>.GetEnumExtension(EnumMetricGroups.CpuMetricsList),
+                Group.MEMORY => EnumExtension<Metrics>.GetEnumExtension(EnumMetricGroups.MemoryMetricsList),
+                Group.NET => EnumExtension<Metrics>.GetEnumExtension(EnumMetricGroups.NetMetricsList),
+                Group.IO => EnumExtension<Metrics>.GetEnumExtension(EnumMetricGroups.IoMetricsList),
+                _ => _enumMetrics
+            };
         }
 
         public void Dispose()
         {
         }
+
         protected override void OnParametersSet()
         {
             base.OnParametersSet();
             notificationCopy = notification.Clone();
         }
-        protected void ValidSubmit()
+
+        private void ValidSubmit()
         {
             notification.id = notificationCopy.id;
             notification.message = notificationCopy.message;
@@ -103,7 +92,7 @@ namespace data_viewer.Component
             notification.overTime = notificationCopy.overTime;
             notification.thresholdNotify = notificationCopy.thresholdNotify;
             notification.metricToMonitor = notificationCopy.metricToMonitor;
-            DialogService.Close(true);
+            dialogService.Close(true);
         }
     }
 }

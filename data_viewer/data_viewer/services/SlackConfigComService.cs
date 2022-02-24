@@ -14,29 +14,29 @@ namespace data_viewer.services
         {
         }
 
-        public async Task<SlackConf> getSlackServerConf()
+        public async Task<SlackConf> GetSlackServerConf()
         {
-            var uri = new Uri(config.hostName + EndpointConstants.slackURL);
-            return await executeRequestSingle<SlackConf>(uri, HttpMethod.Get);
+            var uri = new Uri(config.hostName + EndpointConstants.SlackUrl);
+            return await ExecuteRequestSingle<SlackConf>(uri, HttpMethod.Get);
         }
 
-        public async Task<bool> setSlackServerUrl(String newSlackUrl)
+        public async Task<bool> SetSlackServerUrl(String newSlackUrl)
         {
-            var builder = new UriBuilder(config.hostName + EndpointConstants.slackURL);
+            var builder = new UriBuilder(config.hostName + EndpointConstants.SlackUrl);
             var query = HttpUtility.ParseQueryString(builder.Query);
-            query["url"] = newSlackUrl;
+            query[EpAttributeConstants.Url] = newSlackUrl;
             builder.Query = query.ToString();
             var url = builder.Uri;
-            return await executeNoresponse(url, HttpMethod.Post);
+            return await ExecuteNoresponse(url, HttpMethod.Post);
         }
-        public async Task<bool> setSlackServerActiveFlag(bool activeFlag)
+        public async Task<bool> SetSlackServerActiveFlag(bool activeFlag)
         {
-            var builder = new UriBuilder(config.hostName + EndpointConstants.slackActiveURL);
+            var builder = new UriBuilder(config.hostName + EndpointConstants.SlackActiveUrl);
             var query = HttpUtility.ParseQueryString(builder.Query);
-            query["active"] = activeFlag.ToString();
+            query[EpAttributeConstants.Active] = activeFlag.ToString();
             builder.Query = query.ToString();
             var url = builder.Uri;
-            return await executeNoresponse(url, HttpMethod.Post);
+            return await ExecuteNoresponse(url, HttpMethod.Post);
         }
         
     }

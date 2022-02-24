@@ -15,26 +15,24 @@ namespace data_viewer.services
         {
         }
 
-        public async Task<bool> changeUsername(String newUsername)
+        public async Task<bool> ChangeUsername(String newUsername)
         {
-            var builder = new UriBuilder(config.hostName + EndpointConstants.usernameChangeURL);
+            var builder = new UriBuilder(config.hostName + EndpointConstants.UsernameChangeUrl);
             var query = HttpUtility.ParseQueryString(builder.Query);
-            query["username"] = newUsername;
+            query[EpAttributeConstants.Username] = newUsername;
             builder.Query = query.ToString();
             var url = builder.Uri;
-            var result =  await executeRequestSingle<bool>(url, HttpMethod.Post);
-            return (result != null) ? result : false;
+            return await ExecuteRequestSingle<bool>(url, HttpMethod.Post);
         }
 
-        public async Task<bool> changePassword(String newPassword)
+        public async Task<bool> ChangePassword(String newPassword)
         {
-            var builder = new UriBuilder(config.hostName + EndpointConstants.passwordChangeURL);
+            var builder = new UriBuilder(config.hostName + EndpointConstants.PasswordChangeUrl);
             var query = HttpUtility.ParseQueryString(builder.Query);
-            query["password"] = newPassword;
+            query[EpAttributeConstants.Password] = newPassword;
             builder.Query = query.ToString();
             var url = builder.Uri;
-            var result =  await executeRequestSingle<bool>(url, HttpMethod.Post);
-            return (result != null) ? result : false;
+            return await ExecuteRequestSingle<bool>(url, HttpMethod.Post);
         }
         
         

@@ -5,12 +5,12 @@
         <label>
             slack.webhook
         </label>
-        <RadzenTextBox @bind-Value="SlackWebhook" Disabled="false" Change="@WebhookChanged"/>
+        <RadzenTextBox @bind-Value="_slackWebhook" Disabled="false" Change="@WebhookChanged"/>
     </div>
     <div class="col-12 d-flex flex-column mb-2">
         <label>
             Notification ative
         </label>
-        <RadzenSwitch @bind-Value=@ActioveNotification Disabled="false" Change="@SlackActivation"/>
+        <RadzenSwitch @bind-Value=@_actioveNotification Disabled="false" Change="@SlackActivation"/>
     </div>
 </RadzenFieldset>

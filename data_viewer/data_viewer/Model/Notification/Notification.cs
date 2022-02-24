@@ -5,10 +5,10 @@ namespace data_viewer.Model.Notification
     public class Notification
     {
         public long id { get; set; }
-        public String containerId { get; set; }
+        public string containerId { get; set; }
         public Metrics metricToMonitor { get; set; }
         public Group metricGroup { get; set; }
-        public String message { get; set; }
+        public string message { get; set; }
         public long value { get; set; }
         public long overTime { get; set; }
 

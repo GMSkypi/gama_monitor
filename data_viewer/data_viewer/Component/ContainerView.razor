@@ -1,7 +1,7 @@
 <RadzenCard Style="width: 490px; cursor: pointer;" @onclick="DetailClick">
     <div class="center">
         <h4>@container.id</h4>
-            @if (notRunning)
+            @if (_notRunning)
             {
                 @if (container != null)
                 {
@@ -16,7 +16,7 @@
     <div class="row pb-1">
 
         <RadzenChart Style="width: 230px; height: 140px">
-            <RadzenAreaSeries Data="@cpuData" CategoryProperty="dateTime" Title="Total CPU usage" LineType="LineType.Solid" Fill="red" Stroke="red" ValueProperty="totalPercents">
+            <RadzenAreaSeries Data="@_cpuData" CategoryProperty="dateTime" Title="Total CPU usage" LineType="LineType.Solid" Fill="red" Stroke="red" ValueProperty="totalPercents">
             </RadzenAreaSeries>
             <RadzenCategoryAxis Padding="0" FormatString="{0:HH:mm}"/>
             <RadzenValueAxis Formatter=@(value => ((double) Int32.Parse((value).ToString()) / 1000).ToString() + " %")/>
@@ -26,9 +26,9 @@
         </RadzenChart>
 
         <RadzenChart Style="width: 230px; height: 140px">
-            <RadzenAreaSeries Data="@memoryData" CategoryProperty="dateTime" Title="Memory" LineType="LineType.Solid" ValueProperty="memoryUsed">
+            <RadzenAreaSeries Data="@_memoryData" CategoryProperty="dateTime" Title="Memory" LineType="LineType.Solid" ValueProperty="memoryUsed">
             </RadzenAreaSeries>
-            <RadzenAreaSeries Data="@memoryData" CategoryProperty="dateTime" Title="Swap" LineType="LineType.Dashed" ValueProperty="swap">
+            <RadzenAreaSeries Data="@_memoryData" CategoryProperty="dateTime" Title="Swap" LineType="LineType.Dashed" ValueProperty="swap">
             </RadzenAreaSeries>
             <RadzenCategoryAxis Padding="0" FormatString="{0:HH:mm}"/>
             <RadzenValueAxis Formatter=@(value => ((double) Int32.Parse((value).ToString()) / 1000000).ToString() + " MB")/>

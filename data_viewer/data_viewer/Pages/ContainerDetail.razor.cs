@@ -17,197 +17,185 @@ namespace data_viewer.Pages
 {
     public partial class ContainerDetail : ComponentBase, IDisposable
     {
-        [Parameter]
-        public String ContainerId { get; set; }
+        [Parameter] public String containerId { get; set; }
 
         private Container _container;
-        
-        [Inject]
-        public DialogService DialogService { get; set; }
 
-        [Inject] 
-        public CPUComService cpuComService { get; set; }
-        
-        [Inject]
-        public MemoryComService memoryComService { get; set; }
-        
-        [Inject]
-        public NetComService netComService { get; set; }
-        
-        [Inject]
-        public IOComService ioComService { get; set; }
-        [Inject]
-        public NotificationService NotificationService { get; set; }
-        
-        [Inject]
-        public ContainerComService containerComService { get; set; }
-        
+        [Inject] public DialogService dialogService { get; set; }
+
+        [Inject] public CPUComService cpuComService { get; set; }
+
+        [Inject] public MemoryComService memoryComService { get; set; }
+
+        [Inject] public NetComService netComService { get; set; }
+
+        [Inject] public IOComService ioComService { get; set; }
+        [Inject] public NotificationService notificationService { get; set; }
+
+        [Inject] public ContainerComService containerComService { get; set; }
+
         [Inject] private NotificationComService notificationComService { get; set; }
-        
-        private IEnumerable<CpuSample> cpuData;
-        int value = 0;
-        private CpuSample lastCpuSample = new CpuSample();
 
-        private IEnumerable<MemorySample> memoryData;
-        private MemorySample lastMemorySample = new MemorySample();
-        
-        private IEnumerable<NetSample> netData;
-        private NetSample lastNetSample = new NetSample();
-        
-        private IEnumerable<IOSample> ioData;
-        private IOSample lastioSample = new IOSample();
+        private IEnumerable<CpuSample> _cpuData;
+        private int _value = 0;
+        private CpuSample _lastCpuSample = new CpuSample();
 
-        private DateTime? dateTimeDatePicker;
-        private System.Threading.Timer timer;
+        private IEnumerable<MemorySample> _memoryData;
+        private MemorySample _lastMemorySample = new MemorySample();
 
-        private bool notRunning = false;
+        private IEnumerable<NetSample> _netData;
+        private NetSample _lastNetSample = new NetSample();
+
+        private IEnumerable<IOSample> _ioData;
+        private IOSample _lastioSample = new IOSample();
+
+        private DateTime? _dateTimeDatePicker;
+        private System.Threading.Timer _timer;
+
+        private bool _notRunning = false;
+
         public void Dispose()
         {
-            timer.Dispose();
+            _timer.Dispose();
         }
+
         async Task LoadData(DateTime from, SampledBy sampled, DateTime? to = null)
         {
             Console.WriteLine("loading");
             if (to.HasValue)
             {
-                cpuData = await cpuComService.getCpuSamples(ContainerId, from, to.Value,sampled);
-                memoryData = await memoryComService.getMemorySample(ContainerId, from, to.Value,sampled);
-                ioData = await ioComService.getIOSamples(ContainerId, from, to.Value,sampled);
-                netData = await netComService.getNetSample(ContainerId, from, to.Value,sampled);
+                _cpuData = await cpuComService.GetCpuSamples(containerId, from, to.Value, sampled);
+                _memoryData = await memoryComService.GetMemorySample(containerId, from, to.Value, sampled);
+                _ioData = await ioComService.GetIoSamples(containerId, from, to.Value, sampled);
+                _netData = await netComService.GetNetSample(containerId, from, to.Value, sampled);
             }
             else
             {
-                cpuData = await cpuComService.getCpuSamples(ContainerId, from,sampled);
-                memoryData = await memoryComService.getMemorySample(ContainerId, from,sampled);
-                ioData = await ioComService.getIOSamples(ContainerId, from,sampled);
-                netData = await netComService.getNetSample(ContainerId, from,sampled);
+                _cpuData = await cpuComService.GetCpuSamples(containerId, from, sampled);
+                _memoryData = await memoryComService.GetMemorySample(containerId, from, sampled);
+                _ioData = await ioComService.GetIoSamples(containerId, from, sampled);
+                _netData = await netComService.GetNetSample(containerId, from, sampled);
             }
-            if (cpuData != null && cpuData.Any())
+
+            if (_cpuData != null && _cpuData.Any())
             {
-                lastCpuSample = cpuData.Last();
-                lastMemorySample = memoryData.Last();
-                lastioSample = ioData.Last();
-                lastNetSample = netData.Last();
-                
+                _lastCpuSample = _cpuData.Last();
+                _lastMemorySample = _memoryData.Last();
+                _lastioSample = _ioData.Last();
+                _lastNetSample = _netData.Last();
             }
             else
             {
-                lastCpuSample = null;   
-                lastMemorySample = null;
-                lastioSample = null;
-                lastNetSample = null;
+                _lastCpuSample = null;
+                _lastMemorySample = null;
+                _lastioSample = null;
+                _lastNetSample = null;
             }
+
             StateHasChanged();
             Console.WriteLine("loaded");
         }
 
-        protected override async void OnInitialized()
+        protected override void OnInitialized()
         {
             LiveInitialized();
-            /*
-            LoadData(new DateTime(2022, 1, 14, 12,41,00),
-                new DateTime(2022, 1, 14, 13 ,41,00),
-                DataSamplingRates.hour);
-                
-            */
-            
         }
 
-        protected void LiveInitialized()
+        private void LiveInitialized()
         {
-            timer = new System.Threading.Timer(async (object stateInfo) =>
+            _timer = new System.Threading.Timer(async (object stateInfo) =>
             {
-                if (notRunning)
+                if (_notRunning)
                 {
-                    _container = await containerComService.getContainer(ContainerId);
-                    if (_container != null && _container.lastRecord > DateTime.Now.AddHours(-1)) notRunning = false;
+                    _container = await containerComService.GetContainer(containerId);
+                    if (_container != null && _container.lastRecord > DateTime.Now.AddHours(-1)) _notRunning = false;
                     return;
                 }
-                await LoadData(DateTime.Now.AddMinutes(-10), DataSamplingRates.minute);
-                if (!cpuData.Any())
-                {
-                    notRunning = true;
-                    _container = await containerComService.getContainer(ContainerId);
-                    StateHasChanged();
-                }
-                
 
+                await LoadData(DateTime.Now.AddMinutes(-10), DataSamplingRates.Minute);
+                if (_cpuData.Any()) return;
+                _notRunning = true;
+                _container = await containerComService.GetContainer(containerId);
+                StateHasChanged();
             }, new System.Threading.AutoResetEvent(false), 0, 20000);
         }
 
-        protected void CommonInitialized(DateTime beforeActualTime, SampledBy sampledBy, DateTime afterTime)
+        private void CommonInitialized(DateTime beforeActualTime, SampledBy sampledBy, DateTime afterTime)
         {
-            if (dateTimeDatePicker > beforeActualTime)
+            if (_dateTimeDatePicker > beforeActualTime)
             {
-                LoadData(beforeActualTime,sampledBy);
+                LoadData(beforeActualTime, sampledBy);
                 return;
             }
-            LoadData(dateTimeDatePicker.Value,sampledBy, afterTime);
+
+            LoadData(_dateTimeDatePicker.Value, sampledBy, afterTime);
         }
-        void OnDateTimeChange(DateTime? value, string format)
+
+        private void OnDateTimeChange(DateTime? value, string format)
         {
-            OnSampleRateChange(this.value);
+            OnSampleRateChange(this._value);
         }
-        async void OnSampleRateChange(int value)
+
+        private async void OnSampleRateChange(int value)
         {
             if (value != 0)
             {
-                timer.Dispose();
+                await _timer.DisposeAsync();
             }
+
             switch (value)
             {
                 case 0: // live
                     LiveInitialized();
                     break;
                 case 1: //Hour
-                    CommonInitialized(DateTime.Now.AddHours(-1), DataSamplingRates.hour,
-                        dateTimeDatePicker.Value.AddHours(1));
+                    CommonInitialized(DateTime.Now.AddHours(-1), DataSamplingRates.Hour,
+                        _dateTimeDatePicker.Value.AddHours(1));
                     break;
                 case 2: // Day
-                    CommonInitialized(DateTime.Now.AddDays(-1), DataSamplingRates.day,
-                        dateTimeDatePicker.Value.AddDays(1));
+                    CommonInitialized(DateTime.Now.AddDays(-1), DataSamplingRates.Day,
+                        _dateTimeDatePicker.Value.AddDays(1));
                     break;
                 case 3: // Month
-                    CommonInitialized(DateTime.Now.AddMonths(-1), DataSamplingRates.month,
-                        dateTimeDatePicker.Value.AddMonths(1));
+                    CommonInitialized(DateTime.Now.AddMonths(-1), DataSamplingRates.Month,
+                        _dateTimeDatePicker.Value.AddMonths(1));
                     break;
                 case 4: // Year
-                    CommonInitialized(DateTime.Now.AddYears(-1), DataSamplingRates.year,
-                        dateTimeDatePicker.Value.AddYears(1));
+                    CommonInitialized(DateTime.Now.AddYears(-1), DataSamplingRates.Year,
+                        _dateTimeDatePicker.Value.AddYears(1));
                     break;
                 case 5: // All
-                    LoadData(DateTime.UnixEpoch,DataSamplingRates.inf);
+                    await LoadData(DateTime.UnixEpoch, DataSamplingRates.Inf);
                     break;
             }
         }
-        async void AddNotificationOnClick()
+
+        private async void AddNotificationOnClick()
         {
-            Notification newNotification = new Notification();
-            newNotification.containerId = ContainerId;
-            bool? edited = await DialogService.OpenAsync<EditNotificationDialog>($"Add notification",
-                new Dictionary<string, Object>() { { "Notification", newNotification } },
-                new DialogOptions() { Width = "600px", Height = "fit-content", CloseDialogOnOverlayClick = false  });
-            if (edited.HasValue && edited.Value)
+            Notification newNotification = new Notification {containerId = containerId};
+            bool? edited = await dialogService.OpenAsync<EditNotificationDialog>($"Add notification",
+                new Dictionary<string, Object>() {{"Notification", newNotification}},
+                new DialogOptions() {Width = "600px", Height = "fit-content", CloseDialogOnOverlayClick = false});
+            if (!edited.HasValue || !edited.Value) return;
+            var updatedNotification = await notificationComService.CreateNotification(newNotification);
+            if (updatedNotification != null)
             {
-                Notification updatedNotification = await notificationComService.createNotification(newNotification);
-                if (updatedNotification != null)
+                var message = new NotificationMessage()
                 {
-                    NotificationMessage message = new NotificationMessage()
-                    {
-                        Severity = NotificationSeverity.Success, Summary = "Notification added", Detail = "Notification with id:" + updatedNotification.id + " is added",
-                        Duration = 5000,
-                    };
-                    NotificationService.Notify(message);
-                }
-                else
+                    Severity = NotificationSeverity.Success, Summary = "Notification added",
+                    Detail = "Notification with id:" + updatedNotification.id + " is added",
+                    Duration = 5000,
+                };
+                notificationService.Notify(message);
+            }
+            else
+            {
+                var message = new NotificationMessage()
                 {
-                    NotificationMessage message = new NotificationMessage()
-                    {
-                        Severity = NotificationSeverity.Error, Summary = "Notification adding failed",
-                        Duration = 5000,
-                    };
-                    NotificationService.Notify(message);
-                }
+                    Severity = NotificationSeverity.Error, Summary = "Notification adding failed",
+                    Duration = 5000,
+                };
+                notificationService.Notify(message);
             }
         }
     }

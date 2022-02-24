@@ -12,13 +12,13 @@
                 PageSize="5"
                 PagerHorizontalAlign="HorizontalAlign.Center"
                 AllowSorting="true"
-                Data="@data"
+                Data="@_data"
                 TItem="Container"
-                IsLoading="@isLoading"
-                Count="@count"
+                IsLoading="@_isLoading"
+                Count="@_count"
                 RowClick="(item) => OnItemClick(item)"
                 SelectionMode="Radzen.DataGridSelectionMode.Single"
-                @bind-Value="SelectedContainer"
+                @bind-Value="selectedContainer"
                 LoadData="@LoadData"
                 Style="cursor: pointer;">
     
