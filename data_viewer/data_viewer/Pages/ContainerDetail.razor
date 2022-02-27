@@ -57,7 +57,7 @@
                                                       return ((DateTime) value).ToString();
                                         })/>
 
-                    <RadzenValueAxis Formatter=@(value => ((double) Int32.Parse((value).ToString()) / 1000).ToString() + " %")/>
+                    <RadzenValueAxis Formatter=@(value => ((double) long.Parse((value).ToString()) / 1000).ToString() + " %")/>
 
                     <RadzenLegend Position="LegendPosition.Top"/>
                 </RadzenChart>

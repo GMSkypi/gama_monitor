@@ -18,8 +18,8 @@
         <RadzenChart Style="width: 230px; height: 140px">
             <RadzenAreaSeries Data="@_cpuData" CategoryProperty="dateTime" Title="Total CPU usage" LineType="LineType.Solid" Fill="red" Stroke="red" ValueProperty="totalPercents">
             </RadzenAreaSeries>
-            <RadzenCategoryAxis Padding="0" FormatString="{0:HH:mm}"/>
-            <RadzenValueAxis Formatter=@(value => ((double) Int32.Parse((value).ToString()) / 1000).ToString() + " %")/>
+            <RadzenCategoryAxis Padding="0" FormatString="{0:HH:mm:ss}"/>
+            <RadzenValueAxis Formatter=@(value => ((double) long.Parse((value).ToString()) / 1000).ToString() + " %")/>
             <RadzenGridLines Visible="true"/>
             <RadzenChartTooltipOptions Visible="false"/>
             <RadzenLegend Position="LegendPosition.Top"/>
@@ -30,8 +30,8 @@
             </RadzenAreaSeries>
             <RadzenAreaSeries Data="@_memoryData" CategoryProperty="dateTime" Title="Swap" LineType="LineType.Dashed" ValueProperty="swap">
             </RadzenAreaSeries>
-            <RadzenCategoryAxis Padding="0" FormatString="{0:HH:mm}"/>
-            <RadzenValueAxis Formatter=@(value => ((double) Int32.Parse((value).ToString()) / 1000000).ToString() + " MB")/>
+            <RadzenCategoryAxis Padding="0" FormatString="{0:HH:mm:ss}"/>
+            <RadzenValueAxis Formatter=@(value => ((double) long.Parse((value).ToString()) / 1000000).ToString() + " MB")/>
             <RadzenGridLines Visible="true"/>
             <RadzenChartTooltipOptions Visible="false"/>
             <RadzenLegend Position="LegendPosition.Top"/>
