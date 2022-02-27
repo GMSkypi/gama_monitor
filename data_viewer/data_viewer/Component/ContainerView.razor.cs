@@ -32,6 +32,7 @@ namespace data_viewer.Component
         {
             _cpuData = await cpuComService.GetCpuSamples(container.id, from, sampled);
             _memoryData = await memoryComService.GetMemorySample(container.id, from, sampled);
+            StateHasChanged();
         }
 
         private void LiveInitialized()
@@ -49,7 +50,7 @@ namespace data_viewer.Component
                 if (!_cpuData.Any())
                 {
                     _notRunning = true;
-                    await _cpuUsageChart.Reload();
+                    container = await containerComService.GetContainer(container.id);
                     StateHasChanged();
                 }
             }, new System.Threading.AutoResetEvent(false), 0, 40000);

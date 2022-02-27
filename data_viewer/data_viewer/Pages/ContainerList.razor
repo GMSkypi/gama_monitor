@@ -9,7 +9,7 @@
                 FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                 FilterMode="FilterMode.Advanced"
                 AllowPaging="true"
-                PageSize="5"
+                PageSize="15"
                 PagerHorizontalAlign="HorizontalAlign.Center"
                 AllowSorting="true"
                 Data="@_data"
@@ -19,7 +19,6 @@
                 RowClick="(item) => OnItemClick(item)"
                 SelectionMode="Radzen.DataGridSelectionMode.Single"
                 @bind-Value="selectedContainer"
-                LoadData="@LoadData"
                 Style="cursor: pointer;">
     
     <Columns>

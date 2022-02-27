@@ -27,12 +27,17 @@ namespace data_viewer.Pages
         private int _count;
         private bool _isLoading;
 
-        async Task LoadData(LoadDataArgs args)
+        async Task LoadData()
         {
             _isLoading = true;
             _data = await containerComService.GetContainers();
             _count = _data.Count();
             _isLoading = false;
+        }
+        protected override async void OnInitialized()
+        {
+            await LoadData();
+            StateHasChanged();
         }
 
         private void OnItemClick(DataGridRowMouseEventArgs<Container> e)

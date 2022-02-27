@@ -29,8 +29,13 @@ namespace data_viewer.Pages
         public void Dispose()
         {
         }
+        protected override async void OnInitialized()
+        {
+            await LoadData();
+            StateHasChanged();
+        }
 
-        private async Task LoadData(LoadDataArgs args)
+        private async Task LoadData()
         {
             _isLoading = true;
             _data = await notificationComService.GetNotifications();
