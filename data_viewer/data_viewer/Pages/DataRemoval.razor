@@ -9,12 +9,12 @@
                     AllowPaging="true"
                     PageSize="5"
                     PagerHorizontalAlign="HorizontalAlign.Center"
-                    AllowSorting="true"
+                    AllowSorting="false"
                     Data="@_data"
                     TItem="data_viewer.Model.Container"
                     IsLoading="@_isLoading"
                     Count="@_count"
-                    LoadData="@LoadData"
+                    
                     Style="cursor: pointer;">
 
         <Columns>
@@ -45,14 +45,11 @@
                 Remove data to date 
             </label>
             <RadzenDatePicker @bind-Value=@_dateTimeDatePicker
-                              ShowTime="true"
-                              ShowSeconds="true"
-                              HoursStep="1.5"
-                              MinutesStep="5"
-                              SecondsStep="10"
-                              Change=@(args => OnDateTimeChange(args, "MM/dd/yyyy HH:mm"))
-                              DateFormat="MM/dd/yyyy HH:mm" Class="w-100"/>
-        </div>
+                              ShowTime="false"
+                              ShowSeconds="false"
+                              Change=@(args => OnDateTimeChange(args, "MM/dd/yyyy"))
+                              DateFormat="MM/dd/yyyy" Class="w-100"/>
+        </div> 
     </div>
     <RadzenDataGrid
         AllowFiltering="true"

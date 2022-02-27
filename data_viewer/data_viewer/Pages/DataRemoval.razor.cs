@@ -41,10 +41,12 @@ namespace data_viewer.Pages
         private bool _isLoading;
         private DateTime? _dateTimeDatePicker;
 
-        protected override void OnInitialized()
+        protected override async void OnInitialized()
         {
             _enumGroups = EnumExtension<Group>.GetAllEnumExtension();
             _dateTimeDatePicker = DateTime.UtcNow.AddMonths(-2);
+            await LoadData();
+            StateHasChanged();
         }
 
         private void OnDateTimeChange(DateTime? value, string format)
@@ -138,7 +140,7 @@ namespace data_viewer.Pages
             }
         }
 
-        async Task LoadData(LoadDataArgs args)
+        async Task LoadData()
         {
             _isLoading = true;
             _data = await containerComService.GetContainers();

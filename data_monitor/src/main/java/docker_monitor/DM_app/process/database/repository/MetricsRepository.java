@@ -79,6 +79,6 @@ public class MetricsRepository<C> extends QuestDBRepositoryImp<C> {
     public void deleteData(long dateTimeTo){
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.z");
         executeQuery("ALTER TABLE " + clazz.getAnnotation(Entity.class).name() +" DROP PARTITION WHERE " +
-                "timestamp <" + " to_timestamp('" + dateFormat.format(dateTimeTo) + "','yyyy-MM-dd HH:mm:ss.z')");
+                "date_time <" + " to_timestamp('" + dateFormat.format(dateTimeTo) + "','yyyy-MM-dd HH:mm:ss.z')");
     }
 }
