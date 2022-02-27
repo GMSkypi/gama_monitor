@@ -15,7 +15,7 @@
     </div>
     <div class="row pb-1">
 
-        <RadzenChart Style="width: 230px; height: 140px">
+        <RadzenChart @ref="_cpuUsageChart" Style="width: 230px; height: 140px">
             <RadzenAreaSeries Data="@_cpuData" CategoryProperty="dateTime" Title="Total CPU usage" LineType="LineType.Solid" Fill="red" Stroke="red" ValueProperty="totalPercents">
             </RadzenAreaSeries>
             <RadzenCategoryAxis Padding="0" FormatString="{0:HH:mm:ss}"/>

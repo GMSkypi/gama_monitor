@@ -108,11 +108,11 @@ namespace data_viewer.Pages
                 if (_notRunning)
                 {
                     _container = await containerComService.GetContainer(containerId);
-                    if (_container != null && _container.lastRecord > DateTime.Now.AddHours(-1)) _notRunning = false;
+                    if (_container != null && _container.lastRecord > DateTime.UtcNow.AddHours(-1)) _notRunning = false;
                     return;
                 }
 
-                await LoadData(DateTime.Now.AddMinutes(-10), DataSamplingRates.Minute);
+                await LoadData(DateTime.UtcNow.AddMinutes(-10), DataSamplingRates.Minute);
                 if (_cpuData.Any()) return;
                 _notRunning = true;
                 _container = await containerComService.GetContainer(containerId);
@@ -150,7 +150,7 @@ namespace data_viewer.Pages
                     Duration = 5000,
                 };
                 notificationService.Notify(message);
-                _dateTimeDatePicker = DateTime.Now.AddHours(-1);
+                _dateTimeDatePicker = DateTime.UtcNow.AddHours(-1);
             }
 
             switch (value)
@@ -159,19 +159,19 @@ namespace data_viewer.Pages
                     LiveInitialized();
                     break;
                 case 1: //Hour
-                    CommonInitialized(DateTime.Now.AddHours(-1), DataSamplingRates.Hour,
+                    CommonInitialized(DateTime.UtcNow.AddHours(-1), DataSamplingRates.Hour,
                         _dateTimeDatePicker.Value.AddHours(1));
                     break;
                 case 2: // Day
-                    CommonInitialized(DateTime.Now.AddDays(-1), DataSamplingRates.Day,
+                    CommonInitialized(DateTime.UtcNow.AddDays(-1), DataSamplingRates.Day,
                         _dateTimeDatePicker.Value.AddDays(1));
                     break;
                 case 3: // Month
-                    CommonInitialized(DateTime.Now.AddMonths(-1), DataSamplingRates.Month,
+                    CommonInitialized(DateTime.UtcNow.AddMonths(-1), DataSamplingRates.Month,
                         _dateTimeDatePicker.Value.AddMonths(1));
                     break;
                 case 4: // Year
-                    CommonInitialized(DateTime.Now.AddYears(-1), DataSamplingRates.Year,
+                    CommonInitialized(DateTime.UtcNow.AddYears(-1), DataSamplingRates.Year,
                         _dateTimeDatePicker.Value.AddYears(1));
                     break;
                 case 5: // All

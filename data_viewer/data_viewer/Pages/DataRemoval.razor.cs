@@ -44,7 +44,7 @@ namespace data_viewer.Pages
         protected override void OnInitialized()
         {
             _enumGroups = EnumExtension<Group>.GetAllEnumExtension();
-            _dateTimeDatePicker = DateTime.Now.AddMonths(-2);
+            _dateTimeDatePicker = DateTime.UtcNow.AddMonths(-2);
         }
 
         private void OnDateTimeChange(DateTime? value, string format)

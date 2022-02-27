@@ -8,6 +8,7 @@ using data_viewer.services;
 using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
 using data_viewer.Model.Rate;
+using Radzen.Blazor;
 
 namespace data_viewer.Component
 {
@@ -25,6 +26,8 @@ namespace data_viewer.Component
         private System.Threading.Timer _timer;
         private bool _notRunning = false;
 
+        private RadzenChart _cpuUsageChart; 
+
         private async Task LoadData(DateTime from, SampledBy sampled)
         {
             _cpuData = await cpuComService.GetCpuSamples(container.id, from, sampled);
@@ -38,22 +41,23 @@ namespace data_viewer.Component
                 if (_notRunning)
                 {
                     container = await containerComService.GetContainer(container.id);
-                    if (container != null && container.lastRecord > DateTime.Now.AddHours(-1)) _notRunning = false;
+                    if (container != null && container.lastRecord > DateTime.UtcNow.AddHours(-1)) _notRunning = false;
                     return;
                 }
 
-                await LoadData(DateTime.Now.AddMinutes(-10), DataSamplingRates.Minute);
+                await LoadData(DateTime.UtcNow.AddMinutes(-10), DataSamplingRates.Minute);
                 if (!_cpuData.Any())
                 {
                     _notRunning = true;
+                    await _cpuUsageChart.Reload();
                     StateHasChanged();
                 }
-            }, new System.Threading.AutoResetEvent(false), 0, 20000);
+            }, new System.Threading.AutoResetEvent(false), 0, 40000);
         }
 
         protected override void OnInitialized()
         {
-            _dateTimeDatePicker = DateTime.Now.AddHours(-1);
+            _dateTimeDatePicker = DateTime.UtcNow.AddHours(-1);
             LiveInitialized();
         }
 
