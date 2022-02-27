@@ -1,5 +1,9 @@
 version: '3.9'
 
+networks:
+  gama_network:
+    driver: bridge
+
 services:
       
   database-service:
@@ -11,6 +15,8 @@ services:
       - "9009:9009"
       - "8812:8812"
       - "9003:9003"
+    networks:
+      - gama_network
     volumes:
       - ./questDB:/root/.questdb/
 
@@ -18,12 +24,33 @@ services:
     build: ./data_collector
     container_name: collector
     image: data_collector
+    hostname: collector
     network_mode: host
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /sys/fs/cgroup/:/sys/fs/cgroup/
       - /proc/:/proc/
+      - ./data_collector/config/config.ini:/src/app/config/config.ini
     depends_on:
       - database-service
 
-
+  web-service:
+    build: ./data_viewer/data_viewer
+    container_name: web
+    hostname: web
+    image: data_viewer
+    networks:
+      - gama_network
+    ports:
+      - "80:80"
+  monitor-service:
+    build: ./data_monitor
+    container_name: monitor
+    hostname: monitor
+    image: data_monitor
+    network_mode: host
+  
+    volumes:
+      - ./data_monitor/configuration.properties:/app/build/configuration.properties
+      - ./data_monitor/notifications.json:/app/build/notifications.json
+     

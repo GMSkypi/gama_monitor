@@ -66,5 +66,14 @@ namespace data_viewer.services
             var result =  await ExecuteRequestSingle<IORecord>(url, HttpMethod.Get);
             return (result != null) ? result.values : new List<IOSample>();
         }
+        public async Task<bool> DeleteIOData(DateTime to)
+        {
+            var builder = new UriBuilder(config.hostName + EndpointConstants.IoUrl);
+            var query = HttpUtility.ParseQueryString(builder.Query);
+            query[EpAttributeConstants.DateTo] = to.ToUniversalTime().ToString(DateTimeFormat);;
+            builder.Query = query.ToString();
+            var url = builder.Uri;
+            return await ExecuteNoresponse(url, HttpMethod.Delete);
+        }
     }
 }

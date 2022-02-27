@@ -68,4 +68,10 @@ public class NetController {
         MetricPair<Container, Net> pair = netService.getNetMetrics(containerId,dateFrom,sampleRate);
         return conversion.convertToNetDTO(pair.getMetrics(),pair.getContainer());
     }
+    @DeleteMapping(value = "/" , params = { "dateTo"})
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteData(
+            @RequestParam("dateTo") Instant dateTo){
+        netService.deleteDataTo(dateTo);
+    }
 }

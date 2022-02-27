@@ -66,5 +66,14 @@ namespace data_viewer.services
             var result =  await ExecuteRequestSingle<MemoryRecord>(url, HttpMethod.Get);
             return (result != null) ? result.values : new List<MemorySample>();
         }
+        public async Task<bool> DeleteMemoryData(DateTime to)
+        {
+            var builder = new UriBuilder(config.hostName + EndpointConstants.MemoryUrl);
+            var query = HttpUtility.ParseQueryString(builder.Query);
+            query[EpAttributeConstants.DateTo] = to.ToUniversalTime().ToString(DateTimeFormat);;
+            builder.Query = query.ToString();
+            var url = builder.Uri;
+            return await ExecuteNoresponse(url, HttpMethod.Delete);
+        }
     }
 }

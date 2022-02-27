@@ -68,4 +68,10 @@ public class IOController {
         MetricPair<Container, IO> pair = ioService.getIOMetrics(containerId,dateFrom,sampleRate);
         return conversion.convertToIODTO(pair.getMetrics(),pair.getContainer());
     }
+    @DeleteMapping(value = "/" , params = { "dateTo"})
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteData(
+            @RequestParam("dateTo") Instant dateTo){
+        ioService.deleteDataTo(dateTo);
+    }
 }

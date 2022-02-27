@@ -1,0 +1,41 @@
+FROM java:8-alpine AS Builder
+
+RUN apk add --update ca-certificates && rm -rf /var/cache/apk/* && \
+  find /usr/share/ca-certificates/mozilla/ -name "*.crt" -exec keytool -import -trustcacerts \
+  -keystore /usr/lib/jvm/java-1.8-openjdk/jre/lib/security/cacerts -storepass changeit -noprompt \
+  -file {} -alias {} \; && \
+  keytool -list -keystore /usr/lib/jvm/java-1.8-openjdk/jre/lib/security/cacerts --storepass changeit
+
+ENV MAVEN_VERSION 3.5.4
+ENV MAVEN_HOME /usr/lib/mvn
+ENV PATH $MAVEN_HOME/bin:$PATH
+
+RUN wget http://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz && \
+  tar -zxvf apache-maven-$MAVEN_VERSION-bin.tar.gz && \
+  rm apache-maven-$MAVEN_VERSION-bin.tar.gz && \
+  mv apache-maven-$MAVEN_VERSION /usr/lib/mvn
+
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+COPY . . 
+RUN ./mvnw spring-boot:build-image
+
+
+FROM openjdk:8-jdk-alpine
+ARG JAR_FILE=--from=Builder /usr/src/app/target/*.jar
+COPY ${JAR_FILE} app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
+
+#FROM adoptopenjdk:11-jre-hotspot as builder
+#WORKDIR app
+#ARG JAR_FILE=target/*.jar
+#COPY ${JAR_FILE} application.jar
+#RUN java -Djarmode=layertools -jar application.jar extract
+
+#FROM adoptopenjdk:11-jre-hotspot
+#WORKDIR application
+#COPY --from=builder app/dependencies/ ./
+#COPY --from=builder app/snapshot-dependencies/ ./
+#COPY --from=builder app/resources/ ./
+#COPY --from=builder app/application/ ./
+#ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]

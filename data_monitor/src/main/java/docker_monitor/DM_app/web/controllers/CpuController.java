@@ -68,4 +68,10 @@ public class CpuController {
         MetricPair<Container, Cpu> pair = cpuService.getCpuMetrics(containerId,dateFrom,sampleRate);
         return conversion.convertToCpuDTO(pair.getMetrics(),pair.getContainer());
     }
+    @DeleteMapping(value = "/" , params = { "dateTo"})
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteData(
+            @RequestParam("dateTo") Instant dateTo){
+        cpuService.deleteDataTo(dateTo);
+    }
 }

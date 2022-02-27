@@ -58,4 +58,7 @@ public class NetDataServiceImp implements NetDataService{
         List<Net> metric = netRepository.findByContainerAndTime(containerId,dateFrom.toEpochMilli(),sampleRate);
         return new MetricPair<>(container.get(),metric);
     }
+    public void deleteDataTo(Instant dateTo){
+        netRepository.deleteData(dateTo.toEpochMilli());
+    }
 }

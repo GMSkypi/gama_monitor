@@ -51,5 +51,13 @@ public class ContainerRepository extends QuestDBRepositoryImp<Container> {
                 " join (SELECT date_time,Container_id FROM CPU\n" +
                 "LATEST by Container_id ) as s1 on s1.Container_id = Container.id");
     }
+    public void deleteContainer(String id){
+        executeQuery("CREATE TABLE " + Container.class.getAnnotation(Entity.class).name() + "_copy AS (" +
+                "SELECT * FROM "+Container.class.getAnnotation(Entity.class).name()+" WHERE id != '" + id + "' )");
+        executeQuery("DROP TABLE " + Container.class.getAnnotation(Entity.class).name());
+        executeQuery("RENAME table " + Container.class.getAnnotation(Entity.class).name() +
+                "_copy TO " + Container.class.getAnnotation(Entity.class).name());
+
+    }
 }
 

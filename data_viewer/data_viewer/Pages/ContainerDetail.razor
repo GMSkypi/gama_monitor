@@ -2,7 +2,7 @@
 <RadzenCard Class="w-100">
     <div class="row pb-1">
         <div class="col-2 d-flex flex-column">
-            <RadzenDatePicker @bind-Value=@_dateTimeDatePicker ShowTime="true" ShowSeconds="true" HoursStep="1.5" MinutesStep="5" SecondsStep="10" Change=@(args => OnDateTimeChange(args,  "MM/dd/yyyy HH:mm")) DateFormat="MM/dd/yyyy HH:mm" Class="w-100"/>
+            <RadzenDatePicker @bind-Value=@_dateTimeDatePicker ShowTime="true" ShowSeconds="true" HoursStep="1.5" MinutesStep="5" SecondsStep="10" Change=@(args => OnDateTimeChange(args, "MM/dd/yyyy HH:mm")) DateFormat="MM/dd/yyyy HH:mm" Class="w-100"/>
         </div>
         <div class="col-5 d-flex flex-column">
             <RadzenSelectBar @bind-Value=@_value TValue="int" Multiple="false" Change=@(args => OnSampleRateChange(args))>
@@ -22,11 +22,11 @@
             {
                 @if (_container != null)
                 {
-                    <p style="background-color:tomato;" >Container is not running since @_container.lastRecord</p>
+                    <p style="background-color:tomato;">Container is not running since @_container.lastRecord</p>
                 }
                 else
                 {
-                    <p style="background-color:tomato;" >Container is not running</p>
+                    <p style="background-color:tomato;">Container is not running</p>
                 }
             }
         </div>
@@ -48,7 +48,14 @@
                     <RadzenAreaSeries Data="@_cpuData" CategoryProperty="dateTime" Title="Kernel space" LineType="LineType.Dashed" ValueProperty="kernelSpacePercents">
                     </RadzenAreaSeries>
 
-                    <RadzenCategoryAxis FormatString="{0:d:HH:mm}"/>
+                    <RadzenCategoryAxis Formatter=@(value => 
+                                                  { if (_value == 0){ return ((DateTime) value).ToString("HH:mm:ss"); }
+                                                    if(_value == 1) { return ((DateTime) value).ToString("HH:mm:ss"); }
+                                                    if(_value == 2) { return ((DateTime) value).ToString("HH:mm:ss"); }
+                                                    if(_value == 3) { return ((DateTime) value).ToString("MM/dd/yyyy"); }
+                                                    if(_value == 4) { return ((DateTime) value).ToString("MM/dd/yyyy"); }
+                                                      return ((DateTime) value).ToString();
+                                        })/>
 
                     <RadzenValueAxis Formatter=@(value => ((double) Int32.Parse((value).ToString()) / 1000).ToString() + " %")/>
 
@@ -75,7 +82,14 @@
                     <RadzenAreaSeries Data="@_cpuData" CategoryProperty="dateTime" Title="Throttle ms" LineType="LineType.Solid" ValueProperty="throttleMs">
                     </RadzenAreaSeries>
                     <RadzenValueAxis Formatter=@(value => ((value).ToString() + " ms"))/>
-                    <RadzenCategoryAxis FormatString="{0:d:HH:mm}"/>
+                       <RadzenCategoryAxis Formatter=@(value => 
+                                                                      { if (_value == 0){ return ((DateTime) value).ToString("HH:mm:ss"); }
+                                                                        if(_value == 1) { return ((DateTime) value).ToString("HH:mm:ss"); }
+                                                                        if(_value == 2) { return ((DateTime) value).ToString("HH:mm:ss"); }
+                                                                        if(_value == 3) { return ((DateTime) value).ToString("MM/dd/yyyy"); }
+                                                                        if(_value == 4) { return ((DateTime) value).ToString("MM/dd/yyyy"); }
+                                                                          return ((DateTime) value).ToString();
+                                                            })/>
                     <RadzenLegend Visible="false"/>
                 </RadzenChart>
             </RadzenCard>
@@ -102,12 +116,12 @@
                     </div>
                     <div class="col-4 d-flex  justify-content-end">
                         <div class="flex-column">
-                        @if (_lastMemorySample != null)
-                        {
-                            <p>Memory limit hit count: @_lastMemorySample.memoryLimitHitCount</p>
-                            <p>Memory + swap limit hit count: @_lastMemorySample.memoryAndSwapLimitHitCount</p>
-                        }
-                            
+                            @if (_lastMemorySample != null)
+                            {
+                                <p>Memory limit hit count: @_lastMemorySample.memoryLimitHitCount</p>
+                                <p>Memory + swap limit hit count: @_lastMemorySample.memoryAndSwapLimitHitCount</p>
+                            }
+
                         </div>
                     </div>
                 </div>
@@ -118,8 +132,15 @@
                     </RadzenAreaSeries>
                     <RadzenAreaSeries Data="@_memoryData" CategoryProperty="dateTime" Title="Total" LineType="LineType.Dotted" ValueProperty="memoryAndSwapUsed">
                     </RadzenAreaSeries>
-                    <RadzenValueAxis Formatter=@(value => ((double) Int32.Parse((value).ToString()) / 1000000).ToString() + " MB")/>
-                    <RadzenCategoryAxis FormatString="{0:d:HH:mm}"/>
+                    <RadzenValueAxis Formatter=@(value => ((double) long.Parse((value).ToString()) / 1000000).ToString() + " MB")/>
+                       <RadzenCategoryAxis Formatter=@(value => 
+                                                                      { if (_value == 0){ return ((DateTime) value).ToString("HH:mm:ss"); }
+                                                                        if(_value == 1) { return ((DateTime) value).ToString("HH:mm:ss"); }
+                                                                        if(_value == 2) { return ((DateTime) value).ToString("HH:mm:ss"); }
+                                                                        if(_value == 3) { return ((DateTime) value).ToString("MM/dd/yyyy"); }
+                                                                        if(_value == 4) { return ((DateTime) value).ToString("MM/dd/yyyy"); }
+                                                                          return ((DateTime) value).ToString();
+                                                            })/>
                     <RadzenLegend Position="LegendPosition.Top"/>
                 </RadzenChart>
             </RadzenCard>
@@ -142,8 +163,15 @@
                     <RadzenAreaSeries Data="@_memoryData" CategoryProperty="dateTime" Title="RSS" LineType="LineType.Solid" ValueProperty="rss">
                     </RadzenAreaSeries>
 
-                    <RadzenCategoryAxis FormatString="{0:d:HH:mm}"/>
-                    <RadzenValueAxis Formatter=@(value => ((double) Int32.Parse((value).ToString()) / 1000000).ToString() + " MB")/>
+                      <RadzenCategoryAxis Formatter=@(value => 
+                                                                     { if (_value == 0){ return ((DateTime) value).ToString("HH:mm:ss"); }
+                                                                       if(_value == 1) { return ((DateTime) value).ToString("HH:mm:ss"); }
+                                                                       if(_value == 2) { return ((DateTime) value).ToString("HH:mm:ss"); }
+                                                                       if(_value == 3) { return ((DateTime) value).ToString("MM/dd/yyyy"); }
+                                                                       if(_value == 4) { return ((DateTime) value).ToString("MM/dd/yyyy"); }
+                                                                         return ((DateTime) value).ToString();
+                                                           })/>
+                    <RadzenValueAxis Formatter=@(value => ((double) long.Parse((value).ToString()) / 1000000).ToString() + " MB")/>
                     <RadzenLegend Visible="false"/>
                 </RadzenChart>
             </RadzenCard>
@@ -170,9 +198,16 @@
                             <RadzenAreaSeries Data="@_netData" CategoryProperty="dateTime" Title="Receive" LineType="LineType.Solid" ValueProperty="receive">
                             </RadzenAreaSeries>
                             <RadzenAreaSeries Data="@_netData" CategoryProperty="dateTime" Title="Transmit" LineType="LineType.Dashed" ValueProperty="transmit">
-                             <RadzenValueAxis Formatter=@(value => ((double) Int32.Parse((value).ToString()) / 1000000).ToString() + " MB")/>
+                                <RadzenValueAxis Formatter=@(value => ((double) long.Parse((value).ToString()) / 1000000).ToString() + " MB")/>
                             </RadzenAreaSeries>
-                            <RadzenCategoryAxis FormatString="{0:d:HH:mm}"/>
+                              <RadzenCategoryAxis Formatter=@(value => 
+                                                                             { if (_value == 0){ return ((DateTime) value).ToString("HH:mm:ss"); }
+                                                                               if(_value == 1) { return ((DateTime) value).ToString("HH:mm:ss"); }
+                                                                               if(_value == 2) { return ((DateTime) value).ToString("HH:mm:ss"); }
+                                                                               if(_value == 3) { return ((DateTime) value).ToString("MM/dd/yyyy"); }
+                                                                               if(_value == 4) { return ((DateTime) value).ToString("MM/dd/yyyy"); }
+                                                                                 return ((DateTime) value).ToString();
+                                                                   })/>
                             <RadzenLegend Position="LegendPosition.Top"/>
                         </RadzenChart>
                     </RadzenCard>
@@ -195,7 +230,14 @@
                             <RadzenAreaSeries Data="@_netData" CategoryProperty="dateTime" Title="Transmit Err." LineType="LineType.Dashed" ValueProperty="transmitErrorCountPeriod">
 
                             </RadzenAreaSeries>
-                            <RadzenCategoryAxis FormatString="{0:d:HH:mm}"/>
+                               <RadzenCategoryAxis Formatter=@(value => 
+                                                                              { if (_value == 0){ return ((DateTime) value).ToString("HH:mm:ss"); }
+                                                                                if(_value == 1) { return ((DateTime) value).ToString("HH:mm:ss"); }
+                                                                                if(_value == 2) { return ((DateTime) value).ToString("HH:mm:ss"); }
+                                                                                if(_value == 3) { return ((DateTime) value).ToString("MM/dd/yyyy"); }
+                                                                                if(_value == 4) { return ((DateTime) value).ToString("MM/dd/yyyy"); }
+                                                                                  return ((DateTime) value).ToString();
+                                                                    })/>
                             <RadzenLegend Position="LegendPosition.Top"/>
                         </RadzenChart>
                     </RadzenCard>
@@ -221,9 +263,16 @@
                     </RadzenAreaSeries>
                     <RadzenAreaSeries Data="@_ioData" CategoryProperty="dateTime" Title="byteWrite" LineType="LineType.Solid" ValueProperty="byteWrite">
                     </RadzenAreaSeries>
-                     <RadzenValueAxis Formatter=@(value => ((double) Int32.Parse((value).ToString()) / 1000000).ToString() + " MB")/>
-                    <RadzenCategoryAxis FormatString="{0:d:HH:mm}"/>
-                     <RadzenLegend Position="LegendPosition.Top"/>
+                    <RadzenValueAxis Formatter=@(value => ((double) long.Parse((value).ToString()) / 1000000).ToString() + " MB")/>
+                       <RadzenCategoryAxis Formatter=@(value => 
+                                                                      { if (_value == 0){ return ((DateTime) value).ToString("HH:mm:ss"); }
+                                                                        if(_value == 1) { return ((DateTime) value).ToString("HH:mm:ss"); }
+                                                                        if(_value == 2) { return ((DateTime) value).ToString("HH:mm :ss"); }
+                                                                        if(_value == 3) { return ((DateTime) value).ToString("MM/dd/yyyy"); }
+                                                                        if(_value == 4) { return ((DateTime) value).ToString("MM/dd/yyyy"); }
+                                                                          return ((DateTime) value).ToString();
+                                                            })/>
+                    <RadzenLegend Position="LegendPosition.Top"/>
                 </RadzenChart>
             </RadzenCard>
         </RadzenFieldset>

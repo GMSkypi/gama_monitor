@@ -28,5 +28,14 @@ namespace data_viewer.services
             var url = builder.Uri;
             return await ExecuteRequestSingle<Container>(url, HttpMethod.Get);
         }
+        public async Task<bool> DeleteContainer(string id)
+        {
+            var builder = new UriBuilder(config.hostName + EndpointConstants.ContainerUrl);
+            var query = HttpUtility.ParseQueryString(builder.Query);
+            query[EpAttributeConstants.Container] = id;
+            builder.Query = query.ToString();
+            var url = builder.Uri;
+            return await ExecuteNoresponse(url, HttpMethod.Delete);
+        }
     }
 }

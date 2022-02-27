@@ -1,0 +1,82 @@
+@page "/removedata"
+<h1>Data removing from database</h1>
+<RadzenCard Class="w-100">
+    <h3>Container removal</h3>
+    <RadzenDataGrid @ref="_dataGrid"
+                    AllowFiltering="true"
+                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                    FilterMode="FilterMode.Advanced"
+                    AllowPaging="true"
+                    PageSize="5"
+                    PagerHorizontalAlign="HorizontalAlign.Center"
+                    AllowSorting="true"
+                    Data="@_data"
+                    TItem="data_viewer.Model.Container"
+                    IsLoading="@_isLoading"
+                    Count="@_count"
+                    LoadData="@LoadData"
+                    Style="cursor: pointer;">
+
+        <Columns>
+            <RadzenDataGridColumn TItem="data_viewer.Model.Container" Property="Container.id" Title="ID"/>
+            <RadzenDataGridColumn TItem="data_viewer.Model.Container" Property="Container.dockerID" Title="DockerID"/>
+            <RadzenDataGridColumn TItem="data_viewer.Model.Container" Property="Container.name" Title="Name"/>
+            <RadzenDataGridColumn TItem="data_viewer.Model.Container" Property="Container.image" Title="Image"/>
+            <RadzenDataGridColumn TItem="data_viewer.Model.Container" Property="Container.lastRecord" Title="Last record"/>
+            <RadzenDataGridColumn TItem="data_viewer.Model.Container" Title="Action" Width="135px">
+                <Template Context="container">
+                    <div class="row pb-1">
+                        <RadzenButton ButtonStyle="ButtonStyle.Danger"
+                                      Text="Remove"
+                                      Click="() => RemoveContainer(container)"/>
+                    </div>
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+</RadzenCard>
+<RadzenCard Class="w-100">
+    <div class="row pb-1">
+        <div class="col-2 d-flex flex-column">
+            <h3>Data removal</h3>
+        </div>
+        <div class="col-5 d-flex flex-column">
+            <label>
+                Remove data to date 
+            </label>
+            <RadzenDatePicker @bind-Value=@_dateTimeDatePicker
+                              ShowTime="true"
+                              ShowSeconds="true"
+                              HoursStep="1.5"
+                              MinutesStep="5"
+                              SecondsStep="10"
+                              Change=@(args => OnDateTimeChange(args, "MM/dd/yyyy HH:mm"))
+                              DateFormat="MM/dd/yyyy HH:mm" Class="w-100"/>
+        </div>
+    </div>
+    <RadzenDataGrid
+        AllowFiltering="true"
+        FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+        FilterMode="FilterMode.Advanced"
+        AllowPaging="true"
+        PageSize="5"
+        PagerHorizontalAlign="HorizontalAlign.Center"
+        AllowSorting="true"
+        Data="@_enumGroups"
+        TItem="data_viewer.Extension.EnumExtension<data_viewer.Model.Notification.Group>"
+        Style="cursor: pointer;">
+
+        <Columns>
+            <RadzenDataGridColumn TItem="data_viewer.Extension.EnumExtension<data_viewer.Model.Notification.Group>" Property="EnumExtension<Group>.enumName" Title="Metric name"/>
+            <RadzenDataGridColumn TItem="data_viewer.Extension.EnumExtension<data_viewer.Model.Notification.Group>" Title="Action" Width="135px">
+                <Template Context="group">
+                    <div class="row pb-1">
+                        <RadzenButton ButtonStyle="ButtonStyle.Danger"
+                                      Text="Remove"
+                                      Click="() => RemoveMetricData(group)"/>
+                    </div>
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+</RadzenCard>

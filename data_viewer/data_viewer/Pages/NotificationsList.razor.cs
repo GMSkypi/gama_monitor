@@ -81,7 +81,8 @@ namespace data_viewer.Pages
                     _data = _data.Where(unUpdated => unUpdated.id != notification.id);
                     var message = new NotificationMessage()
                     {
-                        Severity = NotificationSeverity.Success, Summary = "Success Summary", Detail = "Success Detail",
+                        Severity = NotificationSeverity.Success, Summary = "Notification removed",
+                        Detail = "Notification " + notification.id + " removed successfully",
                         Duration = 4000
                     };
                     notificationService.Notify(message);
@@ -91,6 +92,7 @@ namespace data_viewer.Pages
                     var message = new NotificationMessage()
                     {
                         Severity = NotificationSeverity.Error, Summary = "Notification removing failed",
+                        Detail ="Notification " + notification.id + "is still present",
                         Duration = 5000,
                     };
                     notificationService.Notify(message);

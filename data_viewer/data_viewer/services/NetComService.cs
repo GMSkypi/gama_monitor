@@ -66,5 +66,14 @@ namespace data_viewer.services
             var result =  await ExecuteRequestSingle<NetRecord>(url, HttpMethod.Get);
             return (result != null) ? result.values : new List<NetSample>();
         }
+        public async Task<bool> DeleteNetData(DateTime to)
+        {
+            var builder = new UriBuilder(config.hostName + EndpointConstants.NetUrl);
+            var query = HttpUtility.ParseQueryString(builder.Query);
+            query[EpAttributeConstants.DateTo] = to.ToUniversalTime().ToString(DateTimeFormat);;
+            builder.Query = query.ToString();
+            var url = builder.Uri;
+            return await ExecuteNoresponse(url, HttpMethod.Delete);
+        }
     }
 }

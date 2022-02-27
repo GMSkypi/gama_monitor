@@ -58,4 +58,7 @@ public class MemoryDataServiceImp implements MemoryDataService{
         List<Memory> metric = memoryRepository.findByContainerAndTime(containerId,dateFrom.toEpochMilli(),sampleRate);
         return new MetricPair<>(container.get(),metric);
     }
+    public void deleteDataTo(Instant dateTo){
+        memoryRepository.deleteData(dateTo.toEpochMilli());
+    }
 }

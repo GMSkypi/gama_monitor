@@ -665,3 +665,5 @@
 /home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/Razor/Component/User/UsernameView.razor.g.cs
 /home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/RazorDeclaration/Component/ConfirmationDialog.razor.g.cs
 /home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/Razor/Component/ConfirmationDialog.razor.g.cs
+/home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/RazorDeclaration/Pages/DataRemoval.razor.g.cs
+/home/gama/gama_monitor/data_viewer/data_viewer/obj/Debug/net5.0/Razor/Pages/DataRemoval.razor.g.cs

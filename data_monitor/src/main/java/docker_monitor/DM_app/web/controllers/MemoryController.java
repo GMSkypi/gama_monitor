@@ -68,4 +68,10 @@ public class MemoryController {
         MetricPair<Container, Memory> pair = memoryService.getMemoryMetrics(containerId,dateFrom,sampleRate);
         return conversion.convertToMemDTO(pair.getMetrics(),pair.getContainer());
     }
+    @DeleteMapping(value = "/" , params = { "dateTo"})
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteData(
+            @RequestParam("dateTo") Instant dateTo){
+        memoryService.deleteDataTo(dateTo);
+    }
 }

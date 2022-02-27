@@ -142,6 +142,16 @@ namespace data_viewer.Pages
             {
                 await _timer.DisposeAsync();
             }
+            if (_dateTimeDatePicker == null)
+            {
+                var message = new NotificationMessage()
+                {
+                    Severity = NotificationSeverity.Error, Summary = "Date is not correctly specified",
+                    Duration = 5000,
+                };
+                notificationService.Notify(message);
+                _dateTimeDatePicker = DateTime.Now.AddHours(-1);
+            }
 
             switch (value)
             {

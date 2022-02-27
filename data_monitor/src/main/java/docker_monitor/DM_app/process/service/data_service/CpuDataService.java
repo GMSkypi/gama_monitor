@@ -22,4 +22,5 @@ public interface CpuDataService {
     MetricPair<Container, Cpu> getCpuMetrics(String containerId,
                                                     Instant dateFrom,
                                                     SampledBy sampleRate);
+    void deleteDataTo(Instant dateTo);
 }

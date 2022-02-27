@@ -14,10 +14,15 @@ public class ContainerDataServiceImp implements ContainerDataService {
     @Autowired
     ContainerRepository containerRepository;
 
-    public List<Container> getAllContainers(){
+    public List<Container> getAllContainers() {
         return containerRepository.getContainersWithLastRecord();
     }
-    public Container getContainerById(String id){
+
+    public Container getContainerById(String id) {
         return containerRepository.findBy(id).orElse(null);
+    }
+
+    public void deleteContainer(String id) {
+        containerRepository.deleteContainer(id);
     }
 }

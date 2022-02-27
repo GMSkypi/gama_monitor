@@ -1,5 +1,13 @@
 @page "/profile"
 @using data_viewer.Component.User
-
-<PasswordView/>
-<UsernameView/>
+<h1>User login credentials setting</h1>
+<RadzenCard Class="w-100">
+    <div class="row pb-1">
+        <div class="col-6 d-flex flex-column">
+            <PasswordView/>
+        </div>
+        <div class="col-6 d-flex flex-column">
+            <UsernameView/>
+        </div>
+    </div>
+</RadzenCard>

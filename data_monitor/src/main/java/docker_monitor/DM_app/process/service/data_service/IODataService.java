@@ -21,4 +21,5 @@ public interface IODataService {
     MetricPair<Container, IO> getIOMetrics(String containerId,
                                              Instant dateFrom,
                                              SampledBy sampleRate);
+    void deleteDataTo(Instant dateTo);
 }
