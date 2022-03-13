@@ -52,7 +52,7 @@ namespace data_viewer.Pages
         private DateTime? _dateTimeDatePicker;
         private System.Threading.Timer _timer;
 
-        private bool _notRunning = false;
+        private bool _notRunning = true;
 
         public void Dispose()
         {
@@ -96,8 +96,10 @@ namespace data_viewer.Pages
             Console.WriteLine("loaded");
         }
 
-        protected override void OnInitialized()
+        protected override async void OnInitialized()
         {
+            _container = await containerComService.GetContainer(containerId);
+            StateHasChanged();
             LiveInitialized();
         }
 

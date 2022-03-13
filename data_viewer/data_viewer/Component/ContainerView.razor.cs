@@ -24,7 +24,7 @@ namespace data_viewer.Component
         private IEnumerable<MemorySample> _memoryData { get; set; }
         private DateTime? _dateTimeDatePicker;
         private System.Threading.Timer _timer;
-        private bool _notRunning = false;
+        private bool _notRunning = true;
 
         private RadzenChart _cpuUsageChart; 
 
