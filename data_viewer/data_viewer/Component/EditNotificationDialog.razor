@@ -23,19 +23,19 @@
                 <label>
                     Group
                 </label>
-                <RadzenDropDown Data="@_enumGroups" TextProperty="EnumName" ValueProperty="EnumValue" @bind-Value="notificationCopy.metricGroup" Change="@ReloadMetrics"/>
+                <RadzenDropDown Data="@_enumGroups" TextProperty="enumName" ValueProperty="enumValue" @bind-Value="notificationCopy.metricGroup" Change="@ReloadMetrics"/>
             </div>
             <div class="col-4 d-flex flex-column mb-2">
                     <label>
                         Metric
                     </label>
-                    <RadzenDropDown Data="@_enumMetrics" TextProperty="EnumName" ValueProperty="EnumValue" @bind-Value="notificationCopy.metricToMonitor"/>
+                    <RadzenDropDown Data="@_enumMetrics" TextProperty="enumName" ValueProperty="enumValue" @bind-Value="notificationCopy.metricToMonitor"/>
                 </div>
             <div class="col-4 d-flex flex-column mb-2">
                 <label>
                     Notification Type
                 </label>
-                <RadzenDropDown Data="@_enumNotificationType" TextProperty="EnumName" ValueProperty="EnumValue" @bind-Value="notificationCopy.type" Change="@ReloadNotificationType"/>
+                <RadzenDropDown Data="@_enumNotificationType" TextProperty="enumName" ValueProperty="enumValue" @bind-Value="notificationCopy.type" Change="@ReloadNotificationType"/>
             </div>
         </div>
 
@@ -62,7 +62,7 @@
                         </label>
                     </div>
                     <div class="col-sm">
-                        <RadzenDropDown Data="@_enumTriggers" TextProperty="EnumName" ValueProperty="EnumValue" @bind-Value="notificationCopy.changeNotify.trigger"/>
+                        <RadzenDropDown Data="@_enumTriggers" TextProperty="enumName" ValueProperty="enumValue" @bind-Value="notificationCopy.changeNotify.trigger"/>
                     </div>
                 </div>
                 <div class="row">
@@ -100,7 +100,7 @@
                         </label>
                     </div>
                     <div class="col-sm">
-                        <RadzenDropDown Data="@_enumThresholds" TextProperty="EnumName" ValueProperty="EnumValue" @bind-Value="notificationCopy.thresholdNotify.threshold"/>
+                        <RadzenDropDown Data="@_enumThresholds" TextProperty="enumName" ValueProperty="enumValue" @bind-Value="notificationCopy.thresholdNotify.threshold"/>
                     </div>
                 </div>
                 <div class="row">
@@ -130,7 +130,7 @@
                         </label>
                     </div>
                     <div class="col-sm">
-                        <RadzenDropDown Data="@_enumTriggers" TextProperty="EnumName" ValueProperty="EnumValue" @bind-Value="notificationCopy.thresholdNotify.trigger"/>
+                        <RadzenDropDown Data="@_enumTriggers" TextProperty="enumName" ValueProperty="enumValue" @bind-Value="notificationCopy.thresholdNotify.trigger"/>
                     </div>
                 </div>
             </RadzenFieldset>
