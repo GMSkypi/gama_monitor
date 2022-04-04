@@ -11,9 +11,9 @@
 
 namespace parser{
     class DockerAPIParser : public DockerParser{
-        std::vector<Container> parseContainerData(const std::string &data) override;
 
     public:
+        std::vector<Container> parseContainerData(const std::string &data) override;
         unsigned int parseContainerPid(const std::string &data) override;
     };
 }

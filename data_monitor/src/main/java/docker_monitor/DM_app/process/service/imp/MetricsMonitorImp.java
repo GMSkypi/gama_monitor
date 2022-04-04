@@ -107,8 +107,8 @@ public class MetricsMonitorImp implements MetricsMonitor {
         long value = Math.round(comparingStream.mapToDouble(Metric::getValue).average().orElse(0)) -
                     Math.round(beforeStream.mapToDouble(Metric::getValue).average().orElse(0));
         boolean notify = switch (activeNotification.getNotification().getChangeNotify().getTrigger()){
-            case BELOW -> value < activeNotification.getNotification().getValue();
-            case ABOVE -> value < -1 * activeNotification.getNotification().getValue();
+            case BELOW -> value < 0 && Math.abs(value) > activeNotification.getNotification().getValue();
+            case ABOVE -> value > 0 &&  value > activeNotification.getNotification().getValue();
         };
         activeNotification.setLastCheckTime(Instant.ofEpochMilli(dateTimeNow.toEpochMilli() + activeNotification.getNotification().getOverTime()));
         if(notify){
@@ -118,7 +118,7 @@ public class MetricsMonitorImp implements MetricsMonitor {
                     " IS " + activeNotification.getNotification().getChangeNotify().getTrigger() +
                     " DECLARED: " + activeNotification.getNotification().getValue());
             activeNotification.setLastNotificationTime(Instant.ofEpochMilli(dateTimeNow.toEpochMilli() + activeNotification.getNotification().getNotificationDelay()));
-            notification.notifyObservers(activeNotification.getNotification(),value);
+            notification.notifyObservers(activeNotification.getNotification(),Math.abs(value));
         }
 
     }

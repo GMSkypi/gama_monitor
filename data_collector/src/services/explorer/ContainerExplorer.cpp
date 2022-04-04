@@ -15,19 +15,19 @@ ContainerExplorer::ContainerExplorer(std::shared_ptr<DockerExecutor> executor,
     this->pathGenerator = pathGenerator;
     this->blackList = blackList;
 }
-vector<Container> ContainerExplorer::explore(QDBController & dBController) const {
+vector<Container> ContainerExplorer::explore(shared_ptr<DBController> dBController) const {
     string data = executor->getContainers();
     vector<Container> exploredContainers = parser->parseContainerData(data);
     excludeBlackList(exploredContainers);
     std::for_each(exploredContainers.begin(), exploredContainers.end(),
                   [this, &dBController](Container & container){
                       initContainer(container);
-                      dBController.initContainer(container);
+                      dBController->initContainer(container);
                   });
     return exploredContainers;
 }
 
-void ContainerExplorer::exploreNew(vector<Container> &existing, QDBController & dBController) const {
+void ContainerExplorer::exploreNew(vector<Container> &existing, shared_ptr<DBController> dBController) const {
     string data = executor->getContainers();
     vector<Container> exploredContainers = parser->parseContainerData(data);
     excludeBlackList(exploredContainers);
@@ -40,7 +40,7 @@ void ContainerExplorer::exploreNew(vector<Container> &existing, QDBController & 
         // Container is new
         if (!exist) {
             initContainer(expContainer);
-            dBController.initContainer((expContainer));
+            dBController->initContainer((expContainer));
             existing.push_back(expContainer);
         }
     }
@@ -83,7 +83,6 @@ void ContainerExplorer::initContainer(Container &container) const {
     unsigned pid = parser->parseContainerPid(executor->getPid(container.getId()));
     container.setPid(pid);
     containerPathInit(container);
-    // TODO init in database and get ID
 }
 
 void ContainerExplorer::excludeBlackList(std::vector<Container> & containers) const{

@@ -13,12 +13,6 @@ import java.io.IOException;
 @Component
 public class SlackHandler implements NotificationObservers{
 
-    @Value("${slack.webhook}")
-    private String urlSlackWebHook;
-
-    @Value("${notification.enabled}")
-    private boolean notify;
-
     @Autowired
     private ConfigurationCache configurationCache;
 

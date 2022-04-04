@@ -131,3 +131,4 @@ void QDBController::waitForDB() {
     }
     throw std::runtime_error("Unable to connect to database");
 }
+
