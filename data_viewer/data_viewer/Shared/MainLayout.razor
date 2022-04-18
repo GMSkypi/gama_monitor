@@ -1,18 +1,35 @@
-﻿
-@inherits LayoutComponentBase
+﻿@inherits LayoutComponentBase
 
-<RadzenNotification />
+<RadzenNotification/>
 <RadzenDialog/>
 
 <div class="page">
-    <div class="sidebar">
-        <NavMenu/>
-        
+    <div class="sidebar" @onmouseenter="@ToggleSidebarIn" @onmouseleave="@ToggleSidebarOut">
+        @if (collapsed)
+        {
+            <div class="sidebar_extended">
+                <NavMenu/>
+            </div>
+        }
+        else
+        {
+            <div class="sidebar_short">
+                <NavMenu/>
+            </div>
+        }
     </div>
 
+
     <div class="main">
+        <div class="top-bar">
+            <div class="logout-button">
+                <RadzenButton Text="LOGOUT" ButtonStyle="ButtonStyle.Light" Click="@Logout"/>
+            </div>
+        </div>
         <div class="content px-4">
-            @Body
+            <div class="body">
+                @Body
+            </div>
         </div>
     </div>
 </div>

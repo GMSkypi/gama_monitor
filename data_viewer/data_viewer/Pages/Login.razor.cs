@@ -13,7 +13,9 @@ namespace data_viewer.Pages
 
         [Inject]
         public NavigationManager navigationManager { get; set; }
-        
+
+
+        private bool _wrongPassowrd = false;
         public void Dispose()
         {
         }
@@ -23,7 +25,13 @@ namespace data_viewer.Pages
             var result = await customAuthenticationService.Login(new LoginCredential(args.Username, args.Password, "password"));
 
             if (result.Successful) navigationManager.NavigateTo("/dashboard");
-            else Console.WriteLine(result.error_description);
+            else
+            {
+                Console.WriteLine(result.error_description);
+                _wrongPassowrd = true;
+                StateHasChanged();
+            }
+            
         }
 
     }

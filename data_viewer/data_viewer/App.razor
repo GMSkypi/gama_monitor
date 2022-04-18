@@ -1,4 +1,5 @@
 @inject NavigationManager NavigationManager
+@using data_viewer.Pages
 
 <Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true">
     <Found Context="routeData">
@@ -7,8 +8,9 @@
     </Found>
       <NotFound>
         <CascadingAuthenticationState>
-            <LayoutView Layout="@typeof(MainLayout)">
+            <LayoutView Layout="@typeof(EmptyLayout)">
                 <p>Sorry, there's nothing at this address.</p>
+                <NotFound/>
             </LayoutView>
         </CascadingAuthenticationState>
     </NotFound>
@@ -34,4 +36,9 @@
         }
     }
 
+    private void Redirection()
+    {
+        
+    }
+    
 }

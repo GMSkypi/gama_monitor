@@ -1,45 +1,36 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
-    <div class="row pb-1">
-        <div class="col-4 d-flex flex-column">
-            <a class="navbar-brand" href="">Monitor</a>
-        </div>
-        <div class="col-8 d-flex flex-column">
-            <RadzenButton Text="LOGOUT" ButtonStyle="ButtonStyle.Secondary" Click="@Logout"/>
-        </div>
+﻿<div class="navbar">
+    <div class="@navMenuCssClass" @onclick="ToggleNavMenu">
+        <ul class="nav flex-column">
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="dashboard" Match="NavLinkMatch.All">
+                    <span class="oi oi-pie-chart" aria-hidden="true"></span> Dashboard
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="list">
+                    <span class="oi oi-justify-left" aria-hidden="true"></span> Containers
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="notifications">
+                    <span class="oi oi-comment-square" aria-hidden="true"></span> Notifications
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="configuration">
+                    <span class="oi oi-wrench" aria-hidden="true"></span> Configuration
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="profile">
+                    <span class="oi oi-person" aria-hidden="true"></span> User profile
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="removedata">
+                    <span class="oi oi-trash" aria-hidden="true"></span> Data removal
+                </NavLink>
+            </li>
+        </ul>
     </div>
-</div>
-
-<div class="@navMenuCssClass" @onclick="ToggleNavMenu">
-    <ul class="nav flex-column">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="dashboard" Match="NavLinkMatch.All">
-                <span class="oi oi-pie-chart" aria-hidden="true"></span> Dashboard
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="list">
-                <span class="oi oi-justify-left" aria-hidden="true"></span> Containers
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="notifications">
-                <span class="oi oi-comment-square" aria-hidden="true"></span> Notifications
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="configuration">
-                <span class="oi oi-wrench" aria-hidden="true"></span> Configuration
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="profile">
-                <span class="oi oi-person" aria-hidden="true"></span> User profile
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="removedata">
-                <span class="oi oi-trash" aria-hidden="true"></span> Data removal
-            </NavLink>
-        </li>
-    </ul>
 </div>

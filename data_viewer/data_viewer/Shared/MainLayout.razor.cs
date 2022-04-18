@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using data_viewer.services;
 using Microsoft.AspNetCore.Components;
@@ -9,6 +10,10 @@ namespace data_viewer.Shared
     {
         [Inject] private NavigationManager navigationManager { get; set; }
         [Inject] private AuthenticationStateProvider authenticationStateProvider { get; set; }
+        
+        [Inject] private CustomAuthenticationService customAuthenticationService { get; set; }
+
+        private bool collapsed = false;
         protected override async Task OnInitializedAsync()
         {
             base.OnInitialized();
@@ -20,5 +25,22 @@ namespace data_viewer.Shared
             }
              
         }
+
+        private void ToggleSidebarOut()
+        {
+            collapsed = false;
+            StateHasChanged();
+        }
+        private void ToggleSidebarIn()
+        {
+            collapsed = true;
+            StateHasChanged();
+        }
+        private void Logout()
+        {
+            customAuthenticationService.Logout();
+            navigationManager.NavigateTo($"/login");
+        }
+        
     }
 }

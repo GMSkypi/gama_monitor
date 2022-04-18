@@ -1,13 +1,11 @@
 @page "/Login"
 @layout EmptyLayout
-
-<div class="row d-flex px-3">
-    <div class="col-xl-4 d-flex p-3">
-        <RadzenCard Style="width: 100%;">
-            <h2 class="mb-4">Simple login</h2>
+<div class="login">
+    <RadzenCard Style="width: 500px;">
+            <h2 class="mb-4"  style="text-align:center">Data monitoring system</h2>
 
                 <RadzenLogin AllowRegister="false" AllowResetPassword="false"  Login=@(args => OnLogin(args))/>
-
+                @if(_wrongPassowrd){<p style="color:red;">*Bead credentials</p>}
         </RadzenCard>
-    </div>
+        
 </div>

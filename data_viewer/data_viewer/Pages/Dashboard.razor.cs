@@ -18,10 +18,13 @@ namespace data_viewer.Pages
 
         private IEnumerable<Container> _data = new List<Container>();
 
+        private bool _loading = true;
         private async Task LoadData()
         {
             _data = await containerComService.GetContainers();
             Console.WriteLine("Dashboard container loaded: " + _data.Count());
+            _loading = false;
+            
         }
 
         protected override async Task OnInitializedAsync()
