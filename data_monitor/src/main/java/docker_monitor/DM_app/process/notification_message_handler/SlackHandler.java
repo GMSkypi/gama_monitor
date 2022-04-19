@@ -3,7 +3,10 @@ package docker_monitor.DM_app.process.notification_message_handler;
 import com.github.seratch.jslack.Slack;
 import com.github.seratch.jslack.api.webhook.Payload;
 import com.github.seratch.jslack.api.webhook.WebhookResponse;
+import docker_monitor.DM_app.process.database.db_mapper.QuestDBDataMapperImp;
 import docker_monitor.DM_app.process.service.cache.ConfigurationCache;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -13,6 +16,7 @@ import java.io.IOException;
 @Component
 public class SlackHandler implements NotificationObservers{
 
+    private static final Logger logger = LoggerFactory.getLogger(SlackHandler.class);
     @Autowired
     private ConfigurationCache configurationCache;
 
@@ -33,9 +37,8 @@ public class SlackHandler implements NotificationObservers{
         try {
             WebhookResponse webhookResponse = Slack.getInstance().send(
                     configurationCache.getUrlSlackWebHook(), payload);
-            // TODO logger
         } catch (IOException e) {
-            System.out.println(e);
+            logger.error("Slack server exception",e);
         }
     }
 }

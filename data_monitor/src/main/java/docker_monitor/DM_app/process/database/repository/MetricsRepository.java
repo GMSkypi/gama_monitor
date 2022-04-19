@@ -85,13 +85,6 @@ public class MetricsRepository<C> extends QuestDBRepositoryImp<C> {
         }
         return result.toString();
     }
-    /*
-    public List<C> findByContainerAndTime(String containerId, Date dateTime) {
-            return executeQuery("SELECT * FROM " + clazz.getAnnotation(Entity.class).name() +
-                    " WHERE Container_id= " + "'" + containerId + "'" + " and date_time >" + dateTime.getTime());
-    }
-    */
-    // TODO remvoe SimpleDateFormat
     public List<C> findByContainerAndTime(String containerId, long dateTime) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.z");
         return executeQuery("SELECT * FROM " + clazz.getAnnotation(Entity.class).name() +
@@ -133,13 +126,4 @@ public class MetricsRepository<C> extends QuestDBRepositoryImp<C> {
         executeQuery("ALTER TABLE " + clazz.getAnnotation(Entity.class).name() +" DROP PARTITION WHERE " +
                 "date_time <" + " to_timestamp('" + dateFormat.format(dateTimeTo) + "','yyyy-MM-dd HH:mm:ss.z')");
     }
-
-    /*
-select date_time , Container_id ,avg(mem_used) mem_used from (
-SELECT to_timestamp('2022-03-15 06:55:45.UTC','yyyy-MM-dd HH:mm:ss.z') AS date_time, symbol 'daprio/dapr' AS Container_id, 0 AS mem_used union
-SELECT  to_timestamp('2022-03-14 06:55:45.UTC','yyyy-MM-dd HH:mm:ss.z') AS date_time,  symbol 'daprio/dapr' AS Container_id,0 AS mem_used union
-SELECT date_time,  Container_id, mem_used
-FROM Memory WHERE Container_id='daprio/dapr' and date_time >=to_timestamp('2022-03-13 06:55:45.UTC','yyyy-MM-dd HH:mm:ss.z')
- ) timestamp(date_time)  SAMPLE BY 1m FILL(NONE)
-     */
 }

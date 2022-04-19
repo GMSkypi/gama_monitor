@@ -1,6 +1,9 @@
 package docker_monitor.DM_app.process.service.imp;
 
+import docker_monitor.DM_app.process.notification_message_handler.SlackHandler;
 import docker_monitor.DM_app.process.service.ConfigurationLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +17,7 @@ import static java.lang.String.valueOf;
 
 @Service
 public class ConfigurationLoaderImp implements ConfigurationLoader {
-
+    private static final Logger logger = LoggerFactory.getLogger(ConfigurationLoaderImp.class);
     @Autowired
     private  String configurationFilePath;
 
@@ -30,9 +33,9 @@ public class ConfigurationLoaderImp implements ConfigurationLoader {
                 result.put(prop,props.getProperty(prop));
             reader.close();
         } catch (FileNotFoundException ex) {
-            // file does not exist
+            logger.error("File not found: " + configurationFilePath,ex);
         } catch (IOException ex) {
-            // I/O error
+            logger.error("I/O error: " + configurationFilePath,ex);
         }
         return result;
     }
@@ -48,10 +51,10 @@ public class ConfigurationLoaderImp implements ConfigurationLoader {
             writer.close();
             return true;
         } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
+            logger.error("File not found: " + configurationFilePath,ex);
             return false;
         } catch (IOException ex) {
-            ex.printStackTrace();
+            logger.error("I/O error: " + configurationFilePath,ex);
             return false;
         }
     }

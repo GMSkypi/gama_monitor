@@ -70,7 +70,7 @@ public class NotificationCheckTest {
                 arguments(false, 5,3000,Trigger.BELOW,Threshold.MIN,10)
         );
     }
-    @ParameterizedTest
+        @ParameterizedTest
     @MethodSource("thresholdParamProvider")
     void thresholdNotificationTest(boolean notify, int triggerVal, int overtime, Trigger trigger, Threshold threshold, long output){
         List<ActiveNotification> notificationList = new ArrayList<>();
