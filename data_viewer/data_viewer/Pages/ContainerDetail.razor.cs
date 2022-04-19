@@ -110,7 +110,7 @@ namespace data_viewer.Pages
                 if (_notRunning)
                 {
                     _container = await containerComService.GetContainer(containerId);
-                    if (_container != null && _container.lastRecord > DateTime.UtcNow.AddHours(-1)) _notRunning = false;
+                    if (_container != null && DateTime.Compare(_container.lastRecord, DateTime.UtcNow.AddHours(-1)) > 0) _notRunning = false;
                     return;
                 }
 

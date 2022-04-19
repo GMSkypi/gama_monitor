@@ -39,11 +39,12 @@ namespace data_viewer.Component
         {
             _timer = new System.Threading.Timer(async _ =>
             {
+                Console.WriteLine(_notRunning);
                 if (_notRunning)
                 {
                     container = await containerComService.GetContainer(container.id);
-                    if (container != null && container.lastRecord > DateTime.UtcNow.AddHours(-1)) _notRunning = false;
-                    return;
+                    if (container != null && DateTime.Compare(container.lastRecord, DateTime.UtcNow.AddHours(-1)) > 0) _notRunning = false;
+                    else return;
                 }
 
                 await LoadData(DateTime.UtcNow.AddMinutes(-10), DataSamplingRates.Minute);

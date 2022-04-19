@@ -11,7 +11,7 @@ WORKDIR /app/build
 #RUN apk update && apk add bash
 #COPY --from=builder /app/target /app/build
 #COPY ./notifications.json /app/build/notifications.json
-#COPY ./configuration.properties /app/build/configuration.properties
+
 
 COPY --from=builder /app/target/dependencies/ /app/build/
 COPY --from=builder /app/target/snapshot-dependencies/ /app/build/

@@ -36,7 +36,7 @@ Collector::Collector(const shared_ptr<Config>& conf) {
     std::shared_ptr<QDBController> dbController = shared_ptr<QDBController>( new QDBController(conf));
     ContainerExplorer containerExplorer = loadExplorer();
     vector<Container> containers = containerExplorer.explore(dbController);
-    // TODO get node info
+
     const map<constants::Paths,std::string> globalMetricsPaths = containerExplorer.globalPathInit();
     MetricsParserFactory metricsFactory;
     metricsFactory.addAllMetrics();
