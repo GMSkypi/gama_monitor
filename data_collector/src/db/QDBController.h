@@ -11,8 +11,9 @@
 #include "../services/exec/CurlExec.h"
 #include "../parsers/QDBAPIParser.h"
 #include "../obj/Config.h"
+#include "DBController.h"
 
-class QDBController {
+class QDBController : public DBController {
 private:
     std::shared_ptr<SocketExec> socExecutor;
     CurlExec curlExecutor = CurlExec();

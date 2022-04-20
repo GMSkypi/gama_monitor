@@ -1,9 +1,12 @@
 package docker_monitor.DM_app.process.database.db_mapper;
 
 
+import docker_monitor.DM_app.process.database.db_source.DataSourceImp;
 import docker_monitor.DM_app.process.database.entities.Container;
 import docker_monitor.DM_app.process.database.persistance.anotation.Column;
 import docker_monitor.DM_app.process.sql.CustomResultSet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.*;
@@ -18,6 +21,7 @@ import java.util.List;
 
 @Service
 public class QuestDBDataMapperImp implements QuestDBDataMapper {
+    private static final Logger logger = LoggerFactory.getLogger(QuestDBDataMapperImp.class);
     private class FieldIndex{
         public FieldIndex(int index, Field field){
             this.filed = field;
@@ -36,6 +40,7 @@ public class QuestDBDataMapperImp implements QuestDBDataMapper {
                 fieldIndices.add(new FieldIndex(index, f));
             }
             catch(SQLException ignored){
+                logger.debug("ResultSet parsing error",ignored);
             }
         }
         try {
@@ -61,14 +66,19 @@ public class QuestDBDataMapperImp implements QuestDBDataMapper {
             return result;
         }
         catch ( NoSuchMethodException e){
+            logger.debug("ResultSet parsing error: method not found",e);
             e.printStackTrace();
         } catch (InvocationTargetException e) {
+            logger.debug("ResultSet parsing error: target exception",e);
             e.printStackTrace();
         } catch (InstantiationException e) {
+            logger.debug("ResultSet parsing error: instantiation exception",e);
             e.printStackTrace();
         } catch (IllegalAccessException e) {
+            logger.debug("ResultSet parsing error: access exception",e);
             e.printStackTrace();
         }
+
         return null;
     }
     Method resultSetMethodResolver(Class<?> fieldType) throws NoSuchMethodException {

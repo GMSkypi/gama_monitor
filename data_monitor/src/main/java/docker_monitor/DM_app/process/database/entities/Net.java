@@ -11,7 +11,7 @@ import java.util.Date;
 @Entity(name = "NET")
 public class Net {
     @Symbol
-    @Column(name = "ContainerId")
+    @Column(name = "Container_id")
     String containerId;
     @Aggregable
     @Column(name = "receive")

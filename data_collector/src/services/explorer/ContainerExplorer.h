@@ -24,8 +24,8 @@ public:
                                std::shared_ptr<parser::DockerParser> parser,
                                std::shared_ptr<PathGenerator> pathGenerator,
                                std::vector<std::string> blackList);
-    [[nodiscard]] vector<Container> explore(QDBController & dBController) const;
-    void exploreNew(vector<Container> & existing, QDBController & dBController) const;
+    [[nodiscard]] vector<Container> explore(shared_ptr<DBController> dBController) const;
+    void exploreNew(vector<Container> & existing, shared_ptr<DBController> dBController) const;
     std::map<constants::Paths,std::string> globalPathInit() const;
 private:
     void containerPathInit(Container & container) const;

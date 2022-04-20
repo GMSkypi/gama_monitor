@@ -5,7 +5,7 @@ ALTER TABLE Container ALTER COLUMN id ADD INDEX;
 CREATE TABLE IF NOT EXISTS CPU(Container_id symbol,u_space_pr long,k_space_pr long,u_space_ms long,k_space_ms long,throttle_ns long,throttle_cnt long,total_ns long,total_pr long,date_time timestamp)timestamp(date_time) PARTITION BY DAY;
 ALTER TABLE CPU ALTER COLUMN Container_id ADD INDEX;
 /* Table 'Memory' */
-CREATE TABLE IF NOT EXISTS Memory(mem_used int,mem_swap_used int,rss int,cacheC int,swap int,mem_limit long,mem_swap_limit long,mem_hit_cnt long,mem_swap_hit_cnt long,date_time timestamp,Container_id symbol)timestamp(date_time) PARTITION BY DAY;
+CREATE TABLE IF NOT EXISTS Memory(mem_used long,mem_swap_used long,rss long,cacheC long,swap long,mem_limit long,mem_swap_limit long,mem_hit_cnt long,mem_swap_hit_cnt long,date_time timestamp,Container_id symbol)timestamp(date_time) PARTITION BY DAY;
 ALTER TABLE Memory ALTER COLUMN Container_id ADD INDEX;
 
 /* Table 'IO' */

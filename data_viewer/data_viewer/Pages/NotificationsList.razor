@@ -1,0 +1,78 @@
+@page "/notifications"
+@using data_viewer.Model.Notification
+@using data_viewer.Extension
+<div class="head-line">
+    <p>General / List of notifications </p>
+</div>
+
+<RadzenDataGrid @ref="_dataGrid"
+                AllowFiltering="true"
+                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                FilterMode="FilterMode.Advanced"
+                AllowPaging="true"
+                PageSize="15"
+                PagerHorizontalAlign="HorizontalAlign.Center"
+                AllowSorting="true"
+                Data="@_data"
+                TItem="data_viewer.Model.Notification.Notification"
+                IsLoading="@_isLoading"
+                Count="@_count">
+
+<Columns>
+        <RadzenDataGridColumn TItem="data_viewer.Model.Notification.Notification" Property="Notification.id" Title="ID" Frozen="true" Width="50px" TextAlign="TextAlign.Center" Filterable="false"/>
+        <RadzenDataGridColumn TItem="data_viewer.Model.Notification.Notification" Property="Notification.containerId" Title="Docker ID"/>
+        <RadzenDataGridColumn TItem="data_viewer.Model.Notification.Notification" Title="Group" Width="100px">
+            <Template Context="notification">
+                <div class="center">
+                    @(EnumExtension<data_viewer.Model.Notification.Group>.GetEnumExtension(notification.metricGroup).enumName)
+                </div>
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="data_viewer.Model.Notification.Notification" Title="Metric">
+            <Template Context="notification">
+                <div class="center">
+                    @(EnumExtension<Metrics>.GetEnumExtension(notification.metricToMonitor).enumName)
+                </div>
+            </Template>
+        </RadzenDataGridColumn>
+
+        <RadzenDataGridColumn TItem="data_viewer.Model.Notification.Notification" Title="Trigger" Width="120px">
+            <Template Context="notification">
+                <div class="center">
+                    @if (notification.type == NotificationType.CHANGE)
+                    {
+                        @(EnumExtension<Trigger>.GetEnumExtension(notification.changeNotify.trigger).enumName)
+                    }
+                    else
+                    {
+                        @(EnumExtension<Trigger>.GetEnumExtension(notification.thresholdNotify.trigger).enumName)
+                    }
+                </div>
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="data_viewer.Model.Notification.Notification" Property="Notification.value" Title="Value" Frozen="true" Width="100px" TextAlign="TextAlign.Center"/>
+        <RadzenDataGridColumn TItem="data_viewer.Model.Notification.Notification" Title="Type" Width="120px">
+            <Template Context="notification">
+                <div class="center">
+                    @(EnumExtension<NotificationType>.GetEnumExtension(notification.type).enumName)
+                </div>
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="data_viewer.Model.Notification.Notification" Title="Action" Width="270px">
+            <Template Context="notification">
+                <div class="row pb-1">
+                    <div class="col-6 d-flex flex-column">
+                        <RadzenButton ButtonStyle="ButtonStyle.Danger"
+                                      Text="Remove"
+                                      Click="() => RemoveNotification(notification)"/>
+                    </div>
+                    <div class="col-6 d-flex flex-column">
+                        <RadzenButton ButtonStyle="ButtonStyle.Success"
+                                      Text="Modify"
+                                      Click="() => EditNotificationOnItemClick(notification)"/>
+                    </div>
+                </div>
+            </Template>
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>

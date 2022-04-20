@@ -58,4 +58,7 @@ public class IODataServiceImp implements IODataService {
         List<IO> metric = ioRepository.findByContainerAndTime(containerId,dateFrom.toEpochMilli(),sampleRate);
         return new MetricPair<>(container.get(),metric);
     }
+    public void deleteDataTo(Instant dateTo){
+        ioRepository.deleteData(dateTo.toEpochMilli());
+    }
 }

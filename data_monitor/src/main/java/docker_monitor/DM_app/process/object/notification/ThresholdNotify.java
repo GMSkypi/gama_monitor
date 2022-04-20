@@ -3,11 +3,11 @@ package docker_monitor.DM_app.process.object.notification;
 
 public class ThresholdNotify {
     Trigger trigger;
-    Threshold thrashold;
+    Threshold threshold;
 
     public ThresholdNotify(Trigger trigger, Threshold thrashold) {
         this.trigger = trigger;
-        this.thrashold = thrashold;
+        this.threshold = thrashold;
     }
     public ThresholdNotify(){}
 
@@ -19,11 +19,11 @@ public class ThresholdNotify {
         this.trigger = trigger;
     }
 
-    public Threshold getThrashold() {
-        return thrashold;
+    public Threshold getThreshold() {
+        return threshold;
     }
 
-    public void setThrashold(Threshold thrashold) {
-        this.thrashold = thrashold;
+    public void setThreshold(Threshold threshold) {
+        this.threshold = threshold;
     }
 }

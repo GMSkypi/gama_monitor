@@ -22,4 +22,5 @@ public interface MemoryDataService {
     MetricPair<Container, Memory> getMemoryMetrics(String containerId,
                                                           Instant dateFrom,
                                                           SampledBy sampleRate);
+    void deleteDataTo(Instant dateTo);
 }

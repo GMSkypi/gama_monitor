@@ -24,7 +24,7 @@ public class NotificationCache {
             newNotification.setId(notifications.get(notifications.size() - 1).getNotification().getId() + 1);
         notifications.add(new ActiveNotification(newNotification));
 
-        notifications.sort(Comparator.comparing(o -> o.getNotification().getContainerId()));
+        notifications.sort(Comparator.comparing(o -> o.getNotification().getId()));
         serialization.serialize((notifications.stream().map(ActiveNotification::getNotification).collect(Collectors.toList())));
         return newNotification;
     }
@@ -37,6 +37,7 @@ public class NotificationCache {
         this.serialization = serialization;
         List<Notification> notInitializedNotifications = serialization.loadObjects();
         this.notifications = notInitializedNotifications.stream().map(ActiveNotification::new).collect(Collectors.toList());
+        this.notifications.sort(Comparator.comparing(o -> o.getNotification().getId()));
     }
 
     public List<ActiveNotification> getNotifications() {

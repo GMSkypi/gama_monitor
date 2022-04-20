@@ -10,6 +10,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import docker_monitor.DM_app.process.database.db_source.NotificationDataSource;
 import docker_monitor.DM_app.process.object.notification.Notification;
 import docker_monitor.DM_app.process.service.NotificationSerialization;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,8 @@ import java.util.List;
 
 @Service
 public class JSONNotifSerialization implements NotificationSerialization {
+
+    private static final Logger logger = LoggerFactory.getLogger(JSONNotifSerialization.class);
     @Autowired
     private NotificationDataSource dataSource;
 
@@ -32,7 +36,7 @@ public class JSONNotifSerialization implements NotificationSerialization {
             dataSource.persist(data);
             return true;
         } catch(IOException e){
-            e.printStackTrace();
+            logger.error("Serialization error",e);
             return false;
         }
     }
@@ -44,12 +48,12 @@ public class JSONNotifSerialization implements NotificationSerialization {
             String data = dataSource.getNotifications();
             return objectMapper.readValue(data, new TypeReference<List<Notification>>(){});
         } catch(FileNotFoundException e){
-            System.out.println("Notification file not found, creating new file.");
+            logger.info("Notification file not found, creating new file.");
         } catch (JsonMappingException e) {
-            e.printStackTrace();
+            logger.info("Mapping failed",e);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            logger.info("Mapping failed",e);
         }
-        return  new ArrayList<Notification>();
+        return  new ArrayList<>();
     }
 }

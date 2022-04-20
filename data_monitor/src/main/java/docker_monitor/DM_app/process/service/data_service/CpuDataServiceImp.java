@@ -59,4 +59,7 @@ public class CpuDataServiceImp implements CpuDataService {
         List<Cpu> metric = cpuRepository.findByContainerAndTime(containerId,dateFrom.toEpochMilli(),sampleRate);
         return new MetricPair<>(container.get(),metric);
     }
+    public void deleteDataTo(Instant dateTo){
+        cpuRepository.deleteData(dateTo.toEpochMilli());
+    }
 }

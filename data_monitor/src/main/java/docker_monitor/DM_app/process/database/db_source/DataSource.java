@@ -7,4 +7,5 @@ public interface DataSource {
     void connectionOpen() throws SQLException;
     void connectionClose() throws SQLException;
     public ResultSet executeQuery(String query) throws SQLException;
+    boolean connectionAlive();
 }

@@ -1,0 +1,23 @@
+@page "/dashboard"
+@using data_viewer.Model.Notification
+@using data_viewer.Component
+<div class="head-line">
+    <p>General / Dashboard</p>
+</div>
+
+<div class="row">
+    @if (!_data.Any() && !_loading)
+    {
+        <h6>No record to display</h6>
+    }
+    @if (_loading)
+    {
+        <h6>Loading data ...</h6>
+    }
+    @foreach (var container in _data)
+    {
+        <div class="col-sm pb-2">
+            <ContainerView container="@container"/>
+        </div>
+    }
+</div>

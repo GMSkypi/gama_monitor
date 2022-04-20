@@ -1,10 +1,15 @@
 package docker_monitor.DM_app.process.database.db_source;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.*;
 import java.util.Properties;
 
 public class DataSourceImp implements DataSource {
+
+    private static final Logger logger = LoggerFactory.getLogger(DataSourceImp.class);
     private String user;
     private String password;
     private String sslMode;
@@ -52,12 +57,25 @@ public class DataSourceImp implements DataSource {
         return r;
 
     }
+
+    @Override
+    public boolean connectionAlive() {
+        try {
+            executeQuery("SHOW TABLES");
+            return true;
+        } catch (SQLException e) {
+            logger.error("Database is not reachable or not running");
+            return false;
+        }
+    }
+
     @Override
     protected void finalize(){
         try {
             connection.close();
         }
         catch(SQLException e){
+            logger.error("Connection to database can not be closed");
         }
     }
 }

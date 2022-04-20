@@ -3,6 +3,11 @@ package docker_monitor.DM_app.process.notification_message_handler;
 import com.github.seratch.jslack.Slack;
 import com.github.seratch.jslack.api.webhook.Payload;
 import com.github.seratch.jslack.api.webhook.WebhookResponse;
+import docker_monitor.DM_app.process.database.db_mapper.QuestDBDataMapperImp;
+import docker_monitor.DM_app.process.service.cache.ConfigurationCache;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -11,11 +16,9 @@ import java.io.IOException;
 @Component
 public class SlackHandler implements NotificationObservers{
 
-    @Value("${slack.webhook}")
-    private String urlSlackWebHook;
-
-    @Value("${notification.enabled}")
-    private boolean notify;
+    private static final Logger logger = LoggerFactory.getLogger(SlackHandler.class);
+    @Autowired
+    private ConfigurationCache configurationCache;
 
     @Override
     public void update(String message) {
@@ -24,7 +27,7 @@ public class SlackHandler implements NotificationObservers{
         messageBuilder.append("-- DOCKER MONITORING --" + "\n");
         messageBuilder.append(message);
         messageBuilder.append("-------------------------" + "\n");
-        if(notify)
+        if(configurationCache.isNotify())
             process(messageBuilder.toString());
     }
     private void process(String message) {
@@ -33,10 +36,9 @@ public class SlackHandler implements NotificationObservers{
                 .build();
         try {
             WebhookResponse webhookResponse = Slack.getInstance().send(
-                    urlSlackWebHook, payload);
-            // TODO logger
+                    configurationCache.getUrlSlackWebHook(), payload);
         } catch (IOException e) {
-            System.out.println(e);
+            logger.error("Slack server exception",e);
         }
     }
 }

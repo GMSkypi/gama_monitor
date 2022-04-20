@@ -33,10 +33,10 @@ Collector::Collector(const shared_ptr<Config>& conf) {
 }
 
 [[noreturn]] void Collector::startCapturing() {
-    QDBController dbController = QDBController(conf);
+    std::shared_ptr<QDBController> dbController = shared_ptr<QDBController>( new QDBController(conf));
     ContainerExplorer containerExplorer = loadExplorer();
     vector<Container> containers = containerExplorer.explore(dbController);
-    // TODO get node info
+
     const map<constants::Paths,std::string> globalMetricsPaths = containerExplorer.globalPathInit();
     MetricsParserFactory metricsFactory;
     metricsFactory.addAllMetrics();
@@ -50,7 +50,6 @@ Collector::Collector(const shared_ptr<Config>& conf) {
     Timer timer = Timer(conf);
 
     while(true){
-    //for(int i = 0; i < 3; i++){
         const std::vector<constants::Actions> * actions = timer.getActions();
         for(const constants::Actions action : *actions){
             switch(action){
@@ -59,9 +58,13 @@ Collector::Collector(const shared_ptr<Config>& conf) {
                     continue;
                 case constants::Actions::CAPTURE:
                     captureService->globalNewCapturing();
-                    for(Container & container : containers)
-                        captureService->newCapture(container, unCapturedMetrics );
-                    dbController.insertMetrics(containers);
+                    for(Container & container : containers){
+                        try{ captureService->newCapture(container, unCapturedMetrics );}
+                        catch (exception e) {
+                            cout << "Container error: " << e.what() << endl;
+                        }
+                    }
+                    dbController->insertMetrics(containers);
                     continue;
             }
         }

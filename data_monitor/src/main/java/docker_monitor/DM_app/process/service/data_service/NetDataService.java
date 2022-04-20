@@ -22,4 +22,5 @@ public interface NetDataService {
     MetricPair<Container, Net> getNetMetrics(String containerId,
                                                        Instant dateFrom,
                                                        SampledBy sampleRate);
+    void deleteDataTo(Instant dateTo);
 }

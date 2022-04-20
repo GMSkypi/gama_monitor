@@ -2,6 +2,7 @@ package docker_monitor.DM_app.configuration;
 
 import docker_monitor.DM_app.process.notification_message_handler.NotificationObservers;
 import docker_monitor.DM_app.process.notification_message_handler.SlackHandler;
+import docker_monitor.DM_app.process.service.cache.ConfigurationCache;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,4 +31,5 @@ public class BeanConfig {
 
     @Bean
     public ModelMapper modelMapper() {return new ModelMapper();}
+
 }

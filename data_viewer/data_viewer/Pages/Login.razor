@@ -1,0 +1,11 @@
+@page "/Login"
+@layout EmptyLayout
+<div class="login">
+    <RadzenCard Style="width: 500px;">
+            <h2 class="mb-4"  style="text-align:center">Data monitoring system</h2>
+
+                <RadzenLogin AllowRegister="false" AllowResetPassword="false"  Login=@(args => OnLogin(args))/>
+                @if(_wrongPassowrd){<p style="color:red;">*Bead credentials</p>}
+        </RadzenCard>
+        
+</div>

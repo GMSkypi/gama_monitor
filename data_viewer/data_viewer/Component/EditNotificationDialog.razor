@@ -1,0 +1,168 @@
+@using data_viewer.Model.Notification
+<EditForm Model="@notificationCopy" OnValidSubmit="ValidSubmit">
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+
+    <RadzenFieldset Text="Notification details" class="mb-4">
+        <div class="row">
+            <div class="col-6 d-flex flex-column mb-2">
+                <label>
+                    ID
+                </label>
+                <RadzenNumeric @bind-Value="notificationCopy.id" Disabled="true" ShowUpDown="false"/>
+            </div>
+            <div class="col-6 d-flex flex-column mb-2">
+                <label>
+                    Container
+                </label>
+                <RadzenTextBox @bind-Value="notificationCopy.containerId" Disabled="true"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4 d-flex flex-column mb-2">
+                <label>
+                    Group
+                </label>
+                <RadzenDropDown Data="@_enumGroups" TextProperty="enumName" ValueProperty="enumValue" @bind-Value="notificationCopy.metricGroup" Change="@ReloadMetrics"/>
+            </div>
+            <div class="col-4 d-flex flex-column mb-2">
+                    <label>
+                        Metric
+                    </label>
+                    <RadzenDropDown Data="@_enumMetrics" TextProperty="enumName" ValueProperty="enumValue" @bind-Value="notificationCopy.metricToMonitor"/>
+                </div>
+            <div class="col-4 d-flex flex-column mb-2">
+                <label>
+                    Notification Type
+                </label>
+                <RadzenDropDown Data="@_enumNotificationType" TextProperty="enumName" ValueProperty="enumValue" @bind-Value="notificationCopy.type" Change="@ReloadNotificationType"/>
+            </div>
+        </div>
+
+        @if (notificationCopy.type == NotificationType.CHANGE && notificationCopy.changeNotify != null)
+        {
+            <RadzenFieldset Text="Notification details" class="mb-4">
+                <p>
+                    Notification will be sent if the difference between values before and during the specified interval will be above/below a specified value.
+                </p>
+                <div class="row">
+                    <div class="col-sm">
+                        <label>
+                            During time before in ms:
+                        </label>
+                    </div>
+                     <div class="col-sm">
+                        <RadzenNumeric @bind-Value="notificationCopy.changeNotify.comparedToBefore" ShowUpDown="false"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm">
+                        <label>
+                            Triggered on:
+                        </label>
+                    </div>
+                    <div class="col-sm">
+                        <RadzenDropDown Data="@_enumTriggers" TextProperty="enumName" ValueProperty="enumValue" @bind-Value="notificationCopy.changeNotify.trigger"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm">
+                        <label>
+                            Triggered value:
+                        </label>
+                    </div>
+                    <div class="col-sm">
+                        <RadzenNumeric @bind-Value="notificationCopy.value" ShowUpDown="false"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm">
+                        <label>
+                            During time in ms:
+                        </label>
+                    </div>
+                    <div class="col-sm">
+                        <RadzenNumeric @bind-Value="notificationCopy.overTime" ShowUpDown="false"/>
+                    </div>
+                </div>
+            </RadzenFieldset>
+        }
+        else if (notificationCopy.type == NotificationType.THRESHOLD && notificationCopy.thresholdNotify != null)
+        {
+            <RadzenFieldset Text="Notification details" class="mb-4">
+                <p>
+                    Notification will be sent if the threshold of values during the specified interval will be above/below a specified value.
+                </p>
+                <div class="row">
+                    <div class="col-sm">
+                        <label>
+                            Trashold:
+                        </label>
+                    </div>
+                    <div class="col-sm">
+                        <RadzenDropDown Data="@_enumThresholds" TextProperty="enumName" ValueProperty="enumValue" @bind-Value="notificationCopy.thresholdNotify.threshold"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm">
+                        <label>
+                            During time in milliseconds:
+                        </label>
+                    </div>
+                    <div class="col-sm">
+                        <RadzenNumeric @bind-Value="notificationCopy.overTime" ShowUpDown="false"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm">
+                        <label>
+                            Triggered value:
+                        </label>
+                    </div>
+                    <div class="col-sm">
+                        <RadzenNumeric @bind-Value="notificationCopy.value" ShowUpDown="false"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm">
+                        <label>
+                            Triggered on:
+                        </label>
+                    </div>
+                    <div class="col-sm">
+                        <RadzenDropDown Data="@_enumTriggers" TextProperty="enumName" ValueProperty="enumValue" @bind-Value="notificationCopy.thresholdNotify.trigger"/>
+                    </div>
+                </div>
+            </RadzenFieldset>
+        }
+        else
+        {
+            <label>
+               
+            </label>
+        }
+        <div class="row">
+            <div class="col-sm">
+                <label>
+                    Delay between notification:
+                </label>
+            </div>
+            <div class="col-sm">
+                <RadzenNumeric @bind-Value="notificationCopy.notificationDelay" ShowUpDown="false"/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 d-flex flex-column mb-2">
+                <label>
+                    The message that will be sent
+                </label>
+                <RadzenTextBox @bind-Value="notificationCopy.message"/>
+            </div>
+        </div>
+
+    </RadzenFieldset>
+    <div class="d-flex flex-row justify-content-between">
+        <RadzenButton Text="Save" ButtonStyle="ButtonStyle.Secondary" type="submit"/>
+        <RadzenButton Click="@((args) => dialogService.Close(false))" ButtonStyle="ButtonStyle.Light" Text="Cancel"/>
+    </div>
+</EditForm>

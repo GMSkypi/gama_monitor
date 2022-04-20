@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/memory")
 @Validated
@@ -26,45 +27,51 @@ public class MemoryController {
     @Autowired
     MemoryDataService memoryService;
 
-    @GetMapping(value = "/{containerId}")
+    @GetMapping(value = "/", params = {"containerId"})
     @ResponseStatus(HttpStatus.OK)
-    public MemoryDTO getMemMet(@PathVariable String containerId){
+    public MemoryDTO getMemMet(@RequestParam("containerId") String containerId){
         return null;
     }
-    @GetMapping(value = "/{containerId}", params = {"dateFrom", "dateTo"})
+    @GetMapping(value = "/", params = {"containerId", "dateFrom", "dateTo"})
     @ResponseStatus(HttpStatus.OK)
     public MemoryDTO getMemMetWFDate(
-            @PathVariable String containerId,
+            @RequestParam("containerId") String containerId,
             @RequestParam("dateFrom") Instant dateFrom,
             @RequestParam("dateTo") Instant dateTo){
         MetricPair<Container, Memory> pair = memoryService.getMemoryMetrics(containerId,dateFrom,dateTo);
         return conversion.convertToMemDTO(pair.getMetrics(),pair.getContainer());
     }
-    @GetMapping(value = "/{containerId}", params = {"dateFrom", "dateTo", "sampleRate"})
+    @GetMapping(value = "/", params = {"containerId", "dateFrom", "dateTo", "sampleRate"})
     @ResponseStatus(HttpStatus.OK)
     public MemoryDTO getMemMetWFDateWSample(
-            @PathVariable String containerId,
+            @RequestParam("containerId") String containerId,
             @RequestParam("dateFrom") Instant dateFrom,
             @RequestParam("dateTo") Instant dateTo,
             @RequestParam("sampleRate") SampledBy sampleRate){
         MetricPair<Container, Memory> pair = memoryService.getMemoryMetrics(containerId,dateFrom,dateTo,sampleRate);
         return conversion.convertToMemDTO(pair.getMetrics(),pair.getContainer());
     }
-    @GetMapping(value = "/{containerId}", params = {"dateFrom"})
+    @GetMapping(value = "/", params = {"containerId", "dateFrom"})
     @ResponseStatus(HttpStatus.OK)
     public MemoryDTO getMemMetWDate(
-            @PathVariable String containerId,
+            @RequestParam("containerId") String containerId,
             @RequestParam("dateFrom") Instant dateFrom){
         MetricPair<Container, Memory> pair = memoryService.getMemoryMetrics(containerId,dateFrom);
         return conversion.convertToMemDTO(pair.getMetrics(),pair.getContainer());
     }
-    @GetMapping(value = "/{containerId}", params = {"dateFrom", "sampleRate"})
+    @GetMapping(value = "/", params = {"containerId", "dateFrom", "sampleRate"})
     @ResponseStatus(HttpStatus.OK)
     public MemoryDTO getMemMetWDateWSample(
-            @PathVariable String containerId,
+            @RequestParam("containerId") String containerId,
             @RequestParam("dateFrom") Instant dateFrom,
             @RequestParam("sampleRate") SampledBy sampleRate){
         MetricPair<Container, Memory> pair = memoryService.getMemoryMetrics(containerId,dateFrom,sampleRate);
         return conversion.convertToMemDTO(pair.getMetrics(),pair.getContainer());
+    }
+    @DeleteMapping(value = "/" , params = { "dateTo"})
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteData(
+            @RequestParam("dateTo") Instant dateTo){
+        memoryService.deleteDataTo(dateTo);
     }
 }

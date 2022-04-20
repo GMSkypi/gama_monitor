@@ -1,0 +1,41 @@
+<RadzenCard Style="width: 490px; cursor: pointer;" @onclick="DetailClick">
+    <div class="center">
+        <h4>@container.id</h4>
+            @if (_notRunning)
+            {
+                @if (container != null)
+                {
+                    <p  style="background-color:tomato;">Container not running since @container.lastRecord</p>
+                }
+                else
+                {
+                    <p  style="background-color:tomato;">Container not running</p>
+                }
+            }
+    </div>
+    <div class="row pb-1">
+
+        <RadzenChart @ref="_cpuUsageChart" Style="width: 230px; height: 140px">
+            <RadzenAreaSeries Data="@_cpuData" CategoryProperty="dateTime" Title="Total CPU usage" LineType="LineType.Solid" Fill="red" Stroke="red" ValueProperty="totalPercents">
+            </RadzenAreaSeries>
+            <RadzenCategoryAxis Padding="0" FormatString="{0:HH:mm:ss}"/>
+            <RadzenValueAxis Formatter=@(value => ((double) long.Parse((value).ToString()) / 1000).ToString() + " %")/>
+            <RadzenGridLines Visible="true"/>
+            <RadzenChartTooltipOptions Visible="false"/>
+            <RadzenLegend Position="LegendPosition.Top"/>
+        </RadzenChart>
+
+        <RadzenChart Style="width: 230px; height: 140px">
+            <RadzenAreaSeries Data="@_memoryData" CategoryProperty="dateTime" Title="Memory" LineType="LineType.Solid" ValueProperty="memoryUsed">
+            </RadzenAreaSeries>
+            <RadzenAreaSeries Data="@_memoryData" CategoryProperty="dateTime" Title="Swap" LineType="LineType.Dashed" ValueProperty="swap">
+            </RadzenAreaSeries>
+            <RadzenCategoryAxis Padding="0" FormatString="{0:HH:mm:ss}"/>
+            <RadzenValueAxis Formatter=@(value => ((double) long.Parse((value).ToString()) / 1000000).ToString() + " MB")/>
+            <RadzenGridLines Visible="true"/>
+            <RadzenChartTooltipOptions Visible="false"/>
+            <RadzenLegend Position="LegendPosition.Top"/>
+        </RadzenChart>
+
+    </div>
+</RadzenCard>
