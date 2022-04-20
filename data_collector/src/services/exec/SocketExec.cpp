@@ -2,6 +2,7 @@
 // Created by gama on 20.11.21.
 //
 
+#include <netdb.h>
 #include "SocketExec.h"
 
 
@@ -22,10 +23,30 @@ void SocketExec::init() {
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(port);
 
+    struct addrinfo *result = nullptr;
+    if (getaddrinfo(ip.c_str(), NULL, NULL, &result) != 0)
+    {
+        printf("unable to resolve\n");
+        return;
+    }
+    char ipstr[INET_ADDRSTRLEN];
+
+    struct in_addr  *addr;
+    if (result->ai_family == AF_INET) {
+        auto *ipv = (struct sockaddr_in *)result->ai_addr;
+        addr = &(ipv->sin_addr);
+    }
+    else {
+        auto *ipv6 = (struct sockaddr_in6 *)result->ai_addr;
+        addr = (struct in_addr *) &(ipv6->sin6_addr);
+    }
+    inet_ntop(result->ai_family, addr, ipstr, sizeof ipstr);
+
     // Convert IPv4 and IPv6 addresses from text to binary form
-    if(inet_pton(AF_INET, ip.c_str(), &serv_addr.sin_addr)<=0)
+    if(inet_pton(AF_INET, ipstr, &serv_addr.sin_addr)<=0)
     {
         printf("\nInvalid address/ Address not supported \n");
+        printf("Address: %s\n", ipstr);
         return;
     }
 
@@ -34,6 +55,7 @@ void SocketExec::init() {
         printf("\nConnection Failed \n");
         return;
     }
+    freeaddrinfo(result);
 }
 
 void SocketExec::exit() {

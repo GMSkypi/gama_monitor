@@ -10,11 +10,6 @@ services:
     image: questdb/questdb:latest
     hostname: questdb
     container_name: questdb
-    ports:
-      - "9000:9000"
-      - "9009:9009"
-      - "8812:8812"
-      - "9003:9003"
     networks:
       - gama_network
     volumes:
@@ -25,7 +20,8 @@ services:
     container_name: collector
     image: data_collector
     hostname: collector
-    network_mode: host
+    networks:
+      - gama_network
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /sys/fs/cgroup/:/sys/fs/cgroup/
@@ -43,13 +39,16 @@ services:
       - gama_network
     ports:
       - "80:80"
+
   monitor-service:
     build: ./data_monitor
     container_name: monitor
     hostname: monitor
     image: data_monitor
-    network_mode: host
-  
+    networks:
+      - gama_network
+    ports:
+      - "8080:8080"
     volumes:
       - ./data_monitor/configuration.properties:/app/build/configuration.properties
       - ./data_monitor/notifications.json:/app/build/notifications.json
