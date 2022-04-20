@@ -111,7 +111,7 @@ namespace data_viewer.Pages
                 {
                     _container = await containerComService.GetContainer(containerId);
                     if (_container != null && DateTime.Compare(_container.lastRecord, DateTime.UtcNow.AddHours(-1)) > 0) _notRunning = false;
-                    return;
+                    else return;
                 }
 
                 await LoadData(DateTime.UtcNow.AddMinutes(-10), DataSamplingRates.Minute);
