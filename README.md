@@ -51,7 +51,7 @@ GAMA monitor uses a number of technologies  to work properly:
 Clone or download the git repository:
 
 ```bash
-git clone https://github.com/GMSkypi/gama_monitor.git
+git clone --recurse-submodules  git@github.com:GMSkypi/gama_monitor.git 
 ```
 
 Go to the folder with the monitoring system:
