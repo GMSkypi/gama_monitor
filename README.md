@@ -45,6 +45,7 @@ GAMA monitor uses a number of technologies  to work properly:
  - free ports 80 and 8080
  - Docker socket location /var/run/docker.sock
  - Docker Compose 1.29.2
+ - Browser support for WebAssembly
 
 ## Installation
 
